@@ -12,16 +12,6 @@
 
 #include "../minishell.h"
 
-static size_t	env_size(char **envp)
-{
-	size_t	i;
-
-	i = 0;:
-	while (envp[i])
-		i++;
-	return (i);
-}
-
 void	init_env(t_shell *shell, char **envp)
 {
 	shell->env_array = ft_calloc(env_size(envp + 1), sizeof(char *));

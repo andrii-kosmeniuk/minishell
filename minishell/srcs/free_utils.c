@@ -22,3 +22,17 @@ void	free_array(char **array)
 	free(array);
 	array = NULL;
 }
+
+void	allocation_failed(char **array, int last_allocated_string)
+{
+	int	i;
+
+	i = 0;
+	while (i < last_allocated_string)
+	{
+		free(array[i]);
+		i++;
+	}
+	free(array);
+	array = NULL;
+}

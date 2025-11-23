@@ -16,23 +16,23 @@
 void	build_minimum_env(t_shell *shell, char **envp)
 {
 	char	*cur_dir;
-	char	value;
+	char	*value;
 	t_env	*node;
 	char	*key;
 
 	while (*envp)
 	{
-		if (ft_strcmp(envp[i], "PWD") != 0)
+		if (ft_strcmp(*envp, "PWD") != 0)
 		{
 			key = "PWD";
 			cur_dir = getcwd(NULL, 0);
-			if (!value)
+			if (!cur_dir)
 				return ; //remember to free later
 			node = create_node(key, cur_dir);
 			if (!node)
 				return (free(cur_dir));
 		}
-		if (ft_strcmp(enpvp[i], "SHLVL") != 0)
+		if (ft_strcmp(*envp, "SHLVL") != 0)
 		{
 			key = "SHLVL";
 			value = "1";
@@ -41,7 +41,7 @@ void	build_minimum_env(t_shell *shell, char **envp)
 				return (free(cur_dir));
 			add_to_list(head, node);
 		}
-		if (ft_strcmp(envp[i], "_") != 0)
+		if (ft_strcmp(*envp, "_") != 0)
 		{
 			key = "_";
 			value = "/usr/bin/env";//maybe trace in history last used commands and use it

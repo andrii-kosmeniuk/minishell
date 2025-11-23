@@ -39,3 +39,19 @@ typedef struct s_shell
 	int		interactive; // signals representend by ints
 	int		signal_received;
 }	t_shell;
+
+//initialization
+void	init_env(t_shell *shell, char **envp);
+
+//memory managment
+void	free_array(char **array);
+void	allocation_failed(char **array, int last_allocated_string);
+
+//utils
+t_env	*create_node(char *name, char *value);
+int		duplicate_variables(t_shell *shell, char **envp, char *previous_var);
+
+//environment
+void	build_minimum_env(t_shell *shell, char **envp);
+void	create_list_key_value(t_shell *shell, t_env **head, char **envp);
+char	**copy_of_envp(t_shell *shell, char **envp);

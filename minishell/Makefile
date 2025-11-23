@@ -16,7 +16,8 @@ CFLAGS = -Wall -Wextra -Werror
 
 NAME = minishell
 
-SRC = srcs/get_envp.c
+SRC = srcs/get_envp.c srcs/init.c srcs/utils.c srcs/main.c srcs/env_utils.c \
+srcs/free_utils.c
 
 OBJ = $(SRC:.c=.o)
 

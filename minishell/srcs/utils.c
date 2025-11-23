@@ -12,6 +12,16 @@
 
 #include "../minishell.h"
 
+size_t	env_size(char **array)
+{
+	size_t	i,
+
+	i = 0;
+	while (array[i])
+		i++;
+	return (i);
+}
+
 void	add_to_list(t_env **head, t_env *new)
 {
 	t_env	*temp;
@@ -36,17 +46,20 @@ t_env	*create_node(char *name, char *value)
 	new_node = malloc(sizeof(t_env));
 	if (!new_node)
 		return (NULL);
-	new_node->key = name;
-	new_node->value = value;
+	new_node->key = ft_strdup(name);     //
+	new_node->value = ft_strdup(value); // remember to free later
 	new_node->next = NULL;
 	return (new_node);
 }
 
-int	duplicate_variables(t_shell *shell, char **envp, char *previous_variable)
+int	check_replace_duplicates(t_shell *shell, char **envp, char *previous_var)
 {
+	int	i;
+
+	i = 0;
 	while (*envp)
 	{
-		if (ft_strcmp(envp[i], previous_variable) == 0)
+		if (ft_strcmp(envp[i], previous_var) == 0)
 			return (1);
 		envp++;
 	}
