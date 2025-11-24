@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
+#include "../../minishell.h"
 
 void	free_array(char **array)
 {
@@ -35,4 +35,18 @@ void	allocation_failed(char **array, int last_allocated_string)
 	}
 	free(array);
 	array = NULL;
+}
+
+void	free_env_list(t_env *env)
+{
+    t_env *tmp;
+
+    while (env)
+    {
+        tmp = env->next;
+        free(env->key);
+        free(env->value);
+        free(env);
+        env = tmp;
+    }
 }

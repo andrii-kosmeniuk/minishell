@@ -10,41 +10,32 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
-//still add check for when SHLVL exists
-////maybe manually insert =
-void	build_minimum_env(t_shell *shell, char **envp)
+#include "../../minishell.h"
+//this build our own envp
+//env_array is allocated for total len of envp + NULL terminator at the end
+//this stores enough space for the full length of the array from envp[1][i] to
+//envp[n][last char]
+//
+//to build each env variable which by default are strings, we must also allocate
+//memory for each of them (remember, env variables follow a KEY=value design)
+//
+//this will be later passed to execve()
+char	**copy_of_envp(t_shell *shell, char **envp)
 {
-	char	*cur_dir;
-	char	*value;
-	t_env	*node;
-	char	*key;
+	int	i;
 
-	while (*envp)
+	if (!envp)
+		return (NULL);
+	i = 0;
+	while (envp[i])
 	{
-		if (ft_strcmp(*envp, "PWD") != 0)
-		{
-			key = "PWD";
-			cur_dir = getcwd(NULL, 0);
-			if (!cur_dir)
-				return ; //remember to free later
-			node = create_node(key, cur_dir);
-			if (!node)
-				return (free(cur_dir));
-		}
-		if (ft_strcmp(*envp, "SHLVL") != 0)
-		{
-			key = "SHLVL";
-			value = "1";
-			node = create_node(key, value);
-			if (!node)
-				return (free(cur_dir));
-			add_to_list(head, node);
-		}
-		if (ft_strcmp(*envp, "_") != 0)
-		{
-			key = "_";
-			value = "/usr/bin/env";//maybe trace in history last used commands and use it
-		}
+		shell->env_array[i] = malloc(ft_strlen(envp[i]) + 1);
+		if (!shell->env_array[i])
+			return (allocation_failed(envp, i), NULL);
+		ft_strcpy(shell->env_array[i], envp[i]);
+
+		i++;
 	}
+	shell->env_array[env_size(envp)] = NULL;
+	return (shell->env_array);
 }

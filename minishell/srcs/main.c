@@ -14,9 +14,10 @@
 
 int	main(int ac, char **av, char **envp)
 {
-	t_shell *shell;
+	t_shell shell;
 
 	(void)ac;
-	init_env(shell, envp);
+	(void)av;
+	init_env(&shell, envp);
 
 }

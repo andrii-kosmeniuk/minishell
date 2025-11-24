@@ -20,12 +20,15 @@
 # include <sys/wait.h>
 # include <sys/stat.h>
 # include <limits.h>
+# include "libft/libft.h"
+# include <readline/readline.h>
+# include <readline/history.h>
 
 typedef struct s_env
 {
 	char			*key;
 	char			*value;
-	struct t_env	*next;
+	struct s_env	*next;
 }	t_env;
 
 typedef struct s_shell
@@ -46,12 +49,17 @@ void	init_env(t_shell *shell, char **envp);
 //memory managment
 void	free_array(char **array);
 void	allocation_failed(char **array, int last_allocated_string);
+void	free_env_list(t_env *env);
 
 //utils
 t_env	*create_node(char *name, char *value);
 int		duplicate_variables(t_shell *shell, char **envp, char *previous_var);
+size_t	env_size(char **array);
+void	add_to_list(t_env **head, t_env *new);
+char	*ft_strndup(const char *str, size_t len);
 
 //environment
-void	build_minimum_env(t_shell *shell, char **envp);
-void	create_list_key_value(t_shell *shell, t_env **head, char **envp);
+t_env	*create_list_key_value(t_shell *shell, t_env **head, char **envp);
 char	**copy_of_envp(t_shell *shell, char **envp);
+
+#endif

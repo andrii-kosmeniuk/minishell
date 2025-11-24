@@ -17,10 +17,10 @@ void	init_env(t_shell *shell, char **envp)
 	shell->env_array = ft_calloc(env_size(envp + 1), sizeof(char *));
 	if (!shell->env_array)
 		return ;
-	shell->environment_p = malloc(sizeof(t_env) * env_size(shell->env_array)):
+	shell->environment_p = malloc(sizeof(t_env) * env_size(shell->env_array));
 	if (!shell->environment_p)
 	{
-		free_array(shell->env_array)
+		free_array(shell->env_array);
 		return ;
 	}
 }

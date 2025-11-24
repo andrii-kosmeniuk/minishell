@@ -10,11 +10,11 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
+#include "../../minishell.h"
 
 size_t	env_size(char **array)
 {
-	size_t	i,
+	size_t	i;
 
 	i = 0;
 	while (array[i])
@@ -47,21 +47,29 @@ t_env	*create_node(char *name, char *value)
 	if (!new_node)
 		return (NULL);
 	new_node->key = ft_strdup(name);     //
+	if (!new_node->key)
+		return (free(new_node),NULL);
 	new_node->value = ft_strdup(value); // remember to free later
+	if (!new_node->value)
+		return (free(new_node->key), free(new_node), NULL);
 	new_node->next = NULL;
 	return (new_node);
 }
 
-int	check_replace_duplicates(t_shell *shell, char **envp, char *previous_var)
+char	*ft_strndup(const char *str, size_t len)
 {
-	int	i;
+	size_t	i;
+	char	*new;
 
+	new = malloc(sizeof(char) * len + 1);
+	if (!new)
+		return (NULL);
 	i = 0;
-	while (*envp)
+	while (i < len)
 	{
-		if (ft_strcmp(envp[i], previous_var) == 0)
-			return (1);
-		envp++;
+		new[i] = str[i];
+		i++;
 	}
-	return (0);
+	new[i] = '\0';
+	return (new);
 }
