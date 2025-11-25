@@ -1,0 +1,90 @@
+signal_functions
+
+1- void	void (*signal(int sig, void (*handler)(int)))(int)
+- function returns a pointer to a function that takes an int as input
+and returns a void
+
+sig = the signal number
+handler == a pointer to a function, could be:
+void	handler(int signum) -> return value the previous signal
+handler
+
+example:
+
+void my_handler(int signum) {
+    printf("Caught %d\n", signum);
+}
+
+int main() {
+    signal(SIGINT, my_handler);
+    while (1);
+}
+
+a better alternative would be:
+
+2- int	sigaction(int signum, const struct sigaction *act,
+struct sigaction *oldact)
+
+meaning:
+
+signum = the signal number in question;
+act = a pointer to a struct sigaction, that describes what i want
+the new handler to be
+oldact = if not NULL, the kernel fills this up with the previous
+action for that signal
+
+struct sigaction {
+ void     (*sa_handler)(int); // simple signal handler
+ void     (*sa_sigaction)(int, siginfo_t *, void *); // advanced handler
+ sigset_t   sa_mask;	 // collection of signals to block while handler runs
+ int        sa_flags;   // special flags controlling behavior
+};
+
+3- int	sigemptyset(sigset_t *set)
+- this function initializes a signal set so that it contains no signals
+
+so, if sigset_t is a bag of signals, sigemptyset() makes the bag empty
+
+we could do:
+struct sigaction sa;
+sigemptyset(&sa.sa_mask); this means "while running the signal handler, do
+not block any additional signals"
+
+4- int	sigaddset(sigset_t *set, int signum)
+
+adds a signal to a signal set, lets say signals are nodes in a list, this
+function adds signals to it
+
+so we use sigemptyset() to empty the bag and sigaddset() to add a specific
+signal into it
+
+so we could do the following:
+
+struct sigaction sa;
+sigemptyset(&sa.sa_mask);             // start with an empty set
+sigaddset(&sa.sa_mask, SIGTERM);      // block SIGTERM while handler runs
+sigaddset(&sa.sa_mask, SIGHUP);       // block SIGHUP while handler runs
+
+so when the handling runs, the selected signals cant  interrupt it
+
+5- int	kill(pid_t pid, int sig)
+kill() sends a signal to a process or a group of processes
+
+pid = identifies the target of the signal
+if pid > 0 -> send the signal to process with that PID
+if pid == 0 -> send signal to all processes in the same process group
+as the caller
+if pid < -1 -> send signal to all processes in the process group w id
+abs(pid)
+if pid == -1 -> send to all processes the caller has permission to signal
+
+return values
+0 → success
+
+-1 → failure (check errno for reason,
+e.g., EPERM for permission denied or ESRCH if process doesn’t exist)
+
+
+
+
+

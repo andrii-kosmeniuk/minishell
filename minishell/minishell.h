@@ -62,4 +62,7 @@ char	*ft_strndup(const char *str, size_t len);
 t_env	*create_list_key_value(t_shell *shell, t_env **head, char **envp);
 char	**copy_of_envp(t_shell *shell, char **envp);
 
+//signals
+void	setup_signals(void);
+
 #endif
