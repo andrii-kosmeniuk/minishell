@@ -84,6 +84,9 @@ return values
 -1 → failure (check errno for reason,
 e.g., EPERM for permission denied or ESRCH if process doesn’t exist)
 
+to initialize the signal struct is important to set all the bytes of memory to 0
+to avoid undefined behaviour
+
 
 
 

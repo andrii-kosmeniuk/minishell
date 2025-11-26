@@ -13,11 +13,17 @@ MAKEFLAGS += --no-print-directory
 
 CC = cc
 CFLAGS = -Wall -Wextra -Werror
+LDLIBS  = -lreadline -lncurses
 
 NAME = minishell
 
-SRC = srcs/env/get_envp.c srcs/init.c srcs/utils/utils.c srcs/main.c \
-	  srcs/env/env_utils.c srcs/clean_up/free_utils.c
+SRC = srcs/env/get_envp.c \
+	srcs/utils/utils.c \
+	srcs/env/env_utils.c srcs/clean_up/free_utils.c \
+	#srcs/signals/signal_handlers.c srcs/prompt/prompt.c
+	#srcs/init/init.c
+	#srcs/main.c
+	
 
 OBJ = $(SRC:.c=.o)
 

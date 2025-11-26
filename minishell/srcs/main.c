@@ -12,12 +12,22 @@
 
 #include "../minishell.h"
 
+int	g_exit_status = 0;
+
 int	main(int ac, char **av, char **envp)
 {
-	t_shell shell;
+	t_shell	shell;
+	t_env	env;
+	char	*prompt;
 
 	(void)ac;
 	(void)av;
 	init_env(&shell, envp);
-
+	env = create_list_key_value(&shell, &shell->environment_p ,envp);
+	if (!env)
+		return (1);
+	prompt = prompt("👹minis(hell)$1");
+	if (!prompt)
+		return (1);
+	return (0);
 }

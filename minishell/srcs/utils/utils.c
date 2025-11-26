@@ -48,10 +48,15 @@ t_env	*create_node(char *name, char *value)
 		return (NULL);
 	new_node->key = ft_strdup(name);
 	if (!new_node->key)
-		return (free(new_node),NULL);
-	new_node->value = ft_strdup(value); // remember to free later
-	if (!new_node->value)
-		return (free(new_node->key), free(new_node), NULL);
+		return (free(new_node), NULL);
+	if (value)
+	{
+		new_node->value = ft_strdup(value);
+		if (!new_node->value)
+			return (free(new_node->key), free(new_node), NULL);
+	}
+	else
+		new_node->value = NULL;
 	new_node->next = NULL;
 	return (new_node);
 }

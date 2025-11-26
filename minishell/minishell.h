@@ -24,6 +24,8 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 
+extern int	g_exit_status;
+
 typedef struct s_env
 {
 	char			*key;
@@ -35,7 +37,6 @@ typedef struct s_shell
 {
 	t_env	*environment_p; // pointer to copied key-value variables
 	char	**env_array; //copy of envp, passed to execve
-
 	int		last_exit_code; // $?
 	char	*current_line; // gets its input from readline
 	char	*prompt; //minishell promt
@@ -64,5 +65,8 @@ char	**copy_of_envp(t_shell *shell, char **envp);
 
 //signals
 void	setup_signals(void);
+
+//readline
+char	*prompt(const char *prompt);
 
 #endif

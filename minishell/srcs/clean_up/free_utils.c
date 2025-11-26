@@ -39,14 +39,14 @@ void	allocation_failed(char **array, int last_allocated_string)
 
 void	free_env_list(t_env *env)
 {
-    t_env *tmp;
+	t_env	*tmp;
 
-    while (env)
-    {
-        tmp = env->next;
-        free(env->key);
-        free(env->value);
-        free(env);
-        env = tmp;
-    }
+	while (env)
+	{
+		tmp = env->next;
+		free(env->key);
+		free(env->value);
+		free(env);
+		env = tmp;
+	}
 }

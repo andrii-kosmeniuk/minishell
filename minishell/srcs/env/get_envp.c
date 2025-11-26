@@ -39,7 +39,7 @@ static void	build_minimum_env(t_shell *shell)
 // if the key in question already exist we must get rid of it
 // we check if the key is in the first node or not and free node
 // accordingly
-static void replace_key_if_exists(t_env **head, char *key)
+static void	replace_key_if_exists(t_env **head, char *key)
 {
 	t_env	*cur_node;
 	t_env	*prev;
@@ -108,4 +108,33 @@ t_env	*create_list_key_value(t_shell *shell, t_env **head, char **envp)
 	}
 	shell->environment_p = *head;
 	return (*head);
+}
+
+void	print_env_list(t_env *head)
+{
+	while (head)
+	{
+		printf("KEY=\"%s\" VALUE=\"%s\"\n", head->key,
+		head->value ? head->value : "NULL");
+		head = head->next;
+	}
+}
+
+int	main()
+{
+	t_env	*head = NULL;
+	t_shell	shell;
+	char	*fake_envp[] = {
+        "USER=alice",
+        "HOME=/home/alice",
+        "PATH=/usr/bin:/bin",
+        "EMPTY_VALUE=",
+        "NOEQUALSIGN",
+        NULL};
+	t_env	*result = create_list_key_value(&shell, &head, fake_envp);
+	if (!result)
+		return (printf("function error\n"), 1);
+	print_env_list(head);
+	free_env_list(head);
+	return (0);
 }

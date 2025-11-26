@@ -12,4 +12,22 @@
 
 #include "../../minishell.h"
 
-char	*prompt()
+char	*prompt(const char *prompt)
+{
+	char	*line;
+
+	setup_signals();
+	while (1)
+	{
+		line = readline(prompt);
+		if (!line || (ft_strlen(line) == 0))
+		{
+			printf("shell has been killed💀\n");
+			break ;
+		}
+		if (line[0] != '\0')
+			add_history(line);
+		free(line);
+	}
+	return (line);
+}
