@@ -16,18 +16,28 @@ int	g_exit_status = 0;
 
 int	main(int ac, char **av, char **envp)
 {
-	t_shell	shell;
-	t_env	env;
-	char	*prompt;
-
 	(void)ac;
 	(void)av;
+
+	char	*line;
+	t_env	*env;
+	t_env	*head;
+	t_shell	shell;
+
 	init_env(&shell, envp);
-	env = create_list_key_value(&shell, &shell->environment_p ,envp);
-	if (!env)
-		return (1);
-	prompt = prompt("👹minis(hell)$1");
-	if (!prompt)
-		return (1);
+	env = create_list_key_value(&shell, &head, envp);
+	while (1)
+	{
+		setup_signals();
+		line = readline(CYAN"👹-minis(hell)>" RESET);
+		if (!line || ft_strlen(line) == 0)
+		{
+			printf("shell has been killed\n");
+			break ;
+		}
+		if (line[0] != '\0')
+			add_history(line);
+		free(line);
+	}
 	return (0);
 }

@@ -10,16 +10,16 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../minishell.h"
+/*#include "../../minishell.h"
 
-char	*prompt(const char *prompt)
+char	*prompt(const char *input)
 {
 	char	*line;
 
 	setup_signals();
 	while (1)
 	{
-		line = readline(prompt);
+		line = readline(input);
 		if (!line || (ft_strlen(line) == 0))
 		{
 			printf("shell has been killed💀\n");
@@ -30,4 +30,4 @@ char	*prompt(const char *prompt)
 		free(line);
 	}
 	return (line);
-}
+}*/

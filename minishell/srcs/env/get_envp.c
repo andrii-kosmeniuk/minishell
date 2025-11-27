@@ -115,6 +115,7 @@ t_env	*create_list_key_value(t_shell *shell, t_env **head, char **envp)
 			node = create_node(key, value);
 			if (!node)
 				return (free(key), free(value), free_env_list(*head), NULL);
+			replace_key_if_exists(head, key);
 			free_key_value(key, value);
 			add_to_list(head, node);
 			envp++;

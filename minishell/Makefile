@@ -22,10 +22,9 @@ SRC = srcs/env/get_envp.c \
 	srcs/utils/utils.c \
 	srcs/env/env_utils.c srcs/clean_up/free_utils.c \
 	srcs/debug/debug.c \
-	#srcs/signals/signal_handlers.c srcs/prompt/prompt.c \
-	#srcs/init/init.c \
-	#srcs/main.c 
-	
+	srcs/signals/signal_handlers.c srcs/prompt/prompt.c \
+	srcs/init/init.c \
+	srcs/main.c 
 
 OBJ = $(SRC:.c=.o)
 
@@ -49,7 +48,7 @@ $(LIBFT):
 
 $(NAME): $(OBJ) $(LIBFT)
 	@if [ "$(SILENT)" = "0" ]; then echo "$(GREEN)compiling...$(RESET)"; fi
-	@$(CC) $(CFLAGS) $(OBJ) $(LIBFT) -o $(NAME)
+	@$(CC) $(CFLAGS) $(OBJ) $(LIBFT) $(LDLIBS) -o $(NAME)
 	@if [ "$(SILENT)" = "0" ]; then  echo "$(GREEN)ready to execute$(RESET)"; fi
 
 clean:
