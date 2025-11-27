@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: milija-h <milija-h@student.42vienna.com>   +#+  +:+       +#+        */
+/*   By: milija-h <milija-h@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/22 16:05:30 by milija-h          #+#    #+#             */
-/*   Updated: 2025/11/22 16:05:31 by milija-h         ###   ########.fr       */
+/*   Updated: 2025/11/27 18:17:22 by milija-h         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,4 +49,10 @@ void	free_env_list(t_env *env)
 		free(env);
 		env = tmp;
 	}
+}
+
+void	free_key_value(char *key, char *value)
+{
+	free(key);
+	free(value);
 }

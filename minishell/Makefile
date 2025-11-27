@@ -3,16 +3,17 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: milija-h <milija-h@student.42vienna.com>   +#+  +:+       +#+         #
+#    By: milija-h <milija-h@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/11/19 19:13:22 by milija-h          #+#    #+#              #
-#    Updated: 2025/11/19 19:13:23 by milija-h         ###   ########.fr        #
+#    Updated: 2025/11/27 18:30:46 by milija-h         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
+
 MAKEFLAGS += --no-print-directory
 
 CC = cc
-CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror -g
 LDLIBS  = -lreadline -lncurses
 
 NAME = minishell
@@ -20,9 +21,10 @@ NAME = minishell
 SRC = srcs/env/get_envp.c \
 	srcs/utils/utils.c \
 	srcs/env/env_utils.c srcs/clean_up/free_utils.c \
-	#srcs/signals/signal_handlers.c srcs/prompt/prompt.c
-	#srcs/init/init.c
-	#srcs/main.c
+	srcs/debug/debug.c \
+	#srcs/signals/signal_handlers.c srcs/prompt/prompt.c \
+	#srcs/init/init.c \
+	#srcs/main.c 
 	
 
 OBJ = $(SRC:.c=.o)

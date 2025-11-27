@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: milija-h <milija-h@student.42vienna.com>   +#+  +:+       +#+        */
+/*   By: milija-h <milija-h@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 15:14:05 by milija-h          #+#    #+#             */
-/*   Updated: 2025/11/20 15:14:06 by milija-h         ###   ########.fr       */
+/*   Updated: 2025/11/27 18:21:48 by milija-h         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,10 +51,9 @@ void	init_env(t_shell *shell, char **envp);
 void	free_array(char **array);
 void	allocation_failed(char **array, int last_allocated_string);
 void	free_env_list(t_env *env);
-
+void	free_key_value(char *key, char *value);
 //utils
 t_env	*create_node(char *name, char *value);
-int		duplicate_variables(t_shell *shell, char **envp, char *previous_var);
 size_t	env_size(char **array);
 void	add_to_list(t_env **head, t_env *new);
 char	*ft_strndup(const char *str, size_t len);
@@ -68,5 +67,8 @@ void	setup_signals(void);
 
 //readline
 char	*prompt(const char *prompt);
+
+//debug
+void	print_env_list(t_env *head);
 
 #endif

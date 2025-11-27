@@ -33,7 +33,6 @@ char	**copy_of_envp(t_shell *shell, char **envp)
 		if (!shell->env_array[i])
 			return (allocation_failed(envp, i), NULL);
 		ft_strcpy(shell->env_array[i], envp[i]);
-
 		i++;
 	}
 	shell->env_array[env_size(envp)] = NULL;
