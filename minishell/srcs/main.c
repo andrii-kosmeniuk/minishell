@@ -22,6 +22,7 @@ int	main(int ac, char **av, char **envp)
 	char	*line;
 	t_env	*env;
 	t_env	*head;
+	t_data	data;
 	t_shell	shell;
 
 	init_env(&shell, envp);

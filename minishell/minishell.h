@@ -36,11 +36,19 @@ typedef struct s_env
 	struct s_env	*next;
 }	t_env;
 
+typedef struct s_data
+{
+	int	shlvl;
+	int	last_exit_code;
+	t_env	*build_pwd;
+	t_env	*build_shlvl;
+	t_env	*build_underscore;
+}	t_data;
+
 typedef struct s_shell
 {
 	t_env	*environment_p; // pointer to copied key-value variables
 	char	**env_array; //copy of envp, passed to execve
-	int		last_exit_code; // $?
 	char	*current_line; // gets its input from readline
 	char	*prompt; //minishell promt
 	int		interactive; // signals representend by ints
@@ -64,6 +72,9 @@ char	*ft_strndup(const char *str, size_t len);
 //environment
 t_env	*create_list_key_value(t_shell *shell, t_env **head, char **envp);
 char	**copy_of_envp(t_shell *shell, char **envp);
+int		calculate_new_shlvl(t_shell *shell);
+int		update_shlvl_key(t_shell *shell, t_data *data);
+
 
 //signals
 void	setup_signals(void);

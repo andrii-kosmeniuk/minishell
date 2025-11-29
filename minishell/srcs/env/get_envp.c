@@ -19,7 +19,7 @@
 //we can also check for duplicates here, if a duplicate variable is found, we 
 //keep the last (as per what BASH does)
 
-static void	build_minimum_env(t_shell *shell)
+static void	build_minimum_env(t_shell *shell, t_data *data)
 {
 	t_env	*node;
 	t_env	*node2;
@@ -52,9 +52,9 @@ static void	replace_key_if_exists(t_env **head, char *key)
 	prev = NULL;
 	while (cur_node)
 	{
-		
 		if (!cur_node->key)
 			printf("ERROR: cur_node->key is NULL!!\n");
+			//if variable doesnt exist it prints \n when echo $?
 		else if (ft_strcmp(cur_node->key, key) == 0)
 		{
 			if (prev == NULL)
@@ -100,7 +100,7 @@ static int	assign_key_and_value(char *entry, char **key, char **value)
 		return (0);
 	}
 }
-
+//creates initial envp list
 t_env	*create_list_key_value(t_shell *shell, t_env **head, char **envp)
 {
 	char	*key;

@@ -18,7 +18,6 @@
 //
 //to build each env variable which by default are strings, we must also allocate
 //memory for each of them (remember, env variables follow a KEY=value design)
-//
 //this will be later passed to execve()
 char	**copy_of_envp(t_shell *shell, char **envp)
 {
@@ -38,3 +37,67 @@ char	**copy_of_envp(t_shell *shell, char **envp)
 	shell->env_array[env_size(envp)] = NULL;
 	return (shell->env_array);
 }
+
+int	calculate_new_shlvl(t_shell *shell)
+{
+	t_env	*cur_variable;
+	int		current_value;
+	int		new_value;
+
+	cur_variable = shell->environment_p;
+	new_value= 0;
+	current_value = 0;
+	while (cur_variable)
+	{
+		if (ft_strcmp(cur_variable->key, "SHLVL") == 0)
+		{
+			if (cur_variable->value)
+			{
+				current_value = ft_atoi(cur_variable->value);
+				if (current_value <= 0 || current_value >= 1000)
+				{
+					new_value = 1;
+					return (new_value);
+				}
+				new_value = current_value + 1;
+				return (new_value);
+			}
+		 }
+		cur_variable = cur_variable->next;
+	}
+	return (0);
+//in bash, in non-login shells, if SHLVL is not foundit prints \n or returns 0
+}
+
+int	update_shlvl_key(t_shell *shell, t_data *data)
+{
+	int		new_value;
+	char	*new_value_string;
+	t_env	*cur_variable;
+
+	new_value = calculate_new_shlvl(shell);
+	if (new_value == 0)
+		return (1);
+	data->shlvl = new_value;
+	new_value_string = ft_itoa(new_value);
+	if (!new_value_string)
+	{
+		data->shlvl = 0;
+		return (0);
+	}
+	cur_variable = shell->environment_p;
+	while (cur_variable)
+	{
+		if (ft_strcmp(cur_variable->key, "SHLVL") == 0)
+		{
+			free(cur_variable->value);
+			cur_variable->value = new_value_string;
+			return (1);
+		}
+		cur_variable = cur_variable->next;
+	}
+	free(new_value_string);
+	return (0);
+}
+// idea is to get the updated value if the key so i can modify
+// and add correctly later the value of the variable

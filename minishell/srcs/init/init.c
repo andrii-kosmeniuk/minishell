@@ -12,8 +12,12 @@
 
 #include "../../minishell.h"
 
-void	init_env(t_shell *shell, char **envp)
+void	init_env(t_shell *shell, t_data *data, char **envp)
 {
+	data->build_pwd = NULL;
+	data->build_shlvl = NULL;
+	data->build_underscore = NULL;
+	data->shlvl = 1;
 	shell->env_array = ft_calloc(env_size(envp + 1), sizeof(char *));
 	if (!shell->env_array)
 		return ;
