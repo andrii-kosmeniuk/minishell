@@ -30,13 +30,15 @@ int	main(int ac, char **av, char **envp)
 	{
 		setup_signals();
 		line = readline(CYAN"👹-minis(hell)>" RESET);
-		if (!line || ft_strlen(line) == 0)
+		if (!line)
 		{
 			printf("shell has been killed\n");
 			break ;
 		}
 		if (line[0] != '\0')
 			add_history(line);
+		if (ft_strcmp(line, "clear") == 0)
+			printf("\033[H\033[2J");
 		free(line);
 	}
 	return (0);

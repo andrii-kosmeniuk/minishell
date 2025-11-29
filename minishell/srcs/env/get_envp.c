@@ -52,7 +52,10 @@ static void	replace_key_if_exists(t_env **head, char *key)
 	prev = NULL;
 	while (cur_node)
 	{
-		if (ft_strcmp(cur_node->key, key) == 0)
+		
+		if (!cur_node->key)
+			printf("ERROR: cur_node->key is NULL!!\n");
+		else if (ft_strcmp(cur_node->key, key) == 0)
 		{
 			if (prev == NULL)
 				*head = cur_node->next;
@@ -105,6 +108,7 @@ t_env	*create_list_key_value(t_shell *shell, t_env **head, char **envp)
 	t_env	*node;
 	int		has_equal;
 
+	*head = NULL;
 	if (check_empty_env(envp, shell, head) == NULL)
 	{
 		while (*envp)
