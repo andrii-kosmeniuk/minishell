@@ -56,7 +56,7 @@ typedef struct s_shell
 }	t_shell;
 
 //initialization
-void	init_env(t_shell *shell, char **envp);
+void	init_env(t_shell *shell, t_data *data, char **envp);
 
 //memory managment
 void	free_array(char **array);
@@ -70,7 +70,7 @@ void	add_to_list(t_env **head, t_env *new);
 char	*ft_strndup(const char *str, size_t len);
 
 //environment
-t_env	*create_list_key_value(t_shell *shell, t_env **head, char **envp);
+t_env	*list_key_value(t_shell *shell, t_env **head, char **envp, t_data *data);
 char	**copy_of_envp(t_shell *shell, char **envp);
 int		calculate_new_shlvl(t_shell *shell);
 int		update_shlvl_key(t_shell *shell, t_data *data);

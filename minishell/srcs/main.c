@@ -25,8 +25,8 @@ int	main(int ac, char **av, char **envp)
 	t_data	data;
 	t_shell	shell;
 
-	init_env(&shell, envp);
-	env = create_list_key_value(&shell, &head, envp);
+	init_env(&shell, &data, envp);
+	env = list_key_value(&shell, &head, envp, &data);
 	while (1)
 	{
 		setup_signals();

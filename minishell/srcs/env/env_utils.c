@@ -45,7 +45,7 @@ int	calculate_new_shlvl(t_shell *shell)
 	int		new_value;
 
 	cur_variable = shell->environment_p;
-	new_value= 0;
+	new_value = 0;
 	current_value = 0;
 	while (cur_variable)
 	{
@@ -62,11 +62,10 @@ int	calculate_new_shlvl(t_shell *shell)
 				new_value = current_value + 1;
 				return (new_value);
 			}
-		 }
+		}
 		cur_variable = cur_variable->next;
 	}
 	return (0);
-//in bash, in non-login shells, if SHLVL is not foundit prints \n or returns 0
 }
 
 int	update_shlvl_key(t_shell *shell, t_data *data)

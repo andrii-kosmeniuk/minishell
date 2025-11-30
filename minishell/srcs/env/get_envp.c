@@ -22,8 +22,6 @@
 static void	build_minimum_env(t_shell *shell, t_data *data)
 {
 	t_env	*node;
-	t_env	*node2;
-	t_env	*node3;
 	char	*pwd;
 
 	pwd = getcwd(NULL, 0);
@@ -32,15 +30,17 @@ static void	build_minimum_env(t_shell *shell, t_data *data)
 	node = create_node("PWD", pwd);
 	if (!node)
 		return (free(pwd));
+	free(pwd);
 	add_to_list(&shell->environment_p, node);
-	node2 = create_node("SHLVL", "1");
-	if (!node2)
-		return (free(node));
-	add_to_list(&shell->environment_p, node2);
-	node3 = create_node("_", "/usr/bin/env");
-	if (!node3)
-		return (free(node3), free(node2));
-	add_to_list(&shell->environment_p, node3);
+	node = create_node("SHLVL", "1");
+	if (!node)
+		return (free_env_list(shell->environment_p));
+	data->shlvl = 1;
+	add_to_list(&shell->environment_p, node);
+	node = create_node("_", "/usr/bin/env");
+	if (!node)
+		return (free_env_list(shell->environment_p));
+	add_to_list(&shell->environment_p, node);
 }
 
 static void	replace_key_if_exists(t_env **head, char *key)
@@ -54,7 +54,6 @@ static void	replace_key_if_exists(t_env **head, char *key)
 	{
 		if (!cur_node->key)
 			printf("ERROR: cur_node->key is NULL!!\n");
-			//if variable doesnt exist it prints \n when echo $?
 		else if (ft_strcmp(cur_node->key, key) == 0)
 		{
 			if (prev == NULL)
@@ -71,13 +70,13 @@ static void	replace_key_if_exists(t_env **head, char *key)
 	}
 }
 
-static t_env	*check_empty_env(char **envp, t_shell *shell, t_env **head)
+static t_env	*empty_env(char **envp, t_shell *shell, t_env **h, t_data *data)
 {
 	if (!envp || !envp[0])
 	{
-		build_minimum_env(shell);
-		shell->environment_p = *head;
-		return (*head);
+		build_minimum_env(shell, data);
+		shell->environment_p = *h;
+		return (*h);
 	}
 	return (NULL);
 }
@@ -100,8 +99,8 @@ static int	assign_key_and_value(char *entry, char **key, char **value)
 		return (0);
 	}
 }
-//creates initial envp list
-t_env	*create_list_key_value(t_shell *shell, t_env **head, char **envp)
+
+t_env	*list_key_value(t_shell *shell, t_env **head, char **envp, t_data *data)
 {
 	char	*key;
 	char	*value;
@@ -109,7 +108,7 @@ t_env	*create_list_key_value(t_shell *shell, t_env **head, char **envp)
 	int		has_equal;
 
 	*head = NULL;
-	if (check_empty_env(envp, shell, head) == NULL)
+	if (empty_env(envp, shell, head, data) == NULL)
 	{
 		while (*envp)
 		{
