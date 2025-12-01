@@ -6,7 +6,7 @@
 /*   By: milija-h <milija-h@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 15:14:05 by milija-h          #+#    #+#             */
-/*   Updated: 2025/12/01 15:52:10 by milija-h         ###   ########.fr       */
+/*   Updated: 2025/12/01 22:37:09 by milija-h         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,9 +42,41 @@ typedef struct s_data
 	int	last_exit_code;
 }	t_data;
 
+typedef enum
+{
+	S_QUOTE,	   // ''
+	D_QUOTE,	  // "" 
+	R_INPUT,	 // <
+	R_OUTPUT,		// >
+	HERE_DOC,  // <<
+	R_APPEND, // >>
+	PIPE,	 // |
+	EXPAND, // $
+	WORD
+}	t_type;
+
+typedef enum
+{
+	normal = 0,
+	single_q = 1,
+	double_q = 2,
+}	t_state;
+
+typedef struct s_token
+{
+	t_type			type;
+	t_state			state;
+	char			*content;
+	struct	s_token *next;
+}	t_token;
+
+
 typedef struct s_shell
 {
 	t_env	*environment_p; // pointer to copied key-value variables
+	t_token	*head;
+	t_state	*state;
+	t_type	*type;
 	char	**env_array; //copy of envp, passed to execve
 	char	*current_line; // gets its input from readline
 	char	*prompt; //minishell promt
@@ -53,33 +85,44 @@ typedef struct s_shell
 }	t_shell;
 
 //initialization
-void	init_env(t_shell *shell, t_data *data, char **envp);
+void		init_shell(t_shell *shell, t_data *data, char **envp);
 
 //memory managment
-void	free_array(char **array);
-void	allocation_failed(char **array, int last_allocated_string);
-void	free_env_list(t_shell *shell, t_env *env);
-void	free_key_value(char *key, char *value);
+void		free_array(char **array);
+void		allocation_failed(char **array, int last_allocated_string);
+void		free_env_list(t_shell *shell, t_env *env);
+void		free_key_value(char *key, char *value);
+void		free_all(t_token *tokens, t_shell *shell);
 //utils
-t_env	*create_node(char *name, char *value);
-size_t	env_size(char **array);
-void	add_to_list(t_env **head, t_env *new);
-char	*ft_strndup(const char *str, size_t len);
+t_env		*create_node(char *name, char *value);
+size_t		env_size(char **array);
+void		add_to_list(t_env **head, t_env *new);
+char		*ft_strndup(const char *str, size_t len);
 
 //environment
-t_env	*list_key_value(t_shell *shell, char **envp, t_data *data);
-char	**copy_of_envp(t_shell *shell, char **envp);
-int		calculate_new_shlvl(t_shell *shell);
-int		update_shlvl_key(t_shell *shell, t_data *data);
+t_env		*list_key_value(t_shell *shell, char **envp, t_data *data);
+char		**copy_of_envp(t_shell *shell, char **envp);
+int			calculate_new_shlvl(t_shell *shell);
+int			update_shlvl_key(t_shell *shell, t_data *data);
 
+//lexer
+t_token		*create_token(char *content, t_state state, t_type type);
+void		add_token(t_token **head, t_token *new_token);
+int			is_operator(char operator);
+t_token		*build_token_list(t_token *token, const char *input, t_shell *shell);
+bool		add_token_to_list(t_token **token, t_shell *shell, char *value);
+const char	*tokenize_input_redirect(const char *input, t_shell *shell);
+const char	*tokenize_output_redirect(const char *input, t_shell *shell);
+const char	*tokenize_pipe(const char *input, t_shell *shell);
+const char	*tokenize_word(const char *input, t_shell *shell);
 
 //signals
-void	setup_signals(void);
+void		setup_signals(void);
 
 //readline
-char	*prompt(const char *prompt);
+char		*prompt(const char *prompt);
 
 //debug
-void	print_env_list(t_env *head);
+void		print_env_list(t_env *head);
 
 #endif

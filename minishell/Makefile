@@ -24,6 +24,8 @@ SRC = srcs/env/get_envp.c \
 	srcs/debug/debug.c \
 	srcs/signals/signal_handlers.c srcs/prompt/prompt.c \
 	srcs/init/init.c \
+	srcs/lexer/lexer.c \
+	srcs/lexer/lexer_utils.c \
 	srcs/main.c 
 
 OBJ = $(SRC:.c=.o)

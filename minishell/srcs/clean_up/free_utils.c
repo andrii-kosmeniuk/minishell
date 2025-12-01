@@ -6,7 +6,7 @@
 /*   By: milija-h <milija-h@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/22 16:05:30 by milija-h          #+#    #+#             */
-/*   Updated: 2025/12/01 14:19:27 by milija-h         ###   ########.fr       */
+/*   Updated: 2025/12/01 22:28:23 by milija-h         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,4 +56,18 @@ void	free_key_value(char *key, char *value)
 {
 	free(key);
 	free(value);
+}
+
+void	free_all(t_token *tokens, t_shell *shell)
+{
+	t_token	*tmp_token;
+
+	while (tokens)
+	{
+		tmp_token = tokens->next;
+		free(tokens);
+		tokens = tmp_token;
+	}
+	free_env_list(shell, shell->environment_p);
+	free(shell->env_array);
 }

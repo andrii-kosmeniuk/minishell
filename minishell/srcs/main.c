@@ -22,7 +22,7 @@ int	main(int ac, char **av, char **envp)
 	t_data	data;
 	t_shell	shell;
 
-	init_env(&shell, &data, envp);
+	init_shell(&shell, &data, envp);
 	list_key_value(&shell, envp, &data);
 	update_shlvl_key(&shell, &data);
 	print_env_list(shell.environment_p);
