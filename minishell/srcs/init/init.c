@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: milija-h <milija-h@student.42vienna.com>   +#+  +:+       +#+        */
+/*   By: milija-h <milija-h@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 20:23:53 by milija-h          #+#    #+#             */
-/*   Updated: 2025/11/20 20:23:54 by milija-h         ###   ########.fr       */
+/*   Updated: 2025/12/01 15:53:44 by milija-h         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,17 +14,9 @@
 
 void	init_env(t_shell *shell, t_data *data, char **envp)
 {
-	data->build_pwd = NULL;
-	data->build_shlvl = NULL;
-	data->build_underscore = NULL;
 	data->shlvl = 1;
 	shell->env_array = ft_calloc(env_size(envp + 1), sizeof(char *));
 	if (!shell->env_array)
 		return ;
-	shell->environment_p = malloc(sizeof(t_env) * env_size(shell->env_array));
-	if (!shell->environment_p)
-	{
-		free_array(shell->env_array);
-		return ;
-	}
+	shell->environment_p = NULL;
 }

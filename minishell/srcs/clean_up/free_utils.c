@@ -6,7 +6,7 @@
 /*   By: milija-h <milija-h@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/22 16:05:30 by milija-h          #+#    #+#             */
-/*   Updated: 2025/11/27 18:17:22 by milija-h         ###   ########.fr       */
+/*   Updated: 2025/12/01 14:19:27 by milija-h         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ void	allocation_failed(char **array, int last_allocated_string)
 	array = NULL;
 }
 
-void	free_env_list(t_env *env)
+void	free_env_list(t_shell *shell, t_env *env)
 {
 	t_env	*tmp;
 
@@ -49,6 +49,7 @@ void	free_env_list(t_env *env)
 		free(env);
 		env = tmp;
 	}
+	free(shell->env_array);
 }
 
 void	free_key_value(char *key, char *value)

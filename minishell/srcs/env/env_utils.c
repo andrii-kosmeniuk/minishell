@@ -3,15 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   env_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: milija-h <milija-h@student.42vienna.com>   +#+  +:+       +#+        */
+/*   By: milija-h <milija-h@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/22 22:14:16 by milija-h          #+#    #+#             */
-/*   Updated: 2025/11/22 22:14:17 by milija-h         ###   ########.fr       */
+/*   Updated: 2025/12/01 15:56:46 by milija-h         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
-//this build our own envp
+//this build our own envp linked list
 //env_array is allocated for total len of envp + NULL terminator at the end
 //this stores enough space for the full length of the array from envp[1][i] to
 //envp[n][last char]
@@ -46,7 +46,6 @@ int	calculate_new_shlvl(t_shell *shell)
 
 	cur_variable = shell->environment_p;
 	new_value = 0;
-	current_value = 0;
 	while (cur_variable)
 	{
 		if (ft_strcmp(cur_variable->key, "SHLVL") == 0)
@@ -59,7 +58,7 @@ int	calculate_new_shlvl(t_shell *shell)
 					new_value = 1;
 					return (new_value);
 				}
-				new_value = current_value + 1;
+				new_value = current_value;
 				return (new_value);
 			}
 		}
@@ -80,10 +79,7 @@ int	update_shlvl_key(t_shell *shell, t_data *data)
 	data->shlvl = new_value;
 	new_value_string = ft_itoa(new_value);
 	if (!new_value_string)
-	{
-		data->shlvl = 0;
-		return (0);
-	}
+		return (data->shlvl = 0, 0);
 	cur_variable = shell->environment_p;
 	while (cur_variable)
 	{
@@ -98,5 +94,3 @@ int	update_shlvl_key(t_shell *shell, t_data *data)
 	free(new_value_string);
 	return (0);
 }
-// idea is to get the updated value if the key so i can modify
-// and add correctly later the value of the variable
