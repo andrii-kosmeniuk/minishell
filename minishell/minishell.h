@@ -23,11 +23,12 @@
 # include "libft/libft.h"
 # include <readline/readline.h>
 # include <readline/history.h>
+# include <stdbool.h>
 
 # define CYAN  "\033[0;36m"
 # define RESET "\033[0m"
 
-extern int	g_exit_status;
+extern volatile sig_atomic_t	g_exit_status;
 
 typedef struct s_env
 {
@@ -85,44 +86,44 @@ typedef struct s_shell
 }	t_shell;
 
 //initialization
-void		init_shell(t_shell *shell, t_data *data, char **envp);
+void	init_shell(t_shell *shell, t_data *data, char **envp);
 
 //memory managment
-void		free_array(char **array);
-void		allocation_failed(char **array, int last_allocated_string);
-void		free_env_list(t_shell *shell, t_env *env);
-void		free_key_value(char *key, char *value);
-void		free_all(t_token *tokens, t_shell *shell);
+void	free_array(char **array);
+void	allocation_failed(char **array, int last_allocated_string);
+void	free_env_list(t_shell *shell, t_env *env);
+void	free_key_value(char *key, char *value);
+void	free_all(t_token *tokens, t_shell *shell);
 //utils
-t_env		*create_node(char *name, char *value);
-size_t		env_size(char **array);
-void		add_to_list(t_env **head, t_env *new);
-char		*ft_strndup(const char *str, size_t len);
+t_env	*create_node(char *name, char *value);
+size_t	env_size(char **array);
+void	add_to_list(t_env **head, t_env *new);
+char	*ft_strndup(const char *str, size_t len);
 
 //environment
-t_env		*list_key_value(t_shell *shell, char **envp, t_data *data);
-char		**copy_of_envp(t_shell *shell, char **envp);
-int			calculate_new_shlvl(t_shell *shell);
-int			update_shlvl_key(t_shell *shell, t_data *data);
+t_env	*list_key_value(t_shell *shell, char **envp, t_data *data);
+char	**copy_of_envp(t_shell *shell, char **envp);
+int		calculate_new_shlvl(t_shell *shell);
+int		update_shlvl_key(t_shell *shell, t_data *data);
 
 //lexer
-t_token		*create_token(char *content, t_state state, t_type type);
-void		add_token(t_token **head, t_token *new_token);
-int			is_operator(char operator);
-t_token		*build_token_list(t_token *token, const char *input, t_shell *shell);
-bool		add_token_to_list(t_token **token, t_shell *shell, char *value);
-const char	*tokenize_input_redirect(const char *input, t_shell *shell);
-const char	*tokenize_output_redirect(const char *input, t_shell *shell);
-const char	*tokenize_pipe(const char *input, t_shell *shell);
-const char	*tokenize_word(const char *input, t_shell *shell);
+t_token	*create_token(char *content, t_state state, t_type type);
+void	add_token(t_token **head, t_token *new_token);
+int		is_operator(char operator);
+t_token	*build_token_list(t_token *token, const char *input, t_shell *shell);
+bool	add_token_to_list(t_token **token, t_shell *shell, char *value);
+bool	tokenize_input_redirect(const char *input, t_shell *shell);
+bool	tokenize_output_redirect(const char *input, t_shell *shell);
+bool	tokenize_pipe(const char *input, t_shell *shell);
+bool	tokenize_word(const char *input, t_shell *shell);
 
 //signals
-void		setup_signals(void);
+void	setup_signals(void);
 
 //readline
-char		*prompt(const char *prompt);
+char	*prompt(const char *prompt);
 
 //debug
-void		print_env_list(t_env *head);
+void	print_env_list(t_env *head);
 
 #endif

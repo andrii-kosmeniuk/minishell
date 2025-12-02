@@ -15,7 +15,7 @@
 t_token	*create_token(char *content, t_state state, t_type type)
 {
 	int		token_len;
-	t_token *token;
+	t_token	*token;
 
 	token_len = ft_strlen(content);
 	token = malloc(sizeof(t_token) * token_len);
@@ -30,7 +30,7 @@ t_token	*create_token(char *content, t_state state, t_type type)
 
 void	add_token(t_token **head, t_token *new_token)
 {
-	t_token *cur;
+	t_token	*cur;
 
 	if (!head || !*head)
 		return ;
@@ -50,8 +50,8 @@ void	add_token(t_token **head, t_token *new_token)
 
 int	is_operator(char operator)
 {
-	if (operator == '\'' || operator == '\"' || operator == '<' ||
-		operator == '>' || operator == '|')
+	if (operator == '\'' || operator == '\"' || operator == '<'
+		|| operator == '>' || operator == '|')
 		return (1);
 	return (0);
 }

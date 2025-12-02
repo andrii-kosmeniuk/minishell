@@ -12,21 +12,22 @@
 
 #include "../minishell.h"
 //note env - i bash gives you empty list
-int	g_exit_status = 0;
+
+extern volatile		sig_atomic_t	g_exit_status = 0;
 
 int	main(int ac, char **av, char **envp)
 {
 	(void)ac;
 	(void)av;
-	//char	*line;
+	char	*line;
 	t_data	data;
 	t_shell	shell;
 
 	init_shell(&shell, &data, envp);
 	list_key_value(&shell, envp, &data);
 	update_shlvl_key(&shell, &data);
-	print_env_list(shell.environment_p);
-	/*while (1)
+	//print_env_list(shell.environment_p);
+	while (1)
 	{
 		setup_signals();
 		line = readline(CYAN"👹-minis(hell)>" RESET);
@@ -40,7 +41,7 @@ int	main(int ac, char **av, char **envp)
 		if (ft_strcmp(line, "clear") == 0)
 			printf("\033[H\033[2J");
 		free(line);
-	}*/
+	}
 	free_env_list(&shell, shell.environment_p);
 	return (0);
 }

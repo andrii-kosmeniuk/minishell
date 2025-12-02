@@ -17,6 +17,10 @@
 {
 	;
 }*/
+
+//remove readline() functions, undefined behaviour
+//readline_event_hook()
+//re-write all
 static void	sigint_handler(int signum)
 {
 	(void)signum;
