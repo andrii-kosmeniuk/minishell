@@ -14,9 +14,8 @@
 
 char	to_upper(unsigned int n, char c)
 {
-
 	if (n < 5 && c >= 'a' && c <= 'z')
-			return('*');
+		return ('*');
 	return (c);
 }
 
@@ -39,7 +38,6 @@ char	*ft_strmapi(char const *s, char (*f)(unsigned int, char))
 	new[i] = '\0';
 	return (new);
 }
-
 /*int	main(void)
 {
 	const char	*c = "suhdoiugigb7487hkbfl";

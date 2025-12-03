@@ -6,7 +6,7 @@
 /*   By: milija-h <milija-h@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 15:14:05 by milija-h          #+#    #+#             */
-/*   Updated: 2025/12/01 22:37:09 by milija-h         ###   ########.fr       */
+/*   Updated: 2025/12/03 22:29:50 by milija-h         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@
 # define CYAN  "\033[0;36m"
 # define RESET "\033[0m"
 
-extern volatile sig_atomic_t	g_exit_status;
+//extern volatile sig_atomic_t	g_exit_status;
 
 typedef struct s_env
 {
@@ -43,20 +43,20 @@ typedef struct s_data
 	int	last_exit_code;
 }	t_data;
 
-typedef enum
+typedef enum s_type
 {
-	S_QUOTE,	   // ''
-	D_QUOTE,	  // "" 
-	R_INPUT,	 // <
-	R_OUTPUT,		// >
-	HERE_DOC,  // <<
-	R_APPEND, // >>
-	PIPE,	 // |
-	EXPAND, // $
+	S_QUOTE,// ''
+	D_QUOTE,// "" 
+	R_INPUT,// <
+	R_OUTPUT,// >
+	HERE_DOC,// <<
+	R_APPEND,// >>
+	PIPE,// |
+	EXPAND,// $
 	WORD
 }	t_type;
 
-typedef enum
+typedef enum s_state
 {
 	normal = 0,
 	single_q = 1,
@@ -68,16 +68,15 @@ typedef struct s_token
 	t_type			type;
 	t_state			state;
 	char			*content;
-	struct	s_token *next;
+	struct s_token	*next;
 }	t_token;
-
 
 typedef struct s_shell
 {
 	t_env	*environment_p; // pointer to copied key-value variables
 	t_token	*head;
-	t_state	*state;
-	t_type	*type;
+	t_state	state;
+	t_type	type;
 	char	**env_array; //copy of envp, passed to execve
 	char	*current_line; // gets its input from readline
 	char	*prompt; //minishell promt
@@ -111,11 +110,13 @@ t_token	*create_token(char *content, t_state state, t_type type);
 void	add_token(t_token **head, t_token *new_token);
 int		is_operator(char operator);
 t_token	*build_token_list(t_token *token, const char *input, t_shell *shell);
-bool	add_token_to_list(t_token **token, t_shell *shell, char *value);
-bool	tokenize_input_redirect(const char *input, t_shell *shell);
-bool	tokenize_output_redirect(const char *input, t_shell *shell);
+t_token	*build_list(t_shell *shell, t_state state, t_type type, char *value);
+bool	tokenize_input_redirect(const char *input, t_shell *shell, int len);
+bool	tokenize_output_redirect(const char *input, t_shell *shell, int len);
 bool	tokenize_pipe(const char *input, t_shell *shell);
 bool	tokenize_word(const char *input, t_shell *shell);
+bool	tokenize_double_quotes(t_shell *shell, char *input, size_t len);
+bool	tokenize_single_quotes(t_shell *shell, char *input, size_t len);
 
 //signals
 void	setup_signals(void);

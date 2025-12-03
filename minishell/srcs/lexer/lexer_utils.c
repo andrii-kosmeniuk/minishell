@@ -48,10 +48,13 @@ void	add_token(t_token **head, t_token *new_token)
 	}
 }
 
-int	is_operator(char operator)
+t_token	*build_list(t_shell *shell, t_state state, t_type type, char *value)
 {
-	if (operator == '\'' || operator == '\"' || operator == '<'
-		|| operator == '>' || operator == '|')
-		return (1);
-	return (0);
+	t_token	*t_node;
+
+	t_node = create_token(value, state, type);
+	if (!t_node)
+		return (NULL);
+	add_token(&shell->head, t_node);
+	return (shell->head);
 }

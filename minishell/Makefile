@@ -6,7 +6,7 @@
 #    By: milija-h <milija-h@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/11/19 19:13:22 by milija-h          #+#    #+#              #
-#    Updated: 2025/11/27 18:30:46 by milija-h         ###   ########.fr        #
+#    Updated: 2025/12/03 22:31:51 by milija-h         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -26,7 +26,9 @@ SRC = srcs/env/get_envp.c \
 	srcs/init/init.c \
 	srcs/lexer/lexer.c \
 	srcs/lexer/lexer_utils.c \
-	srcs/main.c 
+	srcs/lexer/lex_redir_and_pipe.c \
+	srcs/lexer/lex_word_and_quotes.c \
+	main.c
 
 OBJ = $(SRC:.c=.o)
 

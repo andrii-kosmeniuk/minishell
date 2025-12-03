@@ -6,23 +6,23 @@
 /*   By: milija-h <milija-h@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/22 20:38:51 by milija-h          #+#    #+#             */
-/*   Updated: 2025/12/01 15:19:54 by milija-h         ###   ########.fr       */
+/*   Updated: 2025/12/03 22:32:10 by milija-h         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
+#include "minishell.h"
 //note env - i bash gives you empty list
 
-extern volatile		sig_atomic_t	g_exit_status = 0;
+//extern volatile		sig_atomic_t	g_exit_status = 0;
 
 int	main(int ac, char **av, char **envp)
 {
-	(void)ac;
-	(void)av;
 	char	*line;
 	t_data	data;
 	t_shell	shell;
 
+	(void)ac;
+	(void)av;
 	init_shell(&shell, &data, envp);
 	list_key_value(&shell, envp, &data);
 	update_shlvl_key(&shell, &data);

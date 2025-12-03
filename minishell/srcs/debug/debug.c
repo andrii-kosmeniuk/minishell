@@ -19,12 +19,12 @@ void	print_env_list(t_env *head)
 		if (head->value)
 		{
 			printf("KEY=\"%s\" VALUE=\"%s\"\n", head->key,
-			head->value);
+				head->value);
 		}
 		else
 		{
 			printf("KEY=\"%s\" VALUE=\"%s\"\n", head->key,
-			"NULL");
+				"NULL");
 		}
 		head = head->next;
 	}
