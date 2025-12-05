@@ -78,3 +78,12 @@ char	*ft_strndup(const char *str, size_t len)
 	new[i] = '\0';
 	return (new);
 }
+
+void	skip_white_spaces(const char *input)
+{
+	int	i;
+
+	i = 0;
+	while (input[i] < 33)
+		i++;
+}

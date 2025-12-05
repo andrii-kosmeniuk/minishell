@@ -12,7 +12,7 @@
 
 #include "../../minishell.h"
 
-bool	tokenize_word(const char *input, t_shell *shell)
+bool	tokenize_word(const char *input, t_shell *shell, int *len)
 {
 	const char	*start_of_word;
 	char		*token_word;
@@ -27,6 +27,7 @@ bool	tokenize_word(const char *input, t_shell *shell)
 		return (false);
 	token_word[0] = '\0';
 	ft_strlcpy(token_word, input, input - start_of_word);
+	*len = ft_strlen(token_word);
 	if (!build_list(shell, normal, WORD, token_word))
 		return (free(token_word), false);
 	free(token_word);
@@ -47,8 +48,6 @@ static char	*extract_quoted_string(t_shell *shell, char *input)
 	char	*quoted_string;
 	char	quote;
 
-	while (*input && *input != '\'' && *input != '\"')
-		input++;
 	quote = *input;
 	input++;
 	get_state(shell, quote);
@@ -68,7 +67,7 @@ static char	*extract_quoted_string(t_shell *shell, char *input)
 	return (quoted_string);
 }
 
-bool	tokenize_single_quotes(t_shell *shell, char *input, size_t len)
+bool	tokenize_single_quotes(t_shell *shell, char *input, int *len)
 {
 	char	*quoted_input;
 	t_token	*t_node;
@@ -76,15 +75,15 @@ bool	tokenize_single_quotes(t_shell *shell, char *input, size_t len)
 	quoted_input = extract_quoted_string(shell, input);
 	if (!quoted_input)
 		return (false);
-	len = ft_strlen(quoted_input);
+	*len = ft_strlen(quoted_input);
 	t_node = build_list(shell, single_q, S_QUOTE, quoted_input);
 	if (!t_node)
-		return (free(quoted_input), NULL);
+		return (free(quoted_input), false);
 	free(quoted_input);
 	return (true);
 }
 
-bool	tokenize_double_quotes(t_shell *shell, char *input, size_t len)
+bool	tokenize_double_quotes(t_shell *shell, char *input, int *len)
 {
 	char	*quoted_input;
 	t_token	*t_node;
@@ -92,7 +91,7 @@ bool	tokenize_double_quotes(t_shell *shell, char *input, size_t len)
 	quoted_input = extract_quoted_string(shell, input);
 	if (!quoted_input)
 		return (false);
-	len = ft_strlen(quoted_input);
+	*len = ft_strlen(quoted_input);
 	t_node = build_list(shell, double_q, D_QUOTE, quoted_input);
 	if (!t_node)
 		return (false);

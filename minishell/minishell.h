@@ -6,7 +6,7 @@
 /*   By: milija-h <milija-h@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 15:14:05 by milija-h          #+#    #+#             */
-/*   Updated: 2025/12/03 22:29:50 by milija-h         ###   ########.fr       */
+/*   Updated: 2025/12/05 14:41:09 by milija-h         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,6 +98,9 @@ t_env	*create_node(char *name, char *value);
 size_t	env_size(char **array);
 void	add_to_list(t_env **head, t_env *new);
 char	*ft_strndup(const char *str, size_t len);
+void	skip_white_spaces(const char *input);
+void	quotes(t_shell *shell, t_token *token, const char *input, int *len);
+void	redir_pipe(t_shell *shell, t_token *token, const char *input, int *len);
 
 //environment
 t_env	*list_key_value(t_shell *shell, char **envp, t_data *data);
@@ -111,12 +114,12 @@ void	add_token(t_token **head, t_token *new_token);
 int		is_operator(char operator);
 t_token	*build_token_list(t_token *token, const char *input, t_shell *shell);
 t_token	*build_list(t_shell *shell, t_state state, t_type type, char *value);
-bool	tokenize_input_redirect(const char *input, t_shell *shell, int len);
-bool	tokenize_output_redirect(const char *input, t_shell *shell, int len);
-bool	tokenize_pipe(const char *input, t_shell *shell);
-bool	tokenize_word(const char *input, t_shell *shell);
-bool	tokenize_double_quotes(t_shell *shell, char *input, size_t len);
-bool	tokenize_single_quotes(t_shell *shell, char *input, size_t len);
+bool	tokenize_input_redirect(const char *input, t_shell *shell, int *len);
+bool	tokenize_output_redirect(const char *input, t_shell *shell, int *len);
+bool	tokenize_pipe(const char *input, t_shell *shell, int *len);
+bool	tokenize_word(const char *input, t_shell *shell, int *len);
+bool	tokenize_double_quotes(t_shell *shell, char *input, int *len);
+bool	tokenize_single_quotes(t_shell *shell, char *input, int *len);
 
 //signals
 void	setup_signals(void);

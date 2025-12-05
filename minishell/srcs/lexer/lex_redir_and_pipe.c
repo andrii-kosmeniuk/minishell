@@ -12,52 +12,47 @@
 
 #include "../../minishell.h"
 
-bool	tokenize_input_redirect(const char *input, t_shell *shell, int len)
+bool	tokenize_input_redirect(const char *input, t_shell *shell, int *len)
 {
 	if (input[1] == '<')
 	{
-		if (input[2] == '<')
-		{
-			len = 2;
-			if (!build_list(shell, normal, HERE_DOC, "<<"))
-				return (false);
-		}
-		else
-		{
-			len = 1;
-			if (!build_list(shell, normal, R_INPUT, "<"))
-				return (false);
-		}
+		*len = 2;
+		if (!build_list(shell, normal, HERE_DOC, "<<"))
+			return (false);
+	}
+	else
+	{
+		*len = 1;
+		if (!build_list(shell, normal, R_INPUT, "<"))
+			return (false);
 	}
 	return (true);
 }
 
-bool	tokenize_output_redirect(const char *input, t_shell *shell, int len)
+bool	tokenize_output_redirect(const char *input, t_shell *shell, int *len)
 {
 	if (input[1] == '>')
 	{
-		if (input[2] == '>')
-		{
-			len = 2;
-			if (!build_list(shell, normal, R_APPEND, ">>"))
-				return (false);
-		}
-		else
-		{
-			len = 1;
-			if (!build_list(shell, normal, R_OUTPUT, ">"))
-				return (false);
-		}
+		*len = 2;
+		if (!build_list(shell, normal, R_APPEND, ">>"))
+			return (false);
+	}
+	else
+	{
+		*len = 1;
+		if (!build_list(shell, normal, R_OUTPUT, ">"))
+			return (false);
 	}
 	return (true);
 }
 
-bool	tokenize_pipe(const char *input, t_shell *shell)
+bool	tokenize_pipe(const char *input, t_shell *shell, int *len)
 {
-	if (input[1])
+	(void)input;
+	if (!build_list(shell, normal, PIPE, "|"))
 	{
-		if (!build_list(shell, normal, PIPE, "|"))
-			return (false);
+		*len = 1;
+		return (false);
 	}
 	return (true);
 }
