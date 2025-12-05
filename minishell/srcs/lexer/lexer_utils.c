@@ -14,14 +14,14 @@
 
 t_token	*create_token(char *content, t_state state, t_type type)
 {
-	int		token_len;
 	t_token	*token;
 
-	token_len = ft_strlen(content);
-	token = malloc(sizeof(t_token) * token_len);
+	token = malloc(sizeof(t_token));
 	if (!token)
 		return (NULL);
-	token->content = content;
+	token->content = ft_strdup(content);
+	if (!token->content)
+		return (free(token), NULL);
 	token->state = state;
 	token->type = type;
 	token->next = NULL;
@@ -32,7 +32,7 @@ void	add_token(t_token **head, t_token *new_token)
 {
 	t_token	*cur;
 
-	if (!head || !*head)
+	if (!head || !new_token)
 		return ;
 	if (*head == NULL)
 	{
@@ -42,7 +42,7 @@ void	add_token(t_token **head, t_token *new_token)
 	else
 	{
 		cur = *head;
-		while (cur)
+		while (cur->next)
 			cur = cur->next;
 		cur->next = new_token;
 	}

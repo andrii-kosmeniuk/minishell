@@ -74,7 +74,7 @@ typedef struct s_token
 typedef struct s_shell
 {
 	t_env	*environment_p; // pointer to copied key-value variables
-	t_token	*head;
+	t_token	*head; //list of tokens
 	t_state	state;
 	t_type	type;
 	char	**env_array; //copy of envp, passed to execve
@@ -112,7 +112,7 @@ int		update_shlvl_key(t_shell *shell, t_data *data);
 t_token	*create_token(char *content, t_state state, t_type type);
 void	add_token(t_token **head, t_token *new_token);
 int		is_operator(char operator);
-t_token	*build_token_list(t_token *token, const char *input, t_shell *shell);
+t_token	*build_token_list(const char *input, t_shell *shell);
 t_token	*build_list(t_shell *shell, t_state state, t_type type, char *value);
 bool	tokenize_input_redirect(const char *input, t_shell *shell, int *len);
 bool	tokenize_output_redirect(const char *input, t_shell *shell, int *len);
@@ -129,5 +129,7 @@ char	*prompt(const char *prompt);
 
 //debug
 void	print_env_list(t_env *head);
+void	print_tokens(t_token *token);
+
 
 #endif

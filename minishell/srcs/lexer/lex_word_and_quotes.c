@@ -26,7 +26,7 @@ bool	tokenize_word(const char *input, t_shell *shell, int *len)
 	if (!token_word)
 		return (false);
 	token_word[0] = '\0';
-	ft_strlcpy(token_word, input, input - start_of_word);
+	ft_strlcpy(token_word, start_of_word, word_len + 1);
 	*len = ft_strlen(token_word);
 	if (!build_list(shell, normal, WORD, token_word))
 		return (free(token_word), false);
@@ -75,7 +75,7 @@ bool	tokenize_single_quotes(t_shell *shell, char *input, int *len)
 	quoted_input = extract_quoted_string(shell, input);
 	if (!quoted_input)
 		return (false);
-	*len = ft_strlen(quoted_input);
+	*len = ft_strlen(quoted_input) + 2;
 	t_node = build_list(shell, single_q, S_QUOTE, quoted_input);
 	if (!t_node)
 		return (free(quoted_input), false);
@@ -91,7 +91,7 @@ bool	tokenize_double_quotes(t_shell *shell, char *input, int *len)
 	quoted_input = extract_quoted_string(shell, input);
 	if (!quoted_input)
 		return (false);
-	*len = ft_strlen(quoted_input);
+	*len = ft_strlen(quoted_input) + 2;
 	t_node = build_list(shell, double_q, D_QUOTE, quoted_input);
 	if (!t_node)
 		return (false);

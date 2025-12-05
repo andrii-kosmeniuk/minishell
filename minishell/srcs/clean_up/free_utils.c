@@ -65,9 +65,9 @@ void	free_all(t_token *tokens, t_shell *shell)
 	while (tokens)
 	{
 		tmp_token = tokens->next;
+		free(tokens->content);
 		free(tokens);
 		tokens = tmp_token;
 	}
 	free_env_list(shell, shell->environment_p);
-	free(shell->env_array);
 }

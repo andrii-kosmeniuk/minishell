@@ -20,13 +20,14 @@ int	main(int ac, char **av, char **envp)
 	char	*line;
 	t_data	data;
 	t_shell	shell;
+	t_token	*tokens;
 
 	(void)ac;
 	(void)av;
+	tokens = NULL;
 	init_shell(&shell, &data, envp);
 	list_key_value(&shell, envp, &data);
 	update_shlvl_key(&shell, &data);
-	//print_env_list(shell.environment_p);
 	while (1)
 	{
 		setup_signals();
@@ -39,9 +40,18 @@ int	main(int ac, char **av, char **envp)
 		if (line[0] != '\0')
 			add_history(line);
 		if (ft_strcmp(line, "clear") == 0)
+		{
 			printf("\033[H\033[2J");
+			free(line);
+			continue;
+		}
+		tokens = build_token_list(line, &shell);
+		if (!tokens)
+			return (free_env_list(&shell, shell.environment_p), free(line), 1);
+		print_tokens(tokens);
 		free(line);
 	}
-	free_env_list(&shell, shell.environment_p);
+	free_all(tokens, &shell);
+	rl_clear_history(); 
 	return (0);
 }

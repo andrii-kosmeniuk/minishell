@@ -22,12 +22,12 @@ void	redir_pipe(t_shell *shell, t_token *token, const char *input, int *len)
 		if (!tokenize_output_redirect((char *)input, shell, len))
 			return (free_all(token, shell));
 	}
-	else if (redir == '>')
+	else if (redir == '<')
 	{
 		if (!tokenize_input_redirect((char *)input, shell, len))
 			return (free_all(token, shell));
 	}
-	else
+	else if (redir == '|')
 	{
 		if (!tokenize_pipe((char *)input, shell, len))
 			return (free_all(token, shell));
@@ -44,16 +44,17 @@ void	quotes(t_shell *shell, t_token *token, const char *input, int *len)
 		if (!tokenize_single_quotes(shell, (char *)input, len))
 			return (free_all(token, shell));
 	}
-	else
+	else if (quote == '\"')
 	{
 		if (!tokenize_double_quotes(shell, (char *)input, len))
 			return (free_all(token, shell));
 	}
 }
 
-t_token	*build_token_list(t_token *token, const char *input, t_shell *shell)
+t_token	*build_token_list(const char *input, t_shell *shell)
 {
 	int		len;
+	t_token	token;
 
 	len = 0;
 	while (*input)
@@ -61,12 +62,12 @@ t_token	*build_token_list(t_token *token, const char *input, t_shell *shell)
 		skip_white_spaces(input);
 		if (*input == '<' || *input == '>' || *input == '|')
 		{
-			redir_pipe(shell, token, (char *)input, &len);
+			redir_pipe(shell, &token, (char *)input, &len);
 			input += len;
 		}
-		else if (*input == '\'' || *input == '\'')
+		else if (*input == '\'' || *input == '\"')
 		{
-			quotes(shell, token, (char *)input, &len);
+			quotes(shell, &token, (char *)input, &len);
 			input += len;
 		}
 		else

@@ -29,3 +29,18 @@ void	print_env_list(t_env *head)
 		head = head->next;
 	}
 }
+
+void	print_tokens(t_token *token)
+{
+	while (token)
+	{
+		if (token->content)
+		{
+			printf("the token is: %s\n its state is: %d\nits type is: %d\n",
+		token->content, token->state, token->type);
+		}
+		else
+			printf("Error building token\n");
+		token = token->next;
+	}
+}
