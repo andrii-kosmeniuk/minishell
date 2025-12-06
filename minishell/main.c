@@ -48,18 +48,15 @@ int	main(int ac, char **av, char **envp)
 			{
 				printf("\033[H\033[2J");
 				free(line);
-				continue;
+				continue ;
 			}
 			tokens = build_token_list(line, &shell);
 			if (!tokens || shell.redir_error == 1)
 			{
 				printf("syntax error\n");
-				(free(line));
+				free(line);
 				continue ;
 			}
-			//print_tokens(tokens);
-			//print_num_of_tokens(tokens);
-			//free_tokens(tokens);
 		}
 		free(line);
 	}

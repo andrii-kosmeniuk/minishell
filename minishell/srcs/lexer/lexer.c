@@ -12,7 +12,7 @@
 
 #include "../../minishell.h"
 
-void	redir_pipe(t_shell *shell, const char *input, int *len)
+static void	redir_pipe(t_shell *shell, const char *input, int *len)
 {
 	char	redir;
 
@@ -40,7 +40,7 @@ void	redir_pipe(t_shell *shell, const char *input, int *len)
 	}
 }
 
-void	quotes(t_shell *shell, const char *input, int *len)
+static void	quotes(t_shell *shell, const char *input, int *len)
 {
 	char	quote;
 

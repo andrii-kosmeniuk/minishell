@@ -60,27 +60,3 @@ t_env	*create_node(char *name, char *value)
 	new_node->next = NULL;
 	return (new_node);
 }
-
-char	*ft_strndup(const char *str, size_t len)
-{
-	size_t	i;
-	char	*new;
-
-	new = malloc(sizeof(char) * len + 1);
-	if (!new)
-		return (NULL);
-	i = 0;
-	while (i < len)
-	{
-		new[i] = str[i];
-		i++;
-	}
-	new[i] = '\0';
-	return (new);
-}
-
-bool	my_isspace(char c)
-{
-	return (c == ' ' || c == '\t' || c == '\n'
-		||c == '\v' || c == '\f' || c == '\r');
-}

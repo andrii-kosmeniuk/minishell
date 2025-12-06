@@ -18,6 +18,7 @@
 # include <stdint.h>
 # include <stdarg.h>
 # include <limits.h>
+# include <stdbool.h>
 
 # define BUFFER_SIZE 100
 
@@ -79,6 +80,9 @@ size_t	array_len(char **str);
 char	*ft_strcat(char *dest, const char *src);
 char	*ft_strcpy(char *dest, const char *src);
 char	*ft_strncpy(char *dest, const char *src, size_t n);
+bool	ft_isspace(char c);
+char	*ft_strndup(const char *str, size_t len);
+bool	is_operator(char c);
 
 t_list	*ft_lstnew(void *content);
 t_list	*ft_lstlast(t_list *lst);

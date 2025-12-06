@@ -99,10 +99,7 @@ void	free_tokens(t_token *tokens);
 t_env	*create_node(char *name, char *value);
 size_t	env_size(char **array);
 void	add_to_list(t_env **head, t_env *new);
-char	*ft_strndup(const char *str, size_t len);
 bool	my_isspace(char c);
-void	quotes(t_shell *shell, const char *input, int *len);
-void	redir_pipe(t_shell *shell, const char *input, int *len);
 //environment
 t_env	*list_key_value(t_shell *shell, char **envp, t_data *data);
 char	**copy_of_envp(t_shell *shell, char **envp);
@@ -111,7 +108,6 @@ int		update_shlvl_key(t_shell *shell, t_data *data);
 //lexer
 t_token	*create_token(char *content, t_state state, t_type type);
 void	add_token(t_token **head, t_token *new_token);
-int		is_operator(char operator);
 t_token	*build_token_list(const char *input, t_shell *shell);
 t_token	*build_list(t_shell *shell, t_state state, t_type type, char *value);
 bool	tokenize_input_redirect(const char *input, t_shell *shell, int *len);
