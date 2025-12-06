@@ -82,6 +82,7 @@ typedef struct s_shell
 	char	*prompt; //minishell promt
 	int		interactive; // signals representend by ints
 	int		signal_received;
+	int		redir_error;
 }	t_shell;
 
 //initialization
@@ -100,8 +101,8 @@ size_t	env_size(char **array);
 void	add_to_list(t_env **head, t_env *new);
 char	*ft_strndup(const char *str, size_t len);
 bool	my_isspace(char c);
-void	quotes(t_shell *shell, t_token *token, const char *input, int *len);
-void	redir_pipe(t_shell *shell, t_token *token, const char *input, int *len);
+void	quotes(t_shell *shell, const char *input, int *len);
+void	redir_pipe(t_shell *shell, const char *input, int *len);
 //environment
 t_env	*list_key_value(t_shell *shell, char **envp, t_data *data);
 char	**copy_of_envp(t_shell *shell, char **envp);
@@ -119,7 +120,6 @@ bool	tokenize_pipe(const char *input, t_shell *shell, int *len);
 bool	tokenize_word(const char *input, t_shell *shell, int *len);
 bool	tokenize_double_quotes(t_shell *shell, char *input, int *len);
 bool	tokenize_single_quotes(t_shell *shell, char *input, int *len);
-
 //signals
 void	setup_signals(void);
 

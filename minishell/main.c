@@ -42,24 +42,29 @@ int	main(int ac, char **av, char **envp)
 		{
 			if (line[0] != '\0')
 				add_history(line);
+			free_tokens(shell.head);
+			shell.head = NULL;
 			if (ft_strcmp(line, "clear") == 0)
 			{
 				printf("\033[H\033[2J");
 				free(line);
 				continue;
 			}
-			shell.head = NULL;
 			tokens = build_token_list(line, &shell);
-			if (!tokens)
-				return (free_env_list(&shell,
-						  shell.environment_p), free(line), 1);
-			print_tokens(tokens);
-			print_num_of_tokens(tokens);
-			free_tokens(tokens);
+			if (!tokens || shell.redir_error == 1)
+			{
+				printf("syntax error\n");
+				(free(line));
+				continue ;
+			}
+			//print_tokens(tokens);
+			//print_num_of_tokens(tokens);
+			//free_tokens(tokens);
 		}
 		free(line);
 	}
+	free_tokens(shell.head);
 	free_env_list(&shell, shell.environment_p);
-	rl_clear_history(); 
+	rl_clear_history();
 	return (0);
 }
