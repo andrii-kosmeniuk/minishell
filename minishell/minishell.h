@@ -93,21 +93,20 @@ void	allocation_failed(char **array, int last_allocated_string);
 void	free_env_list(t_shell *shell, t_env *env);
 void	free_key_value(char *key, char *value);
 void	free_all(t_token *tokens, t_shell *shell);
+void	free_tokens(t_token *tokens);
 //utils
 t_env	*create_node(char *name, char *value);
 size_t	env_size(char **array);
 void	add_to_list(t_env **head, t_env *new);
 char	*ft_strndup(const char *str, size_t len);
-void	skip_white_spaces(const char *input);
+bool	my_isspace(char c);
 void	quotes(t_shell *shell, t_token *token, const char *input, int *len);
 void	redir_pipe(t_shell *shell, t_token *token, const char *input, int *len);
-
 //environment
 t_env	*list_key_value(t_shell *shell, char **envp, t_data *data);
 char	**copy_of_envp(t_shell *shell, char **envp);
 int		calculate_new_shlvl(t_shell *shell);
 int		update_shlvl_key(t_shell *shell, t_data *data);
-
 //lexer
 t_token	*create_token(char *content, t_state state, t_type type);
 void	add_token(t_token **head, t_token *new_token);
@@ -130,6 +129,6 @@ char	*prompt(const char *prompt);
 //debug
 void	print_env_list(t_env *head);
 void	print_tokens(t_token *token);
-
+void	print_num_of_tokens(t_token *tokens);
 
 #endif

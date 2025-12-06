@@ -48,11 +48,13 @@ bool	tokenize_output_redirect(const char *input, t_shell *shell, int *len)
 
 bool	tokenize_pipe(const char *input, t_shell *shell, int *len)
 {
-	(void)input;
-	if (!build_list(shell, normal, PIPE, "|"))
+	if (input[0] == '|')
 	{
 		*len = 1;
-		return (false);
+		if (!build_list(shell, normal, PIPE, "|"))
+		{
+			return (false);
+		}
 	}
 	return (true);
 }

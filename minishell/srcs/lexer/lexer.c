@@ -59,7 +59,8 @@ t_token	*build_token_list(const char *input, t_shell *shell)
 	len = 0;
 	while (*input)
 	{
-		skip_white_spaces(input);
+		while (*input && my_isspace(*input))
+			input++;
 		if (*input == '<' || *input == '>' || *input == '|')
 		{
 			redir_pipe(shell, &token, (char *)input, &len);

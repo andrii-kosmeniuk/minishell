@@ -31,27 +31,35 @@ int	main(int ac, char **av, char **envp)
 	while (1)
 	{
 		setup_signals();
+		line = NULL;
 		line = readline(CYAN"👹-minis(hell)>" RESET);
 		if (!line)
 		{
 			printf("exit\n");
 			break ;
 		}
-		if (line[0] != '\0')
-			add_history(line);
-		if (ft_strcmp(line, "clear") == 0)
+		if (*line)
 		{
-			printf("\033[H\033[2J");
-			free(line);
-			continue;
+			if (line[0] != '\0')
+				add_history(line);
+			if (ft_strcmp(line, "clear") == 0)
+			{
+				printf("\033[H\033[2J");
+				free(line);
+				continue;
+			}
+			shell.head = NULL;
+			tokens = build_token_list(line, &shell);
+			if (!tokens)
+				return (free_env_list(&shell,
+						  shell.environment_p), free(line), 1);
+			print_tokens(tokens);
+			print_num_of_tokens(tokens);
+			free_tokens(tokens);
 		}
-		tokens = build_token_list(line, &shell);
-		if (!tokens)
-			return (free_env_list(&shell, shell.environment_p), free(line), 1);
-		print_tokens(tokens);
 		free(line);
 	}
-	free_all(tokens, &shell);
+	free_env_list(&shell, shell.environment_p);
 	rl_clear_history(); 
 	return (0);
 }

@@ -79,11 +79,8 @@ char	*ft_strndup(const char *str, size_t len)
 	return (new);
 }
 
-void	skip_white_spaces(const char *input)
+bool	my_isspace(char c)
 {
-	int	i;
-
-	i = 0;
-	while (input[i] < 33)
-		i++;
+	return (c == ' ' || c == '\t' || c == '\n'
+		||c == '\v' || c == '\f' || c == '\r');
 }

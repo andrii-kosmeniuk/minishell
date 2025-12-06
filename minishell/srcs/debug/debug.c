@@ -36,11 +36,24 @@ void	print_tokens(t_token *token)
 	{
 		if (token->content)
 		{
-			printf("the token is: %s\n its state is: %d\nits type is: %d\n",
-		token->content, token->state, token->type);
+			printf("the token is: %s\nits state is: %d\nits type is: %d\n",
+				token->content, token->state, token->type);
 		}
 		else
 			printf("Error building token\n");
 		token = token->next;
 	}
+}
+
+void	print_num_of_tokens(t_token *tokens)
+{
+	int	i;
+
+	i = 0;
+	while (tokens)
+	{
+		tokens = tokens->next;
+		i++;
+	}
+	printf("The number of tokens is: %d\n", i);
 }
