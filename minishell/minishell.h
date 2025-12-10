@@ -43,6 +43,13 @@ typedef struct s_data
 	int	last_exit_code;
 }	t_data;
 
+typedef enum s_state
+{
+	normal = 0,
+	single_q = 1,
+	double_q = 2,
+}	t_state;
+
 typedef enum s_type
 {
 	S_QUOTE,// ''
@@ -54,14 +61,29 @@ typedef enum s_type
 	PIPE,// |
 	EXPAND,// $
 	WORD
-}	t_type;
+}	t_
 
-typedef enum s_state
+typedef stuct s_redir_type
 {
-	normal = 0,
-	single_q = 1,
-	double_q = 2,
-}	t_state;
+	R_INPUT,
+	R_OUTPUT,
+	R_APPEND,
+	HERE_DOC
+}	t_redir_type;
+
+typedef struct s_redir
+{
+	t_redir_type	redir_type;
+	char			*file;
+	struct s_redir	*next;
+}	t_redir;
+
+typedef struct s_cmd
+{
+	char			**args;
+	t_redir			*redirections;
+	struct	s_cmd	*next;
+}	t_cmd;
 
 typedef struct s_token
 {

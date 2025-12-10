@@ -30,6 +30,7 @@ SRC = srcs/env/get_envp.c \
 	srcs/lexer/lexer_utils.c \
 	srcs/lexer/lex_redir_and_pipe.c \
 	srcs/lexer/lex_word_and_quotes.c \
+	srcs/parser/parser.c \
 	main.c
 
 OBJ = $(SRC:.c=.o)
