@@ -61,15 +61,7 @@ typedef enum s_type
 	PIPE,// |
 	EXPAND,// $
 	WORD
-}	t_
-
-typedef stuct s_redir_type
-{
-	R_INPUT,
-	R_OUTPUT,
-	R_APPEND,
-	HERE_DOC
-}	t_redir_type;
+}	t_type;
 
 typedef struct s_redir
 {
@@ -80,9 +72,9 @@ typedef struct s_redir
 
 typedef struct s_cmd
 {
-	char			**args;
-	t_redir			*redirections;
-	struct	s_cmd	*next;
+	t_token			*args; //linked list of word tokens;
+	t_redir			*redirections; //linked list of redirections
+	struct	s_cmd	*next; //next command if there is a pipe
 }	t_cmd;
 
 typedef struct s_token
@@ -138,6 +130,11 @@ bool	tokenize_pipe(const char *input, t_shell *shell, int *len);
 bool	tokenize_word(const char *input, t_shell *shell, int *len);
 bool	tokenize_double_quotes(t_shell *shell, char *input, int *len);
 bool	tokenize_single_quotes(t_shell *shell, char *input, int *len);
+//parser
+bool	is_argument(t_token *token);
+bool	is_redirection(t_token *token);
+void	add_cmd_to_list(t_cmd **token, t_cmd *new_command);
+
 //signals
 void	setup_signals(void);
 

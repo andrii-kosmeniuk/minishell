@@ -26,3 +26,39 @@ t_cmd	*create_command()
 	return (cmd);
 }
 
+void	add_cmd_to_list(t_cmd **head, t_cmd *new_command)
+{
+	t_cmd	*cur;
+
+	if (!head || new_command)
+		return ;
+	if (head == NULL)
+	{
+		*head = new_token;
+		return ;
+	}
+	else
+	{
+		cur = *head;
+		while (cur->next)
+			cur = cur->next;
+		cur->next = new_token;
+			
+	}
+}
+
+bool	is_argument(t_token *token)
+{
+	if (token->type == WORD || token->type == EXPAND || token->type == S_QUOTE
+		|| token->type == D_QUOTE)
+		return (true);
+	return (false);
+}
+
+bool	is_redirection(t_token *token)
+{
+	if (token->type = R_INPUT || token->type == R_OUTPUT
+		|| token->type == R_APPEND || token->type == HERE_DOC)
+		return (true);
+	return (false);
+}

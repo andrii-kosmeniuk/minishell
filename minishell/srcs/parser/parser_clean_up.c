@@ -26,3 +26,13 @@ void	free_command(t_cmd *cmds)
 	}
 }
 
+t_cmd	*get_last_command(t_cmd *cmd_list)
+{
+	t_cmd	*cur;
+
+	cur = cmd_list;
+	while (cur)
+		cur = cur->next;
+	return (cur);
+}
+
