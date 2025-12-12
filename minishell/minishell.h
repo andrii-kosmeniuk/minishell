@@ -28,6 +28,13 @@
 # define CYAN  "\033[0;36m"
 # define RESET "\033[0m"
 
+//errror messages
+# define PIPE_FIRST		"bash: syntax error near unexpected token `|'\n"
+# define PIPE_END		"bash: syntax error near unexpected token `|'\n"
+# define NO_TARGET		"bash: syntax error near unexpected token `newline'\n"
+# define REDIR_PIPE		"bash: syntax error near unexpected token `|'\n"
+# define HERE_DOC_ERROR	"bash: syntax error near unexpected token `newline'\n"
+
 //extern volatile sig_atomic_t	g_exit_status;
 
 typedef struct s_env
@@ -41,6 +48,7 @@ typedef struct s_data
 {
 	int	shlvl;
 	int	last_exit_code;
+	int	sentence;
 }	t_data;
 
 typedef enum s_state
@@ -66,7 +74,7 @@ typedef enum s_type
 typedef struct s_redir
 {
 	t_redir_type	redir_type;
-	char			*file;
+	char			*target;
 	struct s_redir	*next;
 }	t_redir;
 
@@ -74,7 +82,7 @@ typedef struct s_cmd
 {
 	t_token			*args; //linked list of word tokens;
 	t_redir			*redirections; //linked list of redirections
-	struct	s_cmd	*next; //next command if there is a pipe
+	struct s_cmd	*next; //next command if there is a pipe
 }	t_cmd;
 
 typedef struct s_token
@@ -133,7 +141,10 @@ bool	tokenize_single_quotes(t_shell *shell, char *input, int *len);
 //parser
 bool	is_argument(t_token *token);
 bool	is_redirection(t_token *token);
-void	add_cmd_to_list(t_cmd **token, t_cmd *new_command);
+void	add_cmd_back(t_cmd **head, t_cmd *new_command);
+t_cmd	*create_command(void);
+void	add_redir(t_ **head, t_type type, char *target, int *len);
+bool	syntax_check(t_shell *shell, t_cmd *cmd);
 
 //signals
 void	setup_signals(void);

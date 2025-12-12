@@ -1,37 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parser_clean_up.c                                  :+:      :+:    :+:   */
+/*   utils2.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: milija-h <milija-h@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/12/10 18:37:44 by milija-h          #+#    #+#             */
-/*   Updated: 2025/12/10 18:37:59 by milija-h         ###   ########.fr       */
+/*   Created: 2025/12/12 22:34:49 by milija-h          #+#    #+#             */
+/*   Updated: 2025/12/12 22:35:16 by milija-h         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-void	free_command(t_cmd *cmds)
+bool	is_argument(t_token *token)
 {
-	t_cmd	*cur;
-
-	while (cmds)
-	{
-		cur = cmds->next;
-		free_array(cmds->args);
-		free(cmds->redirections);
-		free(cmds);
-		cmds = cur;
-	}
+	if (token->type == WORD || token->type == EXPAND || token->type == S_QUOTE
+		|| token->type == D_QUOTE)
+		return (true);
+	return (false);
 }
 
-t_cmd	*get_last_command(t_cmd *cmd_list)
+bool	is_redirection(t_token *token)
 {
-	t_cmd	*cur;
-
-	cur = cmd_list;
-	while (cur)
-		cur = cur->next;
-	return (cur);
+	if (token->type = R_INPUT || token->type == R_OUTPUT
+		|| token->type == R_APPEND || token->type == HERE_DOC)
+		return (true);
+	return (false);
 }

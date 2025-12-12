@@ -12,29 +12,28 @@
 
 #include "../../minishell.h"
 
-// initially cmd has no args, redirections and is not tied a pipeline
-t_cmd	*create_command()
+t_cmd	*create_command(void)
 {
 	t_cmd	*cmd;
 
-	cmd = malloc(sizeof(t_cmd));
+	cmd = ft_calloc(1, sizeof(t_cmd));
 	if (!cmd)
-		return ;
+		return (NULL);
 	cmd->args = NULL;
 	cmd->redirections = NULL;
 	cmd->next = NULL;
 	return (cmd);
 }
 
-void	add_cmd_to_list(t_cmd **head, t_cmd *new_command)
+void	add_cmd_back(t_cmd **head, t_cmd *new_command)
 {
 	t_cmd	*cur;
 
-	if (!head || new_command)
+	if (!head || !new_command)
 		return ;
 	if (head == NULL)
 	{
-		*head = new_token;
+		*head = new_command;
 		return ;
 	}
 	else
@@ -42,23 +41,63 @@ void	add_cmd_to_list(t_cmd **head, t_cmd *new_command)
 		cur = *head;
 		while (cur->next)
 			cur = cur->next;
-		cur->next = new_token;
+		cur->next = new_command;
 			
 	}
 }
 
-bool	is_argument(t_token *token)
+void	add_redir(t_redir **head, t_type type, char *target, int *len)
 {
-	if (token->type == WORD || token->type == EXPAND || token->type == S_QUOTE
-		|| token->type == D_QUOTE)
-		return (true);
-	return (false);
+	t_redir	*new_redir;
+	t_redir	*cur;
+
+	if (type == R_INPUT || R_OUTPUT)
+		*len = 1;
+	else if (type == HERE_DOC || R_APPEND)
+		*len = 2;
+	new_redir = ft_calloc(len, sizeof(t_redir));
+	if (!new_redir)
+		return ;
+	new_redir->type = type;
+	new_redir->target = ft_strdup(target);
+	if (!new_redir)
+		return (free(new_redir));
+	new_redir->next = NULL;
+	if (*head == NULL)
+	{
+		*head = new_redir;
+		return ;
+	}
+	cur = *head;
+	while (cur->next)
+		cur = cur->next;
+	cur->next = new-redir;
 }
 
-bool	is_redirection(t_token *token)
+bool	syntax_check(t_shell *shell, t_cmd *cmd)
 {
-	if (token->type = R_INPUT || token->type == R_OUTPUT
-		|| token->type == R_APPEND || token->type == HERE_DOC)
-		return (true);
-	return (false);
+	t_token	*cur;
+	t_token	*next;
+
+	cur = shell->head;
+	if (cur->type == PIPE)
+		return (fprintf(stderr, PIPE_FIRST), false);
+	while (cur)
+	{
+		next = cur->next;
+		if (cur->type == PIPE && next == NULL)
+			return (fprintf(2, PIPE_END), false);
+		if ((cur->type == R_OUTPUT || cur->type == R_INPUT
+				|| cur->type == HERE_DOC || cur_type == R_APPEND)
+			&& (next->type == PIPE))
+			return (fprintf(stderr, REDIR_PIPE), false);
+		if (cur->type == R_INPUT || cur->type == R_OUTPUT
+			|| cur->type = R_APPEND || cur->type == HERE_DOC)
+		{
+			if (next == NULL || next->type != WORD)
+				return (fprintf(stderror, NO_TARGET), false);
+		}
+		cur = next;
+	}
+	return (true);
 }

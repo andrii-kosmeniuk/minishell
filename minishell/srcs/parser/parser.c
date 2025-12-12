@@ -12,4 +12,25 @@
 
 #include "../../minishell.h"
 
+//maybe remove quotes if target has quotes
+void	pipe_handler(t_shell *shell)
+{
+	t_token	*cur;
+	t_token	*next;
+	t_redir	*redir;
+	int		len;
 
+	cur = shell->head;
+	while (cur)
+	{
+		next = cur->next;
+		if (cur->type == R_APPEND || cur->type == R_INPUT
+			|| cur->type == R_OUTPUT || cur->type == HERE_DOC)
+		{
+				if (next->type != WORD)
+					return (fprintf(stderr, NO_TARGET));
+		}
+		add_redir(&redir, cur->type, next->content, &len);
+
+	}
+}
