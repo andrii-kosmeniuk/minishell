@@ -20,6 +20,7 @@ NAME = minishell
 
 SRC = srcs/env/get_envp.c \
 	srcs/utils/utils.c \
+	srcs/utils/utils2.c \
 	srcs/env/env_utils.c \
 	srcs/clean_up/free_utils.c \
 	srcs/clean_up/free_utils2.c \
@@ -31,6 +32,8 @@ SRC = srcs/env/get_envp.c \
 	srcs/lexer/lex_redir_and_pipe.c \
 	srcs/lexer/lex_word_and_quotes.c \
 	srcs/parser/parser.c \
+	srcs/parser/parser_clean_up.c \
+	srcs/parser/parser_utils.c \
 	main.c
 
 OBJ = $(SRC:.c=.o)

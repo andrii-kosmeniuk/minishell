@@ -22,7 +22,7 @@ bool	is_argument(t_token *token)
 
 bool	is_redirection(t_token *token)
 {
-	if (token->type = R_INPUT || token->type == R_OUTPUT
+	if (token->type == R_INPUT || token->type == R_OUTPUT
 		|| token->type == R_APPEND || token->type == HERE_DOC)
 		return (true);
 	return (false);

@@ -13,24 +13,33 @@
 #include "../../minishell.h"
 
 //maybe remove quotes if target has quotes
-void	pipe_handler(t_shell *shell)
+
+t_cmd	*parse(t_shell *shell, t_token *tokens)
 {
-	t_token	*cur;
-	t_token	*next;
-	t_redir	*redir;
-	int		len;
+	t_cmd	*head;
+	t_cmd	*current;
+	t_redir	*r;
+	size_t	len;
 
-	cur = shell->head;
-	while (cur)
+	if (!shell || !tokens)
+		return (NULL);
+	if (!syntax_check(shell))
+		return (NULL);
+	head = create_command();
+	current = head;
+	while (tokens)
 	{
-		next = cur->next;
-		if (cur->type == R_APPEND || cur->type == R_INPUT
-			|| cur->type == R_OUTPUT || cur->type == HERE_DOC)
+		if (tokens->type == WORD)
+			add_args(current, tokens);
+		else if (tokens->type == PIPE)
+			handle_pipe(&current);
+		else if (tokens->type == R_INPUT || tokens->type == R_OUTPUT
+			|| tokens->type == R_APPEND || tokens->type == HERE_DOC)
 		{
-				if (next->type != WORD)
-					return (fprintf(stderr, NO_TARGET));
+			add_redir(&r, tokens->type, current->redirections->target, &len);
+			tokens = tokens->next;
 		}
-		add_redir(&redir, cur->type, next->content, &len);
-
+		tokens = tokens->next;
 	}
+	return (head);
 }

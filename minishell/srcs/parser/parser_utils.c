@@ -42,20 +42,41 @@ void	add_cmd_back(t_cmd **head, t_cmd *new_command)
 		while (cur->next)
 			cur = cur->next;
 		cur->next = new_command;
-			
 	}
 }
 
-void	add_redir(t_redir **head, t_type type, char *target, int *len)
+void	add_args(t_cmd *cmd, t_token *token)
+{
+	t_token	*temp;
+
+	token->next = NULL;
+	if (!cmd->args)
+		cmd->args = token;
+	else
+	{
+		temp = cmd->args;
+		while (temp->next)
+			temp = temp->next;
+		temp->next = token;
+	}
+}
+
+void	handle_pipe(t_cmd **current)
+{
+	(*current)->next = create_command();
+	*current = (*current)->next;
+}
+
+void	add_redir(t_redir **head, t_type type, char *target, size_t *len)
 {
 	t_redir	*new_redir;
 	t_redir	*cur;
 
-	if (type == R_INPUT || R_OUTPUT)
+	if (type == R_INPUT || type == R_OUTPUT)
 		*len = 1;
-	else if (type == HERE_DOC || R_APPEND)
+	else if (type == HERE_DOC || type == R_APPEND)
 		*len = 2;
-	new_redir = ft_calloc(len, sizeof(t_redir));
+	new_redir = ft_calloc((size_t)len, sizeof(t_redir));
 	if (!new_redir)
 		return ;
 	new_redir->type = type;
@@ -71,33 +92,5 @@ void	add_redir(t_redir **head, t_type type, char *target, int *len)
 	cur = *head;
 	while (cur->next)
 		cur = cur->next;
-	cur->next = new-redir;
-}
-
-bool	syntax_check(t_shell *shell, t_cmd *cmd)
-{
-	t_token	*cur;
-	t_token	*next;
-
-	cur = shell->head;
-	if (cur->type == PIPE)
-		return (fprintf(stderr, PIPE_FIRST), false);
-	while (cur)
-	{
-		next = cur->next;
-		if (cur->type == PIPE && next == NULL)
-			return (fprintf(2, PIPE_END), false);
-		if ((cur->type == R_OUTPUT || cur->type == R_INPUT
-				|| cur->type == HERE_DOC || cur_type == R_APPEND)
-			&& (next->type == PIPE))
-			return (fprintf(stderr, REDIR_PIPE), false);
-		if (cur->type == R_INPUT || cur->type == R_OUTPUT
-			|| cur->type = R_APPEND || cur->type == HERE_DOC)
-		{
-			if (next == NULL || next->type != WORD)
-				return (fprintf(stderror, NO_TARGET), false);
-		}
-		cur = next;
-	}
-	return (true);
+	cur->next = new_redir;
 }

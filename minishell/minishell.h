@@ -73,17 +73,10 @@ typedef enum s_type
 
 typedef struct s_redir
 {
-	t_redir_type	redir_type;
+	t_type			type;
 	char			*target;
 	struct s_redir	*next;
 }	t_redir;
-
-typedef struct s_cmd
-{
-	t_token			*args; //linked list of word tokens;
-	t_redir			*redirections; //linked list of redirections
-	struct s_cmd	*next; //next command if there is a pipe
-}	t_cmd;
 
 typedef struct s_token
 {
@@ -92,6 +85,13 @@ typedef struct s_token
 	char			*content;
 	struct s_token	*next;
 }	t_token;
+
+typedef struct s_cmd
+{
+	t_token			*args; //linked list of word tokens;
+	t_redir			*redirections; //linked list of redirections
+	struct s_cmd	*next; //next command if there is a pipe
+}	t_cmd;
 
 typedef struct s_shell
 {
@@ -117,6 +117,8 @@ void	free_env_list(t_shell *shell, t_env *env);
 void	free_key_value(char *key, char *value);
 void	free_all(t_token *tokens, t_shell *shell);
 void	free_tokens(t_token *tokens);
+void	free_on_cmd_failure(t_shell *shell);
+void	free_command(t_cmd *cmds);
 //utils
 t_env	*create_node(char *name, char *value);
 size_t	env_size(char **array);
@@ -143,9 +145,11 @@ bool	is_argument(t_token *token);
 bool	is_redirection(t_token *token);
 void	add_cmd_back(t_cmd **head, t_cmd *new_command);
 t_cmd	*create_command(void);
-void	add_redir(t_ **head, t_type type, char *target, int *len);
-bool	syntax_check(t_shell *shell, t_cmd *cmd);
-
+void	add_redir(t_redir **head, t_type type, char *target, size_t *len);
+bool	syntax_check(t_shell *shell);
+void	add_args(t_cmd *args, t_token *token);
+t_cmd	*parse(t_shell *shell, t_token *token);
+void	handle_pipe(t_cmd **current);
 //signals
 void	setup_signals(void);
 
@@ -156,5 +160,6 @@ char	*prompt(const char *prompt);
 void	print_env_list(t_env *head);
 void	print_tokens(t_token *token);
 void	print_num_of_tokens(t_token *tokens);
+void	print_cmd_structure(t_cmd *cmd);
 
 #endif

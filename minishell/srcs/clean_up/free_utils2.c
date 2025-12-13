@@ -24,3 +24,10 @@ void	free_tokens(t_token *tokens)
 		tokens = tmp;
 	}
 }
+
+void	free_on_cmd_failure(t_shell *shell)
+{
+	//free(input);
+	free_tokens(shell->head);
+	free_env_list(shell, shell->environment_p);
+}

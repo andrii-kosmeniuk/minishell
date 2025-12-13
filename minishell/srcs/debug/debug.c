@@ -57,3 +57,38 @@ void	print_num_of_tokens(t_token *tokens)
 	}
 	printf("The number of tokens is: %d\n", i);
 }
+
+void	print_cmd_structure(t_cmd *cmd)
+{
+	int	cmd_index;
+
+	cmd_index = 0;
+	while (cmd)
+	{
+		t_token *arg;
+		t_redir *redir;
+
+		printf("===== COMMAND %d =====\n", cmd_index);
+		printf("Arguments:\n");
+		arg = cmd->args;
+		if (!arg)
+			printf("  (none)\n");
+		while (arg)
+		{
+			printf("  - %s\n", arg->content);
+			arg = arg->next;
+		}
+		printf("Redirections:\n");
+		redir = cmd->redirections;
+		if (!redir)
+			printf("  (none)\n");
+		while (redir)
+		{
+			printf("  - type: %d, target: %s\n",
+				redir->type, redir->target);
+			redir = redir->next;
+		}
+		cmd = cmd->next;
+		cmd_index++;
+	}
+}

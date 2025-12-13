@@ -60,3 +60,29 @@ t_env	*create_node(char *name, char *value)
 	new_node->next = NULL;
 	return (new_node);
 }
+
+bool	syntax_check(t_shell *shell)
+{
+	t_token	*cur;
+	t_token	*next;
+
+	cur = shell->head;
+	if (cur->type == PIPE)
+		return (fprintf(stderr, PIPE_FIRST), false);
+	while (cur)
+	{
+		next = cur->next;
+		if (cur->type == PIPE && next == NULL)
+			return (printf(PIPE_END), false);
+		if ((cur->type == R_OUTPUT || cur->type == R_INPUT
+				|| cur->type == HERE_DOC || cur->type == R_APPEND)
+			&& (next && next->type == PIPE))
+			return (printf(REDIR_PIPE), false);
+		if ((cur->type == R_INPUT || cur->type == R_OUTPUT
+			|| cur->type == R_APPEND || cur->type == HERE_DOC) && (next == NULL
+			|| next-> type != WORD))
+				return (printf(NO_TARGET), false);
+		cur = next;
+	}
+	return (true);
+}

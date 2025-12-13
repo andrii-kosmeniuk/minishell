@@ -16,10 +16,12 @@ void	free_command(t_cmd *cmds)
 {
 	t_cmd	*cur;
 
+	if (!cmds)
+		return ;
 	while (cmds)
 	{
 		cur = cmds->next;
-		free_array(cmds->args);
+		//free(cmds->args);
 		free(cmds->redirections);
 		free(cmds);
 		cmds = cur;

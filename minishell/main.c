@@ -21,10 +21,12 @@ int	main(int ac, char **av, char **envp)
 	t_data	data;
 	t_shell	shell;
 	t_token	*tokens;
+	t_cmd	*cmd;
 
 	(void)ac;
 	(void)av;
 	tokens = NULL;
+	cmd = NULL;
 	init_shell(&shell, &data, envp);
 	list_key_value(&shell, envp, &data);
 	update_shlvl_key(&shell, &data);
@@ -57,9 +59,17 @@ int	main(int ac, char **av, char **envp)
 				free(line);
 				continue ;
 			}
+			cmd = parse(&shell, tokens);
+			if (!cmd)
+			{
+				free(line);
+				continue ;
+			}
+			print_cmd_structure(cmd);
 		}
 		free(line);
 	}
+	free_command(cmd);
 	free_tokens(shell.head);
 	free_env_list(&shell, shell.environment_p);
 	rl_clear_history();
