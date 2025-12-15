@@ -6,7 +6,7 @@
 /*   By: milija-h <milija-h@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 15:14:05 by milija-h          #+#    #+#             */
-/*   Updated: 2025/12/05 14:41:09 by milija-h         ###   ########.fr       */
+/*   Updated: 2025/12/15 21:22:45 by milija-h         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,9 +86,15 @@ typedef struct s_token
 	struct s_token	*next;
 }	t_token;
 
+typedef struct s_arg
+{
+    char			*value;
+    struct s_arg	*next;
+}	t_arg;
+
 typedef struct s_cmd
 {
-	t_token			*args; //linked list of word tokens;
+	t_arg			*args; //linked list of word tokens;
 	t_redir			*redirections; //linked list of redirections
 	struct s_cmd	*next; //next command if there is a pipe
 }	t_cmd;
@@ -145,7 +151,7 @@ bool	is_argument(t_token *token);
 bool	is_redirection(t_token *token);
 void	add_cmd_back(t_cmd **head, t_cmd *new_command);
 t_cmd	*create_command(void);
-void	add_redir(t_redir **head, t_type type, char *target, size_t *len);
+void	add_redir(t_redir **head, t_type type, char *target);
 bool	syntax_check(t_shell *shell);
 void	add_args(t_cmd *args, t_token *token);
 t_cmd	*parse(t_shell *shell, t_token *token);

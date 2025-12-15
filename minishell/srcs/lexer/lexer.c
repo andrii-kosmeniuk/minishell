@@ -6,7 +6,7 @@
 /*   By: milija-h <milija-h@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/01 17:09:27 by milija-h          #+#    #+#             */
-/*   Updated: 2025/12/05 14:54:46 by milija-h         ###   ########.fr       */
+/*   Updated: 2025/12/15 22:26:20 by milija-h         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ static void	redir_pipe(t_shell *shell, const char *input, int *len)
 	}
 }
 
-static void	quotes(t_shell *shell, const char *input, int *len)
+static bool	quotes(t_shell *shell, const char *input, int *len)
 {
 	char	quote;
 
@@ -48,13 +48,14 @@ static void	quotes(t_shell *shell, const char *input, int *len)
 	if (quote == '\'')
 	{
 		if (!tokenize_single_quotes(shell, (char *)input, len))
-			return ;
+			return (false);
 	}
 	else if (quote == '\"')
 	{
 		if (!tokenize_double_quotes(shell, (char *)input, len))
-			return ;
+			return (false);
 	}
+	return (true);
 }
 
 t_token	*build_token_list(const char *input, t_shell *shell)
@@ -67,20 +68,20 @@ t_token	*build_token_list(const char *input, t_shell *shell)
 		while (*input && my_isspace(*input))
 			input++;
 		if (*input == '<' || *input == '>' || *input == '|')
-		{
 			redir_pipe(shell, (char *)input, &len);
-			input += len;
-		}
 		else if (*input == '\'' || *input == '\"')
 		{
-			quotes(shell, (char *)input, &len);
-			input += len;
+			if (!quotes(shell, (char *)input, &len))
+				shell->redir_error = 1;
 		}
 		else
 		{
-			tokenize_word((char *)input, shell, &len);
-			input += len;
+			if (!tokenize_word((char *)input, shell, &len))
+				shell->redir_error = 1;
 		}
+		if (shell->redir_error == 1)
+			return (free_tokens(shell->head), shell->head = NULL, NULL);
+		input += len;
 	}
 	return (shell->head);
 }

@@ -79,9 +79,10 @@ bool	syntax_check(t_shell *shell)
 			&& (next && next->type == PIPE))
 			return (printf(REDIR_PIPE), false);
 		if ((cur->type == R_INPUT || cur->type == R_OUTPUT
-			|| cur->type == R_APPEND || cur->type == HERE_DOC) && (next == NULL
-			|| next-> type != WORD))
-				return (printf(NO_TARGET), false);
+				|| cur->type == R_APPEND || cur->type == HERE_DOC)
+			&& (next == NULL
+				|| next-> type != WORD))
+			return (printf(NO_TARGET), false);
 		cur = next;
 	}
 	return (true);

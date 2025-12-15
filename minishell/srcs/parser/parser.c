@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: milija-h <milija-h@student.42vienna.com>   +#+  +:+       +#+        */
+/*   By: milija-h <milija-h@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/09 12:53:50 by milija-h          #+#    #+#             */
-/*   Updated: 2025/12/09 12:54:13 by milija-h         ###   ########.fr       */
+/*   Updated: 2025/12/15 22:03:47 by milija-h         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,28 +18,29 @@ t_cmd	*parse(t_shell *shell, t_token *tokens)
 {
 	t_cmd	*head;
 	t_cmd	*current;
-	t_redir	*r;
-	size_t	len;
+	t_token	*t_oken;
 
-	if (!shell || !tokens)
-		return (NULL);
-	if (!syntax_check(shell))
+	if ((!shell || !tokens) || (!syntax_check(shell)))
 		return (NULL);
 	head = create_command();
 	current = head;
-	while (tokens)
+	t_oken = tokens;
+	while (t_oken)
 	{
-		if (tokens->type == WORD)
-			add_args(current, tokens);
-		else if (tokens->type == PIPE)
+		if (t_oken->type == HERE_DOC)
+			handle_here_doc();
+		if (t_oken->type == WORD)
+			add_args(current, t_oken);
+		else if (t_oken->type == PIPE)
 			handle_pipe(&current);
-		else if (tokens->type == R_INPUT || tokens->type == R_OUTPUT
-			|| tokens->type == R_APPEND || tokens->type == HERE_DOC)
+		else if (t_oken->type == R_INPUT || t_oken->type == R_OUTPUT
+			|| t_oken->type == R_APPEND || t_oken->type == HERE_DOC)
 		{
-			add_redir(&r, tokens->type, current->redirections->target, &len);
-			tokens = tokens->next;
+			add_redir(&current->redirections, t_oken->type,
+				t_oken->next->content);
+			t_oken = t_oken->next;
 		}
-		tokens = tokens->next;
+		t_oken = t_oken->next;
 	}
 	return (head);
 }

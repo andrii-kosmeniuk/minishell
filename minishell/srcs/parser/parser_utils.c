@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: milija-h <milija-h@student.42vienna.com>   +#+  +:+       +#+        */
+/*   By: milija-h <milija-h@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/10 18:31:40 by milija-h          #+#    #+#             */
-/*   Updated: 2025/12/10 18:31:42 by milija-h         ###   ########.fr       */
+/*   Updated: 2025/12/15 21:20:40 by milija-h         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,17 +47,28 @@ void	add_cmd_back(t_cmd **head, t_cmd *new_command)
 
 void	add_args(t_cmd *cmd, t_token *token)
 {
-	t_token	*temp;
+	t_arg	*temp;
+	t_arg	*new;
 
-	token->next = NULL;
+	if (!cmd || !token || !token->content)
+		return ;
+	new = malloc(sizeof(t_arg));
+	if (!new)
+		return ;
+	new->value = ft_strdup(token->content);
+	if (!new->value)
+		return (free(new));
+	new->next = NULL;
 	if (!cmd->args)
-		cmd->args = token;
+	{
+		cmd->args = new;
+	}
 	else
 	{
 		temp = cmd->args;
 		while (temp->next)
 			temp = temp->next;
-		temp->next = token;
+		temp->next = new;
 	}
 }
 
@@ -67,16 +78,12 @@ void	handle_pipe(t_cmd **current)
 	*current = (*current)->next;
 }
 
-void	add_redir(t_redir **head, t_type type, char *target, size_t *len)
+void	add_redir(t_redir **head, t_type type, char *target)
 {
 	t_redir	*new_redir;
 	t_redir	*cur;
 
-	if (type == R_INPUT || type == R_OUTPUT)
-		*len = 1;
-	else if (type == HERE_DOC || type == R_APPEND)
-		*len = 2;
-	new_redir = ft_calloc((size_t)len, sizeof(t_redir));
+	new_redir = ft_calloc(1, sizeof(t_redir));
 	if (!new_redir)
 		return ;
 	new_redir->type = type;

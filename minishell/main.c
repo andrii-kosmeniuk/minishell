@@ -6,7 +6,7 @@
 /*   By: milija-h <milija-h@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/22 20:38:51 by milija-h          #+#    #+#             */
-/*   Updated: 2025/12/03 22:32:10 by milija-h         ###   ########.fr       */
+/*   Updated: 2025/12/15 22:16:15 by milija-h         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,50 +27,62 @@ int	main(int ac, char **av, char **envp)
 	(void)av;
 	tokens = NULL;
 	cmd = NULL;
+
 	init_shell(&shell, &data, envp);
 	list_key_value(&shell, envp, &data);
 	update_shlvl_key(&shell, &data);
+
 	while (1)
 	{
+		shell.redir_error = 0;
 		setup_signals();
-		line = NULL;
 		line = readline(CYAN"👹-minis(hell)>" RESET);
 		if (!line)
 		{
 			printf("exit\n");
-			break ;
+			break;
 		}
 		if (*line)
+			add_history(line);
+		if (shell.head)
 		{
-			if (line[0] != '\0')
-				add_history(line);
 			free_tokens(shell.head);
 			shell.head = NULL;
-			if (ft_strcmp(line, "clear") == 0)
-			{
-				printf("\033[H\033[2J");
-				free(line);
-				continue ;
-			}
-			tokens = build_token_list(line, &shell);
-			if (!tokens || shell.redir_error == 1)
-			{
-				printf("syntax error\n");
-				free(line);
-				continue ;
-			}
-			cmd = parse(&shell, tokens);
-			if (!cmd)
-			{
-				free(line);
-				continue ;
-			}
-			print_cmd_structure(cmd);
 		}
+		if (ft_strcmp(line, "clear") == 0)
+		{
+			printf("\033[H\033[2J");
+			free(line);
+			continue;
+		}
+		tokens = build_token_list(line, &shell);
+		if (!tokens || shell.redir_error)
+		{
+			printf("syntax error\n");
+			if (shell.head)
+			{
+				free_tokens(shell.head);
+				shell.head = NULL;
+			}
+			free(line);
+			continue;
+		}
+		cmd = parse(&shell, tokens);
+		if (cmd)
+			print_cmd_structure(cmd);
+		free_command(cmd);
+		cmd = NULL;
+		free_tokens(shell.head);
+		shell.head = NULL;
 		free(line);
 	}
 	free_command(cmd);
-	free_tokens(shell.head);
+	cmd = NULL;
+	if (shell.head)
+	{
+		free_tokens(shell.head);
+		shell.head = NULL;
+	}
 	free_env_list(&shell, shell.environment_p);
 	rl_clear_history();
 	return (0);

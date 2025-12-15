@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   debug.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: milija-h <milija-h@student.42vienna.com>   +#+  +:+       +#+        */
+/*   By: milija-h <milija-h@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/27 18:20:04 by milija-h          #+#    #+#             */
-/*   Updated: 2025/11/27 18:20:28 by milija-h         ###   ########.fr       */
+/*   Updated: 2025/12/15 21:18:15 by milija-h         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ void	print_cmd_structure(t_cmd *cmd)
 	cmd_index = 0;
 	while (cmd)
 	{
-		t_token *arg;
+		t_arg *arg;
 		t_redir *redir;
 
 		printf("===== COMMAND %d =====\n", cmd_index);
@@ -75,7 +75,7 @@ void	print_cmd_structure(t_cmd *cmd)
 			printf("  (none)\n");
 		while (arg)
 		{
-			printf("  - %s\n", arg->content);
+			printf("  - %s\n", arg->value);
 			arg = arg->next;
 		}
 		printf("Redirections:\n");

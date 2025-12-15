@@ -22,14 +22,13 @@ bool	tokenize_word(const char *input, t_shell *shell, int *len)
 	while (*input >= 33)
 		input++;
 	word_len = input - start_of_word;
-	token_word = malloc(word_len + 1);
+	token_word = ft_calloc(word_len + 1, sizeof(char));
 	if (!token_word)
 		return (false);
-	token_word[0] = '\0';
-	ft_strlcpy(token_word, start_of_word, word_len + 1);
-	*len = ft_strlen(token_word);
+	ft_strncpy(token_word, start_of_word, word_len);
 	if (!build_list(shell, normal, WORD, token_word))
 		return (free(token_word), false);
+	*len = ft_strlen(token_word);
 	free(token_word);
 	return (true);
 }
