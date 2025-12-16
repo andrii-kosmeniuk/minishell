@@ -1,0 +1,60 @@
+HERE_DOC EXAMPLES
+
+simple example:
+
+cat << EOF
+hello
+	world
+EOF
+what does this do?
+every test in between the first EOF and the second EOF will be
+passed to cat over its stdin, which reads from stdin and writes to
+stdout
+
+cat << "EOF"
+hello $USER, $SHLVL is 1
+EOF
+here we do not perform expansions, everything from EOF until EOF
+keeps it literal fo erm
+
+echo 'foo' << EOF
+bar
+EOF
+result of this is:
+foo
+what is actually happenning?
+<< eof starts a here-document, so everything until eof is fed to
+the commands stdin, so we basically say "send bar\n to stdin"
+
+echo foo does not read from stdin at all, echo always prints its
+arguments, so echo simply ignores stdin and prints foo
+
+lesson:
+a here-document only matters if the command actually reads from stdin
+so everytime a command that doesnt not read from its used with heredoc
+whatever is written between delimeters, gets ignored, however, if both commands
+read from stdin, heredoc wins
+
+echo foo | cat << eof
+bar
+eod
+
+results in : bar
+
+EXPANSIONS
+
+-EOF yes, variables are expanded
+
+<< eof
+$USER, becomes milija-h
+
+-'EOF'/"EOF" no, literal value is expanded
+
+<< 'eof'/"eof"
+$USER, stays $USER
+
+to put it more simply, the delimiter is what determines wether expansions
+happen or not, so if DELIMITER is not quoted is expands everything
+because quotes are just literal characters that wrap the expanded
+value, important, quotes are then mantained, with the expanded value
+

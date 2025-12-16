@@ -94,7 +94,7 @@ typedef struct s_arg
 
 typedef struct s_cmd
 {
-	t_arg			*args; //linked list of word tokens;
+	t_arg			*args; //linked list of arguments;
 	t_redir			*redirections; //linked list of redirections
 	struct s_cmd	*next; //next command if there is a pipe
 }	t_cmd;

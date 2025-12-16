@@ -11,3 +11,15 @@
 /* ************************************************************************** */
 
 #include "../../minishell.h"
+
+void	parse_heredoc(t_cmd *cmd, t_token *tokens)
+{
+	while (tokens)
+	{
+		if (tokens->type == HERE_DOC)
+		{
+		
+
+		}
+	}
+}
