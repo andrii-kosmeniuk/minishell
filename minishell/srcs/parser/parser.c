@@ -14,7 +14,7 @@
 
 //maybe remove quotes if target has quotes
 
-t_cmd	*parse(t_shell *shell, t_token *tokens)
+t_cmd	*parse(t_shell *shell, t_token *tokens, t_data *data)
 {
 	t_cmd	*head;
 	t_cmd	*current;
@@ -27,8 +27,6 @@ t_cmd	*parse(t_shell *shell, t_token *tokens)
 	t_oken = tokens;
 	while (t_oken)
 	{
-		if (t_oken->type == HERE_DOC)
-			handle_here_doc();
 		if (t_oken->type == WORD)
 			add_args(current, t_oken);
 		else if (t_oken->type == PIPE)
@@ -36,6 +34,8 @@ t_cmd	*parse(t_shell *shell, t_token *tokens)
 		else if (t_oken->type == R_INPUT || t_oken->type == R_OUTPUT
 			|| t_oken->type == R_APPEND || t_oken->type == HERE_DOC)
 		{
+			if (t_oken->type == HERE_DOC)
+				data->number_of_heredocs += 1;
 			add_redir(&current->redirections, t_oken->type,
 				t_oken->next->content);
 			t_oken = t_oken->next;

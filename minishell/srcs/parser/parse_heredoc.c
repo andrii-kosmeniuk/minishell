@@ -12,14 +12,51 @@
 
 #include "../../minishell.h"
 
-void	parse_heredoc(t_cmd *cmd, t_token *tokens)
-{
-	while (tokens)
-	{
-		if (tokens->type == HERE_DOC)
-		{
-		
+/*For each command, for each redirection:
 
-		}
+If redirection is HERE_DOC
+
+Read from stdin until delimiter
+
+Expand if delimiter not quoted
+
+Write to temp file
+
+Store fd in redirection struct
+
+there can be here doc in rows
+cat eof << eof << eof <<< eof
+*/
+static char	*here_doc_content(t_data *data, char *delimeter)
+{
+	int		i;
+	char	*line;
+	char	*here_doc_buffer;
+
+	i = 0;
+	while (i < 3)//data->number_of_heredocs)
+	{
+		line = readline("heredoc>");
+		if (!line)
+			return (NULL);
+		here_doc_buffer = malloc(strlen(line));
+		if (!here_doc_buffer)
+			return (free(line), NULL);
+		if (line == delimeter)
+			break ;
+		strcpy(here_doc_buffer, line);
+		i++;
 	}
+	return (here_doc_buffer);
+}
+
+int main(void)
+{
+	t_token cmd; t_data data;
+
+	char *result = here_doc_content(&data, "eof");
+	if (!result)
+		return (printf("error"), 1);
+	printf("%s\n", result);
+	return 0;
 }

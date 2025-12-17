@@ -48,7 +48,7 @@ typedef struct s_data
 {
 	int	shlvl;
 	int	last_exit_code;
-	int	sentence;
+	int	number_of_heredocs;
 }	t_data;
 
 typedef enum s_state
