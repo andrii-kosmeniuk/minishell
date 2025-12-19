@@ -20,7 +20,7 @@ int	main(int ac, char **av, char **envp)
 	char	*line;
 	t_data	data;
 	t_shell	shell;
-	t_token	*tokens;
+	t_token	*tokens = NULL;
 	t_cmd	*cmd;
 
 	(void)ac;
@@ -70,6 +70,13 @@ int	main(int ac, char **av, char **envp)
 		cmd = parse(&shell, tokens);
 		if (cmd)
 			print_cmd_structure(cmd);
+		t_token *tok = tokens;
+		while (tok)
+		{
+			if (tok->redir && tok->redir->type == HERE_DOC)
+			heredoc_append(tok->redir);
+			tok = tok->next;
+		}
 		free_command(cmd);
 		cmd = NULL;
 		free_tokens(shell.head);

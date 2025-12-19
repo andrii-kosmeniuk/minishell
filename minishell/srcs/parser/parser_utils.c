@@ -78,26 +78,27 @@ void	handle_pipe(t_cmd **current)
 	*current = (*current)->next;
 }
 
-void	add_redir(t_redir **head, t_type type, char *target)
+t_redir	*add_redir(t_redir **head, t_type type, char *target)
 {
 	t_redir	*new_redir;
 	t_redir	*cur;
 
 	new_redir = ft_calloc(1, sizeof(t_redir));
 	if (!new_redir)
-		return ;
+		return (NULL);
 	new_redir->type = type;
 	new_redir->target = ft_strdup(target);
 	if (!new_redir)
-		return (free(new_redir));
+		return (free(new_redir), NULL);
 	new_redir->next = NULL;
 	if (*head == NULL)
 	{
 		*head = new_redir;
-		return ;
+		return (new_redir);
 	}
 	cur = *head;
 	while (cur->next)
 		cur = cur->next;
 	cur->next = new_redir;
+	return (new_redir);
 }

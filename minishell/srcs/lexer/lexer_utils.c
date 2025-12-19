@@ -16,7 +16,7 @@ t_token	*create_token(char *content, t_state state, t_type type)
 {
 	t_token	*token;
 
-	token = malloc(sizeof(t_token));
+	token = ft_calloc(1, sizeof(t_token));
 	if (!token)
 		return (NULL);
 	token->content = ft_strdup(content);

@@ -24,6 +24,7 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 # include <stdbool.h>
+# include <fcntl.h>
 
 # define CYAN  "\033[0;36m"
 # define RESET "\033[0m"
@@ -48,7 +49,6 @@ typedef struct s_data
 {
 	int	shlvl;
 	int	last_exit_code;
-	int	number_of_heredocs;
 }	t_data;
 
 typedef enum s_state
@@ -82,14 +82,15 @@ typedef struct s_token
 {
 	t_type			type;
 	t_state			state;
+	t_redir			*redir;
 	char			*content;
 	struct s_token	*next;
 }	t_token;
 
 typedef struct s_arg
 {
-    char			*value;
-    struct s_arg	*next;
+	char			*value;
+	struct s_arg	*next;
 }	t_arg;
 
 typedef struct s_cmd
@@ -151,11 +152,14 @@ bool	is_argument(t_token *token);
 bool	is_redirection(t_token *token);
 void	add_cmd_back(t_cmd **head, t_cmd *new_command);
 t_cmd	*create_command(void);
-void	add_redir(t_redir **head, t_type type, char *target);
+t_redir	*add_redir(t_redir **head, t_type type, char *target);
 bool	syntax_check(t_shell *shell);
 void	add_args(t_cmd *args, t_token *token);
 t_cmd	*parse(t_shell *shell, t_token *token);
 void	handle_pipe(t_cmd **current);
+
+//heredoc and append redir
+void	heredoc_append(t_redir *redir);
 //signals
 void	setup_signals(void);
 

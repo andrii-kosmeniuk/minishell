@@ -14,11 +14,12 @@
 
 //maybe remove quotes if target has quotes
 
-t_cmd	*parse(t_shell *shell, t_token *tokens, t_data *data)
+t_cmd	*parse(t_shell *shell, t_token *tokens)
 {
 	t_cmd	*head;
 	t_cmd	*current;
 	t_token	*t_oken;
+	t_redir	*redir;
 
 	if ((!shell || !tokens) || (!syntax_check(shell)))
 		return (NULL);
@@ -34,11 +35,10 @@ t_cmd	*parse(t_shell *shell, t_token *tokens, t_data *data)
 		else if (t_oken->type == R_INPUT || t_oken->type == R_OUTPUT
 			|| t_oken->type == R_APPEND || t_oken->type == HERE_DOC)
 		{
-			if (t_oken->type == HERE_DOC)
-				data->number_of_heredocs += 1;
-			add_redir(&current->redirections, t_oken->type,
-				t_oken->next->content);
-			t_oken = t_oken->next;
+			if (!(redir = add_redir(&current->redirections, t_oken->type,
+				t_oken->next->content)))
+				return (NULL);
+			t_oken->redir = redir;
 		}
 		t_oken = t_oken->next;
 	}
