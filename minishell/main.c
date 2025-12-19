@@ -68,8 +68,6 @@ int	main(int ac, char **av, char **envp)
 			continue;
 		}
 		cmd = parse(&shell, tokens);
-		if (cmd)
-			print_cmd_structure(cmd);
 		t_token *tok = tokens;
 		while (tok)
 		{
