@@ -12,8 +12,6 @@
 
 #include "../../minishell.h"
 
-//maybe remove quotes if target has quotes
-
 t_cmd	*parse(t_shell *shell, t_token *tokens)
 {
 	t_cmd	*head;
@@ -35,8 +33,9 @@ t_cmd	*parse(t_shell *shell, t_token *tokens)
 		else if (t_oken->type == R_INPUT || t_oken->type == R_OUTPUT
 			|| t_oken->type == R_APPEND || t_oken->type == HERE_DOC)
 		{
-			if (!(redir = add_redir(&current->redirections, t_oken->type,
-				t_oken->next->content)))
+			redir = add_redir(&current->redirections, t_oken->type,
+					t_oken->next->content);
+			if (!redir)
 				return (NULL);
 			t_oken->redir = redir;
 		}
