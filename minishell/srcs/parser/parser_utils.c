@@ -45,19 +45,19 @@ void	add_cmd_back(t_cmd **head, t_cmd *new_command)
 	}
 }
 
-void	add_args(t_cmd *cmd, t_token *token)
+t_arg	*add_args(t_cmd *cmd, t_token *token)
 {
 	t_arg	*temp;
 	t_arg	*new;
 
 	if (!cmd || !token || !token->content)
-		return ;
+		return (NULL);
 	new = malloc(sizeof(t_arg));
 	if (!new)
-		return ;
+		return (NULL);
 	new->value = ft_strdup(token->content);
 	if (!new->value)
-		return (free(new));
+		return (free(new), NULL);
 	new->next = NULL;
 	if (!cmd->args)
 	{
@@ -70,6 +70,7 @@ void	add_args(t_cmd *cmd, t_token *token)
 			temp = temp->next;
 		temp->next = new;
 	}
+	return (new);
 }
 
 void	handle_pipe(t_cmd **current)

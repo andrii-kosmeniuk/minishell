@@ -49,6 +49,7 @@ typedef struct s_data
 {
 	int	shlvl;
 	int	last_exit_code;
+	int	heredoc_number;
 }	t_data;
 
 typedef enum s_state
@@ -154,9 +155,10 @@ void	add_cmd_back(t_cmd **head, t_cmd *new_command);
 t_cmd	*create_command(void);
 t_redir	*add_redir(t_redir **head, t_type type, char *target);
 bool	syntax_check(t_shell *shell);
-void	add_args(t_cmd *args, t_token *token);
+t_arg	*add_args(t_cmd *args, t_token *token);
 t_cmd	*parse(t_shell *shell, t_token *token);
 void	handle_pipe(t_cmd **current);
+char	**argument_array(t_arg *args);
 
 //heredoc and append redir
 void	heredoc_append(t_redir *redir);

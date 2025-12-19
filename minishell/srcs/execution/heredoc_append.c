@@ -6,7 +6,7 @@
 /*   By: milija-h <milija-h@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/15 23:20:27 by milija-h          #+#    #+#             */
-/*   Updated: 2025/12/19 05:17:50 by milija-h         ###   ########.fr       */
+/*   Updated: 2025/12/19 05:49:47 by milija-h         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,18 +46,17 @@ void	heredoc_append(t_redir	*redir)
 	int		pipe_fd[2];
 	char	*line;
 
-	if (!redir)
-		return ;
 	line = NULL;
 	if (redir->type == R_APPEND)
-		handle_append(redir);
+	{
+		if (!handle_append(redir))
+			return ;
+	}
 	else if (redir->type == HERE_DOC)
 	{
 		if (pipe(pipe_fd) < 0)
 			return ;
 		line = readline("heredoc>");
-		if (!line)
-			return ;
 		while (ft_strcmp(line, redir->target) != 0)
 		{
 			line = readline("heredoc>");

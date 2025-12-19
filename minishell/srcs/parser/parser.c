@@ -18,6 +18,7 @@ t_cmd	*parse(t_shell *shell, t_token *tokens)
 	t_cmd	*current;
 	t_token	*t_oken;
 	t_redir	*redir;
+	t_arg	*arg;
 
 	if ((!shell || !tokens) || (!syntax_check(shell)))
 		return (NULL);
@@ -27,7 +28,7 @@ t_cmd	*parse(t_shell *shell, t_token *tokens)
 	while (t_oken)
 	{
 		if (t_oken->type == WORD)
-			add_args(current, t_oken);
+			arg = add_args(current, t_oken);
 		else if (t_oken->type == PIPE)
 			handle_pipe(&current);
 		else if (t_oken->type == R_INPUT || t_oken->type == R_OUTPUT
