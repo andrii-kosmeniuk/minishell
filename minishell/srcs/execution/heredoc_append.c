@@ -6,7 +6,7 @@
 /*   By: milija-h <milija-h@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/15 23:20:27 by milija-h          #+#    #+#             */
-/*   Updated: 2025/12/19 05:49:47 by milija-h         ###   ########.fr       */
+/*   Updated: 2025/12/24 10:59:11 by milija-h         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,10 +41,26 @@ static void	dup_close_pipes_free(int fd[2], char *str)
 	free(str);
 }
 
+static bool	here_doc(char *line, t_redir *redir, int pipe[2])
+{
+	line = readline("heredoc>");
+	if (!line)
+		return (false);
+	while (ft_strcmp(line, redir->target) != 0)
+	{
+		line = readline("heredoc>");
+		if (!line)
+			return (false);
+		write_to_pipe(pipe, line);
+	}
+	return (true);
+}
+
 void	heredoc_append(t_redir	*redir)
 {
-	int		pipe_fd[2];
-	char	*line;
+	int			pipe_fd[2];
+	char		*line;
+	static int	backup = -1;
 
 	line = NULL;
 	if (redir->type == R_APPEND)
@@ -52,18 +68,16 @@ void	heredoc_append(t_redir	*redir)
 		if (!handle_append(redir))
 			return ;
 	}
+	if (backup == -1)
+		backup = dup(STDIN_FILENO);
 	else if (redir->type == HERE_DOC)
 	{
 		if (pipe(pipe_fd) < 0)
 			return ;
-		line = readline("heredoc>");
-		while (ft_strcmp(line, redir->target) != 0)
-		{
-			line = readline("heredoc>");
-			if (!line)
-				return ;
-			write_to_pipe(pipe_fd, line);
-		}
+		if (!dup2(backup, STDIN_FILENO))
+			return ;
+		if (!here_doc(line, redir, pipe_fd))
+			return ;
 		dup_close_pipes_free(pipe_fd, line);
 	}
 }

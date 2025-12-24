@@ -39,7 +39,7 @@ int	main(int ac, char **av, char **envp)
 		line = readline(CYAN"👹-minis(hell)>" RESET);
 		if (!line)
 		{
-			printf("exit\n");
+			printf("exit1\n");
 			break;
 		}
 		if (*line)
