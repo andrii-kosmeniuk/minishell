@@ -21,12 +21,11 @@ int	main(int ac, char **av, char **envp)
 	t_data	data;
 	t_shell	shell;
 	t_token	*tokens = NULL;
-	t_cmd	*cmd;
+	t_cmd	*cmd = NULL;
+	//char	**array;
 
 	(void)ac;
 	(void)av;
-	tokens = NULL;
-	cmd = NULL;
 
 	init_shell(&shell, &data, envp);
 	list_key_value(&shell, envp, &data);
@@ -68,7 +67,15 @@ int	main(int ac, char **av, char **envp)
 			continue;
 		}
 		cmd = parse(&shell, tokens);
+		print_cmd_structure(cmd);
 		t_token *tok = tokens;
+		/*array = argument_array(cmd);
+		if (!array)
+		{
+			printf("error\n");
+			break ;
+		}
+		print_array(array);*/
 		while (tok)
 		{
 			if (tok->redir && tok->redir->type == HERE_DOC)

@@ -28,31 +28,31 @@ bool	is_redirection(t_token *token)
 	return (false);
 }
 
-static size_t	list_size(t_arg *args)
+static size_t	list_size(t_cmd *words)
 {
 	size_t	count;
 
 	count = 0;
-	while (args)
+	while (words)
 	{
-		count++;
-		args = args->next;
+		words = words->next;
+		count += 1;
 	}
 	return (count);
 }
 
-char	**argument_array(t_arg *args)
+char	**argument_array(t_cmd *cmd)
 {
 	char	**array;
 	int		i;
 
-	array = ft_calloc(list_size(args) + 1, sizeof(char *));
+	array = ft_calloc(list_size(cmd) + 1, sizeof(char *));
 	if (!array)
 		return (NULL);
 	i = 0;
-	while (args)
+	while (cmd)
 	{
-		array[i] = ft_strdup(args->value);
+		array[i] = ft_strdup(cmd->args->value);
 		if (!array[i])
 		{
 			while (i > 0)
@@ -60,7 +60,7 @@ char	**argument_array(t_arg *args)
 			return (free(array), NULL);
 		}
 		i++;
-		args = args->next;
+		cmd = cmd->next;
 	}
 	array[i] = NULL;
 	return (array);

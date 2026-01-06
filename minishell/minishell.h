@@ -158,7 +158,7 @@ bool	syntax_check(t_shell *shell);
 t_arg	*add_args(t_cmd *args, t_token *token);
 t_cmd	*parse(t_shell *shell, t_token *token);
 void	handle_pipe(t_cmd **current);
-char	**argument_array(t_arg *args);
+char	**argument_array(t_cmd *args);
 
 // expansions
 char	*expand_string(char *input, t_env *env, int last_exit_status);
@@ -175,5 +175,6 @@ void	print_env_list(t_env *head);
 void	print_tokens(t_token *token);
 void	print_num_of_tokens(t_token *tokens);
 void	print_cmd_structure(t_cmd *cmd);
+void	print_array(char **array);
 
 #endif

@@ -92,3 +92,22 @@ void	print_cmd_structure(t_cmd *cmd)
 		cmd_index++;
 	}
 }
+
+void	print_array(char **array)
+{
+	int	i;
+	int	j;
+
+	i = 0;
+	while (array[i])
+	{
+		j = 0;
+		while (array[i][j])
+		{
+			printf("%c", array[i][j]);
+			j++;
+		}
+		printf("\n");
+		i++;
+	}
+}
