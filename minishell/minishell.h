@@ -160,6 +160,8 @@ t_cmd	*parse(t_shell *shell, t_token *token);
 void	handle_pipe(t_cmd **current);
 char	**argument_array(t_arg *args);
 
+// expansions
+char	*expand_string(char *input, t_env *env, int last_exit_status);
 //heredoc and append redir
 void	heredoc_append(t_redir *redir);
 //signals
