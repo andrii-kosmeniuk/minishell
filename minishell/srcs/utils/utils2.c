@@ -28,39 +28,47 @@ bool	is_redirection(t_token *token)
 	return (false);
 }
 
-static size_t	list_size(t_cmd *words)
+static size_t	list_size(t_arg *arg)
 {
 	size_t	count;
+	t_arg	*tmp;
 
 	count = 0;
-	while (words)
+	tmp = arg;
+	while (tmp)
 	{
-		words = words->next;
-		count += 1;
+		if (tmp->type == WORD)
+			count++;
+		if (arg->type == R_INPUT || arg->type == R_OUTPUT
+			|| arg->type == HERE_DOC || arg->type == R_APPEND)
+			tmp = tmp->next;
+		tmp = tmp->next;
 	}
 	return (count);
 }
 
-char	**argument_array(t_cmd *cmd)
+char	**argument_array(t_arg *arg)
 {
 	char	**array;
 	int		i;
 
-	array = ft_calloc(list_size(cmd) + 1, sizeof(char *));
+	array = ft_calloc(list_size(arg) + 1, sizeof(char *));
 	if (!array)
 		return (NULL);
 	i = 0;
-	while (cmd)
+	while (arg)
 	{
-		array[i] = ft_strdup(cmd->args->value);
-		if (!array[i])
+		if (arg->type == R_INPUT || arg->type == R_OUTPUT
+			|| arg->type == HERE_DOC || arg->type == R_APPEND)
 		{
-			while (i > 0)
-				free(array[--i]);
-			return (free(array), NULL);
+			arg = arg->next;
+			if (arg)
+				arg = arg->next;
+			continue ;
 		}
-		i++;
-		cmd = cmd->next;
+		if (arg->type == WORD)
+			array[i++] = arg->value;
+		arg = arg->next;
 	}
 	array[i] = NULL;
 	return (array);

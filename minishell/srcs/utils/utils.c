@@ -22,21 +22,21 @@ size_t	env_size(char **array)
 	return (i);
 }
 
-void	add_to_list(t_env **head, t_env *new)
+void	add_to_list(t_env **head, t_env *neww)
 {
 	t_env	*temp;
 
-	if (!head || !new)
+	if (!head || !neww)
 		return ;
 	if (*head == NULL)
 	{
-		*head = new;
+		*head = neww;
 		return ;
 	}
 	temp = *head;
 	while (temp->next != NULL)
 		temp = temp->next;
-	temp->next = new;
+	temp->next = neww;
 }
 
 t_env	*create_node(char *name, char *value)

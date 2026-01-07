@@ -12,7 +12,7 @@
 
 #include "../../minishell.h"
 //child processes will inherit from parent the signals
-
+//for heredoc use a volatile struct
 /*void	forward_signal(pid_t child_pid, int signun)
 {
 	;

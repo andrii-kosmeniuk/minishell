@@ -22,7 +22,7 @@ int	main(int ac, char **av, char **envp)
 	t_shell	shell;
 	t_token	*tokens = NULL;
 	t_cmd	*cmd = NULL;
-	//char	**array;
+	char	**array;
 
 	(void)ac;
 	(void)av;
@@ -67,15 +67,19 @@ int	main(int ac, char **av, char **envp)
 			continue;
 		}
 		cmd = parse(&shell, tokens);
-		print_cmd_structure(cmd);
+		array = argument_array(cmd->args);
 		t_token *tok = tokens;
-		/*array = argument_array(cmd);
-		if (!array)
+		/*while (cmd)
 		{
-			printf("error\n");
-			break ;
-		}
-		print_array(array);*/
+			array = argument_array(cmd->args);
+			if (!array)
+			{
+				printf("error\n");
+				break ;
+			}
+			print_array(array);
+			cmd = cmd->next;
+		}*/
 		while (tok)
 		{
 			if (tok->redir && tok->redir->type == HERE_DOC)
@@ -84,12 +88,11 @@ int	main(int ac, char **av, char **envp)
 		}
 		free_command(cmd);
 		cmd = NULL;
+		free(array);
 		free_tokens(shell.head);
 		shell.head = NULL;
 		free(line);
 	}
-	free_command(cmd);
-	cmd = NULL;
 	if (shell.head)
 	{
 		free_tokens(shell.head);

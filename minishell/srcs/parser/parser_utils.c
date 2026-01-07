@@ -58,6 +58,7 @@ t_arg	*add_args(t_cmd *cmd, t_token *token)
 	new->value = ft_strdup(token->content);
 	if (!new->value)
 		return (free(new), NULL);
+	new->type = WORD;
 	new->next = NULL;
 	if (!cmd->args)
 	{

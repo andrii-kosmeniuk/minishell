@@ -91,6 +91,7 @@ typedef struct s_token
 typedef struct s_arg
 {
 	char			*value;
+	t_type			type;
 	struct s_arg	*next;
 }	t_arg;
 
@@ -127,10 +128,11 @@ void	free_all(t_token *tokens, t_shell *shell);
 void	free_tokens(t_token *tokens);
 void	free_on_cmd_failure(t_shell *shell);
 void	free_command(t_cmd *cmds);
+
 //utils
 t_env	*create_node(char *name, char *value);
 size_t	env_size(char **array);
-void	add_to_list(t_env **head, t_env *new);
+void	add_to_list(t_env **head, t_env *neww);
 bool	my_isspace(char c);
 //environment
 t_env	*list_key_value(t_shell *shell, char **envp, t_data *data);
@@ -158,7 +160,7 @@ bool	syntax_check(t_shell *shell);
 t_arg	*add_args(t_cmd *args, t_token *token);
 t_cmd	*parse(t_shell *shell, t_token *token);
 void	handle_pipe(t_cmd **current);
-char	**argument_array(t_cmd *args);
+char	**argument_array(t_arg *args);
 
 // expansions
 char	*expand_string(char *input, t_env *env, int last_exit_status);
