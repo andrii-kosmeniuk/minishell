@@ -35,7 +35,8 @@ SRC = srcs/env/get_envp.c \
 	srcs/parser/parser_clean_up.c \
 	srcs/parser/parser_utils.c \
 	srcs/execution/heredoc_append.c \
-	main.c
+	srcs/expansions/expansions.c
+	#main.c
 
 OBJ = $(SRC:.c=.o)
 
