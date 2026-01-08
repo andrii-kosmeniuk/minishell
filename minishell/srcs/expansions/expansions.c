@@ -35,98 +35,100 @@
 //if the characters after it match any environmental variables key, we expand
 //its value using getenv
 
-static bool	is_valid(char c)
+static int	handle_single_quotes(char *input, int i, char *expanded_string)
 {
-	if (ft_isalpha(c) || c == '_')
-		return (true);
-	return (false);
+	input[i] == '\''
+	i++;
+	while (input[i] && input[i] != '\'')
+	{
+		*output[i] = input[i];
+		i++;
+	}
+	if (input[i] != '\'')
+		return (printf("unclosed single quote\n"), 0);
+	i++;
+	return (i);
 }
 
-static	char *get_value(t_env *env, char *variable_name)
+static int	double_unquoted(char *input, int i, char *expanded_string)
 {
-	t_env	*cur;
-	char	*value;
-
-	cur = env;
-	while (cur)
+	t_state	state;
+	char	*var_name;
+	char	*exit_str;
+	int		i;
+	int		exit_status;
+	
+	state = normal;
+	while (input[i])
 	{
-		if (ft_strcmp(cur->key, variable_name))
+		if (state == normal)
 		{
-			value = getenv(variable_name); //OR MAYBE value = ft_strdup(cur->value)?
+			if (input[i] == '\'')
+				break ;
+			if (input[i] == '"')
+			{
+				state = double_q;
+				i++;
+				continue ;
+			}
+		}
+		else if (state == double_q)
+		{
+			if (input[i] == '"')
+			{
+				state = normal;
+				i++;
+				continue ;
+			}
+		}
+		if (input[i] == '$' && input[i + 1] == '$')
+		{
+			//exit_status = get_exit_status(exit_status);
+			exit_str = ft_itoa(exit_status);
+			if (!exit_str)
+				return (0);
+			ft_strcat(output, exit_str);
+			i += 2;
+		}
+		if (input[i] == '$' && is_valid(input[i + 1]))
+		{
+			var_name = input;
+			value = get_value(var_name);
 			if (!value)
 			{
 				value = ft_strdup("");
 				if (!value)
-					return (NULL);
+					return (0);
 			}
+			ft_strcat(expanded_string, value);
+			i += 1 + ft_strlen(var_name);
+			continue ;
 		}
-		cur = cur->next;
+		ft_strcat(output, input[i]);
+		i++;
 	}
-	return (value);
+	return (i);
 }
 
-char	*expand_string(char *input, t_env *env, int exit_code)
+static char	*expand(char *input)
 {
-	t_state	state;
-	int		number_of_quotes;
-	char	quote;
-	char	*result;
-	char	*value;
+	char	*expanded;
+	int		i;
 
-	(void)exit_code;
-	result = NULL;
-	while (*input)
+	expanded = ft_calloc(ft_strlen(input) + 1, sizeof(char));
+	if (!expanded)
+		return (NULL);
+	i = 0;
+	while (input[i])
 	{
-		state = 0;
-		number_of_quotes = 0;
-		if (*input == '\'')
-		{
-			number_of_quotes = 1;
-			quote = *input;
-			while (*input)
-			{
-				if (*input == '\'')
-					number_of_quotes++;
-				input++;
-			}
-			if (*input == '\0' && number_of_quotes % 2 != 0)
-				return (printf("unclosed single quotes\n"), NULL);
-			state = 1;
-			//logic here is -> no expansion, just append full input to result
-			ft_strlcat(result, input, *input - quote); //allocate with malloc?
-			input++;
-		}
-		else if (*input == '\"')
-		{
-			quote = *input;
-			while (*input)
-			{
-				if (*input == '\"')
-					number_of_quotes++;
-				input++;
-			}
-			if (*input == '\0' && number_of_quotes % 2 != 0)
-				return (printf("unclosed double quotes\n"), NULL);
-			state = 2;
-			input = &quote;
-			while (*input)
-			{
-				if (*input == '$')
-				{
-					if (!is_valid(*(input + 1))) //if first variable name does not start with letter or _, error
-						return (NULL);
-					value = get_value(env, input);
-					if (!value)
-						return (NULL);
-					ft_strcat(result, value);
-					input += ft_strlen(value);
-				}
-				input++;
-			}
-		}
-		input++;
+		if (input[i] == '\'')
+			i = handle_single_quotes(input, i, expanded);
+		else
+			i = double_unquoted(input, i, expanded);
+		i++:
 	}
-	return (result);;
+	input[i] = '\0';
+	return (expanded);
 }
 
 t_env *create_env(void)
@@ -163,22 +165,24 @@ int main(void)
 {
     t_env *env = create_env();
 
-    char *tests[] = {
+    /*char *tests[] = {
         "$milija",
         "No expansion here",
         "Hello $user!",
         "Mixed $milija-$user",
         NULL
-    };
+    };*/
 
-    for (int i = 0; tests[i]; i++)
+	char *input = "$milija";
+
+    for (int i = 0; input[i]; i++)
     {
-        char *result = expand_string(tests[i], env, 0);
+        char *result = expand_string(input, env, 0);
         /*if (!result)
             printf("Error expanding: %s\n", tests[i]);*/
         //else
         //{
-            printf("Input: \"%s\" --> Expanded: \"%s\"\n", tests[i], result);
+            printf("Input: \"%s\" --> Expanded: \"%s\"\n", input, result);
             free(result);  // Assuming expand_string allocates memory
         //}
     }
