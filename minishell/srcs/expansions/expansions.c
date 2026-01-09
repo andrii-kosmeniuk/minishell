@@ -37,26 +37,23 @@
 
 static int	handle_single_quotes(char *input, int i, char *expanded_string)
 {
-	input[i] == '\''
+	input[i] = '\'';
 	i++;
 	while (input[i] && input[i] != '\'')
-	{
-		*output[i] = input[i];
-		i++;
-	}
+		*expanded_string++ = input[i++];
 	if (input[i] != '\'')
 		return (printf("unclosed single quote\n"), 0);
 	i++;
 	return (i);
 }
 
-static int	double_unquoted(char *input, int i, char *expanded_string)
+static int	double_unquoted(t_env *env, char *input, int i, char *expanded_str)
 {
 	t_state	state;
 	char	*var_name;
 	char	*exit_str;
-	int		i;
-	int		exit_status;
+	int		exit_status = 0;
+	char	*value;
 	
 	state = normal;
 	while (input[i])
@@ -87,30 +84,30 @@ static int	double_unquoted(char *input, int i, char *expanded_string)
 			exit_str = ft_itoa(exit_status);
 			if (!exit_str)
 				return (0);
-			ft_strcat(output, exit_str);
+			ft_strcat(expanded_str, exit_str);
 			i += 2;
 		}
 		if (input[i] == '$' && is_valid(input[i + 1]))
 		{
 			var_name = input;
-			value = get_value(var_name);
+			value = get_value(env, var_name);
 			if (!value)
 			{
 				value = ft_strdup("");
 				if (!value)
 					return (0);
 			}
-			ft_strcat(expanded_string, value);
+			ft_strcat(expanded_str, value);
 			i += 1 + ft_strlen(var_name);
 			continue ;
 		}
-		ft_strcat(output, input[i]);
+		ft_strcat(expanded_str, &input[i]);
 		i++;
 	}
 	return (i);
 }
 
-static char	*expand(char *input)
+static char	*expand(char *input, t_env *env)
 {
 	char	*expanded;
 	int		i;
@@ -124,8 +121,8 @@ static char	*expand(char *input)
 		if (input[i] == '\'')
 			i = handle_single_quotes(input, i, expanded);
 		else
-			i = double_unquoted(input, i, expanded);
-		i++:
+			i = double_unquoted(env, input, i, expanded);
+		i++;
 	}
 	input[i] = '\0';
 	return (expanded);
@@ -177,7 +174,7 @@ int main(void)
 
     for (int i = 0; input[i]; i++)
     {
-        char *result = expand_string(input, env, 0);
+        char *result = expand(input, env);
         /*if (!result)
             printf("Error expanding: %s\n", tests[i]);*/
         //else

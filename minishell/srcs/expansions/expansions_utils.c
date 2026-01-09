@@ -25,19 +25,21 @@ char *get_value(t_env *env, char *variable_name)
 	char	*value;
 
 	cur = env;
+	value = NULL;
 	while (cur)
 	{
-		if (ft_strcmp(cur->key, variable_name))
+		if (ft_strcmp(cur->key, variable_name) == 0)
 		{
-			value = getenv(variable_name); //OR MAYBE value = ft_strdup(cur->value)?
+			value = ft_strdup(cur->value);
 			if (!value)
 			{
 				value = ft_strdup("");
 				if (!value)
 					return (NULL);
 			}
+			return (value);
 		}
 		cur = cur->next;
 	}
-	return (value);
+	return (ft_strdup(""));
 }
