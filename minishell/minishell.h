@@ -166,6 +166,10 @@ char	**argument_array(t_arg *args);
 char	*expand_string(char *input, t_env *env, int last_exit_status);
 char	*get_value(t_env *env, char *variable_name);
 bool	is_valid(char c);
+char	*read_variable_name(char *input, char *start_of_variable);
+void	append_char(char *dest, char c);
+char	**final_expand(char *input, t_env *env);
+char	*expand(char *input, t_env *env);
 
 //heredoc and append redir
 void	heredoc_append(t_redir *redir);

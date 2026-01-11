@@ -19,7 +19,7 @@ bool	is_valid(char c)
 	return (false);
 }
 
-char *get_value(t_env *env, char *variable_name)
+char	*get_value(t_env *env, char *variable_name)
 {
 	t_env	*cur;
 	char	*value;
@@ -42,4 +42,39 @@ char *get_value(t_env *env, char *variable_name)
 		cur = cur->next;
 	}
 	return (ft_strdup(""));
+}
+
+static int	alpha_numeric_underscore(int c)
+{
+	if ((c >= '0' && c <= '9') || (c >= 'A' && c <= 'Z')
+		|| (c >= 'a' && c <= 'z') || (c == '_'))
+		return (1);
+	else
+		return (0);
+}
+
+void	append_char(char *dest, char c)
+{
+	size_t	len;
+
+	len = ft_strlen(dest);
+	dest[len] = c;
+	dest[len + 1] = '\0';
+}
+
+char	*read_variable_name(char *input, char *start_of_variable)
+{
+	int		length;
+	char	*variable_name;
+
+	input = start_of_variable;
+	if (!is_valid(*input))
+		return (NULL);
+	while (alpha_numeric_underscore(*input)
+		input++;
+	length = input - start_of_variable;
+	variable_name = ft_substr(input, start_of_variable, length);
+	if (!variable_name)
+		return (NULL);
+	return (variable_name);
 }

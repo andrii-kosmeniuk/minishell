@@ -23,6 +23,7 @@ int	main(int ac, char **av, char **envp)
 	t_token	*tokens = NULL;
 	t_cmd	*cmd = NULL;
 	char	**array;
+	char	**argv;
 
 	(void)ac;
 	(void)av;
@@ -67,20 +68,21 @@ int	main(int ac, char **av, char **envp)
 			continue;
 		}
 		cmd = parse(&shell, tokens);
-		array = argument_array(cmd->args);
-		t_token *tok = tokens;
-		/*while (cmd)
+		if (!cmd)
+			return (-1); //free necessary stuff upon fail
+		array = final_expand(cmd->args[0], env)
+		if (!array)
 		{
-			array = argument_array(cmd->args);
-			if (!array)
-			{
-				printf("error\n");
-				break ;
-			}
-			print_array(array);
-			cmd = cmd->next;
-		}*/
-		while (tok)
+		   printf("Expansion failed\n");
+			free_command(cmd);
+			cmd = NULL;
+			free(line);
+			continue;
+		}
+		for (int i = 0; array[i]; i++)
+			printf("argv[%d] = [%s]\n", i, array[i]);
+		t_token *tok = tokens;
+			while (tok)
 		{
 			if (tok->redir && tok->redir->type == HERE_DOC)
 			heredoc_append(tok->redir);

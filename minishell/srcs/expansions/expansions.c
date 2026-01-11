@@ -6,7 +6,7 @@
 /*   By: milija-h <milija-h@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/19 11:26:28 by milija-h          #+#    #+#             */
-/*   Updated: 2025/12/28 01:49:06 by milija-h         ###   ########.fr       */
+/*   Updated: 2026/01/11 18:11:02 by milija-h         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,155 +35,106 @@
 //if the characters after it match any environmental variables key, we expand
 //its value using getenv
 
-static int	handle_single_quotes(char *input, int i, char *expanded_string)
+static char	*handle_single_quotes(char *input, char *expanded_string)
 {
-	input[i] = '\'';
-	i++;
-	while (input[i] && input[i] != '\'')
-		*expanded_string++ = input[i++];
-	if (input[i] != '\'')
-		return (printf("unclosed single quote\n"), 0);
-	i++;
-	return (i);
+	input++;
+	while (*input && *input != '\'')
+	{
+		append_char(expanded_string, *input);
+		input++;
+	}
+	if (*input != '\'')
+		return (printf("unclosed single quote\n"), NULL);
+	return (input + 1);
 }
 
-static int	double_unquoted(t_env *env, char *input, int i, char *expanded_str)
+static char	*double_unquoted(t_env *env, char *input, char *expanded_str)
 {
 	t_state	state;
 	char	*var_name;
 	char	*exit_str;
-	int		exit_status = 0;
 	char	*value;
-	
+	int		exit_status;
+
+	exit_status = 0;
 	state = normal;
-	while (input[i])
+	while (*input)
 	{
 		if (state == normal)
 		{
-			if (input[i] == '\'')
+			if (*input == '\'')
 				break ;
-			if (input[i] == '"')
+			if (*input == '"')
 			{
 				state = double_q;
-				i++;
+				input++;
 				continue ;
 			}
 		}
 		else if (state == double_q)
 		{
-			if (input[i] == '"')
+			if (*input == '"')
 			{
 				state = normal;
-				i++;
+				input++;
 				continue ;
 			}
 		}
-		if (input[i] == '$' && input[i + 1] == '$')
+		if (*input == '$' && *(input + 1) == '?')
 		{
-			//exit_status = get_exit_status(exit_status);
 			exit_str = ft_itoa(exit_status);
 			if (!exit_str)
-				return (0);
+				return (NULL);
 			ft_strcat(expanded_str, exit_str);
-			i += 2;
-		}
-		if (input[i] == '$' && is_valid(input[i + 1]))
-		{
-			var_name = input;
-			value = get_value(env, var_name);
-			if (!value)
-			{
-				value = ft_strdup("");
-				if (!value)
-					return (0);
-			}
-			ft_strcat(expanded_str, value);
-			i += 1 + ft_strlen(var_name);
+			free(exit_str);
+			input += 2;
 			continue ;
 		}
-		ft_strcat(expanded_str, &input[i]);
-		i++;
-	}
-	return (i);
+		if (*input == '$' && is_valid(*(input + 1)))
+		{
+			var_name = read_variable_name(input, input + 1);
+			if (!var_name)
+				return (NULL);
+			value = get_value(env, var_name);
+			if (!value)
+				value = "";
+			ft_strcat(expanded_str, value);
+			input += 1 + ft_strlen(var_name);
+			free(var_name);
+			continue ;
+		}
+		append_char(expanded_str, *input);
+		input++;
+    }
+	return (input);
 }
 
-static char	*expand(char *input, t_env *env)
+char	*expand(char *input, t_env *env)
 {
 	char	*expanded;
-	int		i;
+	char	*new_pos;
 
+	if (!input)
+		return (NULL);
 	expanded = ft_calloc(ft_strlen(input) + 1, sizeof(char));
 	if (!expanded)
 		return (NULL);
-	i = 0;
-	while (input[i])
+	while (*input)
 	{
-		if (input[i] == '\'')
-			i = handle_single_quotes(input, i, expanded);
+		if (*input == '\'')
+		{
+			new_pos = handle_single_quotes(input, expanded);
+			if (!new_pos)
+				return (free(expanded), NULL);
+			input = new_pos;
+		}
 		else
-			i = double_unquoted(env, input, i, expanded);
-		i++;
+		{
+			new_pos = double_unquoted(env, input, expanded);
+			if (!new_pos)
+				return (free(expanded), NULL);
+			input = new_pos;
+		}
 	}
-	input[i] = '\0';
 	return (expanded);
-}
-
-t_env *create_env(void)
-{
-    t_env *head = malloc(sizeof(t_env));
-    t_env *second = malloc(sizeof(t_env));
-
-    head->key = strdup("milija");
-    head->value = strdup("hello");
-    head->next = second;
-
-    second->key = strdup("user");
-    second->value = strdup("world");
-    second->next = NULL;
-
-    return head;
-}
-
-// Free the environment list
-void free_env(t_env *env)
-{
-    t_env *tmp;
-    while (env)
-    {
-        tmp = env;
-        env = env->next;
-        free(tmp->key);
-        free(tmp->value);
-        free(tmp);
-    }
-}
-
-int main(void)
-{
-    t_env *env = create_env();
-
-    /*char *tests[] = {
-        "$milija",
-        "No expansion here",
-        "Hello $user!",
-        "Mixed $milija-$user",
-        NULL
-    };*/
-
-	char *input = "$milija";
-
-    for (int i = 0; input[i]; i++)
-    {
-        char *result = expand(input, env);
-        /*if (!result)
-            printf("Error expanding: %s\n", tests[i]);*/
-        //else
-        //{
-            printf("Input: \"%s\" --> Expanded: \"%s\"\n", input, result);
-            free(result);  // Assuming expand_string allocates memory
-        //}
-    }
-
-    free_env(env);
-    return 0;
 }
