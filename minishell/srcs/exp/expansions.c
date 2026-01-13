@@ -35,12 +35,12 @@
 //if the characters after it match any environmental variables key, we expand
 //its value using getenv
 
-static char	*handle_single_quotes(char *input, char *expanded_string)
+static char	*handle_single_quotes(char *input, char *expanded, size_t *pos)
 {
 	input++;
 	while (*input && *input != '\'')
 	{
-		append_char(expanded_string, *input);
+		expanded[(*pos)++] = *input;
 		input++;
 	}
 	if (*input != '\'')
@@ -48,15 +48,13 @@ static char	*handle_single_quotes(char *input, char *expanded_string)
 	return (input + 1);
 }
 
-static char	*double_unquoted(t_env *env, char *input, char *expanded_str)
+static char	*expand(t_env *env, char *input, char *expanded, size_t *position)
 {
 	t_state	state;
 	char	*var_name;
 	char	*exit_str;
 	char	*value;
-	int		exit_status;
 
-	exit_status = 0;
 	state = normal;
 	while (*input)
 	{
@@ -82,10 +80,11 @@ static char	*double_unquoted(t_env *env, char *input, char *expanded_str)
 		}
 		if (*input == '$' && *(input + 1) == '?')
 		{
-			exit_str = ft_itoa(exit_status);
+			exit_str = ft_itoa(0);//Use actual exit status
 			if (!exit_str)
 				return (NULL);
-			ft_strcat(expanded_str, exit_str);
+			ft_memcpy(expanded + *position, exit_str, ft_strlen(exit_str));
+			*position += ft_strlen(exit_str);
 			free(exit_str);
 			input += 2;
 			continue ;
@@ -98,39 +97,43 @@ static char	*double_unquoted(t_env *env, char *input, char *expanded_str)
 			value = get_value(env, var_name);
 			if (!value)
 				value = "";
-			ft_strcat(expanded_str, value);
+			ft_memcpy(expanded + *position, value, ft_strlen(value));
+			*position += ft_strlen(value);
 			input += 1 + ft_strlen(var_name);
 			free(var_name);
 			continue ;
 		}
-		append_char(expanded_str, *input);
+		expanded[(*position)++] = *input;
 		input++;
-    }
+	}
 	return (input);
 }
 
-char	*expand(char *input, t_env *env)
+char	*final_expand(char *input, t_env *env)
 {
 	char	*expanded;
 	char	*new_pos;
+	size_t	estimated_size;
+	size_t	position = 0;
 
 	if (!input)
 		return (NULL);
-	expanded = ft_calloc(ft_strlen(input) + 1, sizeof(char));
+	estimated_size = calculate_expanded_size(input, env);
+	expanded = ft_calloc(estimated_size, sizeof(char));
 	if (!expanded)
 		return (NULL);
 	while (*input)
 	{
 		if (*input == '\'')
 		{
-			new_pos = handle_single_quotes(input, expanded);
+			new_pos = handle_single_quotes(input, expanded, &position);
 			if (!new_pos)
 				return (free(expanded), NULL);
 			input = new_pos;
 		}
 		else
 		{
-			new_pos = double_unquoted(env, input, expanded);
+			new_pos = expand(env, input, expanded, &position);
 			if (!new_pos)
 				return (free(expanded), NULL);
 			input = new_pos;

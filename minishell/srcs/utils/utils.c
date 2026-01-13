@@ -87,3 +87,10 @@ bool	syntax_check(t_shell *shell)
 	}
 	return (true);
 }
+
+bool	is_valid(char c)
+{
+	if (ft_isalpha(c) || c == '_')
+		return (true);
+	return (false);
+}

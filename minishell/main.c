@@ -6,7 +6,7 @@
 /*   By: milija-h <milija-h@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/22 20:38:51 by milija-h          #+#    #+#             */
-/*   Updated: 2025/12/15 22:16:15 by milija-h         ###   ########.fr       */
+/*   Updated: 2026/01/12 14:33:27 by milija-h         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,6 @@ int	main(int ac, char **av, char **envp)
 	t_token	*tokens = NULL;
 	t_cmd	*cmd = NULL;
 	char	**array;
-	char	**argv;
 
 	(void)ac;
 	(void)av;
@@ -67,10 +66,28 @@ int	main(int ac, char **av, char **envp)
 			free(line);
 			continue;
 		}
+
+		//--------- testing command structure
 		cmd = parse(&shell, tokens);
 		if (!cmd)
 			return (-1); //free necessary stuff upon fail
-		array = final_expand(cmd->args[0], env)
+		print_cmd_structure(cmd);
+		printf("\n\n");
+
+		array = argument_array(cmd->args);
+		if (!array)
+			return (-1); // free necessary stuff upon fail
+		int i = 0;
+		while (array[i])
+		{
+			printf("%s\n", array[i]);
+			i++;
+		}
+		printf("\n\n");
+	
+	// -------- testing char ** content---------------
+
+		char **argv = final_argv(array[0], shell.environment_p);
 		if (!array)
 		{
 		   printf("Expansion failed\n");
@@ -79,10 +96,14 @@ int	main(int ac, char **av, char **envp)
 			free(line);
 			continue;
 		}
-		for (int i = 0; array[i]; i++)
-			printf("argv[%d] = [%s]\n", i, array[i]);
+		i = 0;
+		while (argv[i])
+		{
+			printf("argv[%d] = [%s]\n", i, argv[i]);
+			i++;
+		}
 		t_token *tok = tokens;
-			while (tok)
+		while (tok)
 		{
 			if (tok->redir && tok->redir->type == HERE_DOC)
 			heredoc_append(tok->redir);

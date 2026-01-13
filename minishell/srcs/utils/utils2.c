@@ -73,3 +73,19 @@ char	**argument_array(t_arg *arg)
 	array[i] = NULL;
 	return (array);
 }
+
+char	*substring(char *input, char *start_of_word, size_t len)
+{
+	char	*substr;
+	
+	if (!input || !start_of_word)
+		return (NULL);
+	if (len > ft_strlen(input))
+		len = ft_strlen(start_of_word);
+	substr = ft_calloc(len + 1, sizeof(char));
+	if (!substr)
+		return (NULL);
+	ft_memcpy(substr, start_of_word, len);
+	substr[len] = '\0';
+	return (substr);
+}

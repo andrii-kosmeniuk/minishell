@@ -88,6 +88,16 @@ typedef struct s_token
 	struct s_token	*next;
 }	t_token;
 
+typedef struct s_expand_ctx
+{
+	t_env	*env;
+	int		exit_status;
+	t_state	state;
+	char	*result;
+	size_t	pos;
+	int		calc_mode; // 1 = calculate size, 0 = actually expand
+}	t_expand;
+
 typedef struct s_arg
 {
 	char			*value;
@@ -134,6 +144,8 @@ t_env	*create_node(char *name, char *value);
 size_t	env_size(char **array);
 void	add_to_list(t_env **head, t_env *neww);
 bool	my_isspace(char c);
+char	*substring(char *input, char *start_of_word, size_t len);
+int		alpha_numeric_underscore(int c);
 //environment
 t_env	*list_key_value(t_shell *shell, char **envp, t_data *data);
 char	**copy_of_envp(t_shell *shell, char **envp);
@@ -168,8 +180,9 @@ char	*get_value(t_env *env, char *variable_name);
 bool	is_valid(char c);
 char	*read_variable_name(char *input, char *start_of_variable);
 void	append_char(char *dest, char c);
-char	**final_expand(char *input, t_env *env);
-char	*expand(char *input, t_env *env);
+char	**final_argv(char *input, t_env *env);
+char	*final_expand(char *input, t_env *env);
+size_t	calculate_expanded_size(char *input, t_env *env);
 
 //heredoc and append redir
 void	heredoc_append(t_redir *redir);

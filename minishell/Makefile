@@ -21,6 +21,7 @@ NAME = minishell
 SRC = srcs/env/get_envp.c \
 	srcs/utils/utils.c \
 	srcs/utils/utils2.c \
+	srcs/utils/utils3.c \
 	srcs/env/env_utils.c \
 	srcs/clean_up/free_utils.c \
 	srcs/clean_up/free_utils2.c \
