@@ -36,8 +36,8 @@ SRC = srcs/env/get_envp.c \
 	srcs/parser/parser_clean_up.c \
 	srcs/parser/parser_utils.c \
 	srcs/execution/heredoc_append.c \
-	srcs/expansions/expansions.c \
-	srcs/expansions/expansions_utils.c \
+	srcs/expansions/expander.c \
+	srcs/expansions/expander_utils.c \
 	srcs/expansions/word_splitting.c \
 	main.c
 

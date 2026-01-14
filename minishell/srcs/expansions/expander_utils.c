@@ -22,20 +22,10 @@ char	*get_value(t_env *env, char *variable_name)
 	while (cur)
 	{
 		if (ft_strcmp(cur->key, variable_name) == 0)
-			return (cur->value);
+			return (ft_strdup(cur->value));
 		cur = cur->next;
 	}
-	return (NULL)
-}
-
-bool	is_single_word(char *expanded)
-{
-	while (*expanded)
-	{
-		if (my_isspace(*expanded))
-			return (true);
-	}
-	return (false);
+	return (NULL);
 }
 
 char	*read_variable_name(char *input, char *start_of_variable)
@@ -55,34 +45,34 @@ char	*read_variable_name(char *input, char *start_of_variable)
 	return (variable_name);
 }
 
-char	**word_split(char *expanded)
+bool	append_char(char **buffer, size_t *len, char c)
 {
-	char	**words;
-	char	*word;
-	char	*start;
+	char	*new_buf;
 
-	words = NULL;
-	word_count = 0;
-	while (*expanded)
-	{
-		while (*expanded && my_isspace(*expanded))
-			expanded++;
-		if (*expanded == '\0')
-			break ; //if string is only space
-		start = expanded; // keep track of word_start
-		while (*expanded && !my_isspace(*expanded))
-			expanded++; // at the end of the word
-		word = ft_calloc(expanded - start + 1, sizeof(char))
-		if (!word)
-			return (free_array(words), NULL);
-		*words = ft_calloc(ft_strlen(word) + 1, sizeof(char)); //individual alloc
-		if (!(*words)) 
-			return (free(word), free_array(words), NULL);
-		ft_memcpy(*words, word, ft_strlen(word)); // copy word into *words
-		free(word);
-		word = NULL;
-		words++;
-		expanded++;
-	}
-	return (words);
+	new_buf = ft_realloc(*buf, &len, *len + 2);
+	if (!new_buf)
+		return (false);
+	*buf = new_buf;
+	(*buf)[*len] = c;
+	(*buf)[*len + 1] = '\0';
+	(*len)++;
+	return (true);
+}
+
+bool	append_string(char **buffer, size_t *len, char *str)
+{
+	char	*new_buf;
+	size_t	str_len;
+
+	if (!str)
+		return (true);
+	str_len = ft_strlen(str);
+	new_buf = ft_realloc(*buf, &len, *len + str_len + 1);
+	if (!new_buf)
+		return (false);
+	*buf = new_buf;
+	ft_memcpy(*buf + *len, str, str_len);
+	*len += str_len;
+	(*buf)[*len] = '\0';
+	return (true);
 }

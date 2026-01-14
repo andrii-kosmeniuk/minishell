@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "../../minishell.h"
+#include <string.h>
 
 int	alpha_numeric_underscore(int c)
 {
@@ -19,4 +20,28 @@ int	alpha_numeric_underscore(int c)
 		return (1);
 	else
 		return (0);
+}
+
+t_state	determine_state(t_state state, char *input)
+{
+	if (state == normal && *input == '\'')
+		state = single_q;
+	else if (state == normal && *input == '"')
+		state = double_q;
+	else if (state == single_q && *input == '\'')
+		state = normal;
+	else if (state == double_q && *input == '"')
+		state = normal;
+	return (state);
+}
+
+bool	is_single_word(char *expanded)
+{
+	while (*expanded)
+	{
+		if (ft_isspace(*expanded))
+			return (false);
+		expanded++;
+	}
+	return (true);
 }

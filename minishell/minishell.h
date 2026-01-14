@@ -143,9 +143,9 @@ void	free_command(t_cmd *cmds);
 t_env	*create_node(char *name, char *value);
 size_t	env_size(char **array);
 void	add_to_list(t_env **head, t_env *neww);
-bool	my_isspace(char c);
 char	*substring(char *input, char *start_of_word, size_t len);
 int		alpha_numeric_underscore(int c);
+bool	my_isspace(char input);
 //environment
 t_env	*list_key_value(t_shell *shell, char **envp, t_data *data);
 char	**copy_of_envp(t_shell *shell, char **envp);
@@ -175,14 +175,17 @@ void	handle_pipe(t_cmd **current);
 char	**argument_array(t_arg *args);
 
 // expansions
-char	*expand_string(char *input, t_env *env, int last_exit_status);
+bool	append_string(char **buffer, size_t *len, char *str);
+bool	append_char(char **buffer, size_t *len, char c);
+char	*expand_string(char *input, t_state state, t_env *env, int exit);
 char	*get_value(t_env *env, char *variable_name);
 bool	is_valid(char c);
 char	*read_variable_name(char *input, char *start_of_variable);
-void	append_char(char *dest, char c);
+char	**word_split(char *expanded);
+t_state	determine_state(t_state state, char *input);
+
 char	**final_argv(char *input, t_env *env);
 char	*final_expand(char *input, t_env *env);
-size_t	calculate_expanded_size(char *input, t_env *env);
 
 //heredoc and append redir
 void	heredoc_append(t_redir *redir);
