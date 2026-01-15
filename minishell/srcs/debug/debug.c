@@ -65,7 +65,7 @@ void	print_cmd_structure(t_cmd *cmd)
 	cmd_index = 0;
 	while (cmd)
 	{
-		t_arg *arg;
+		char **arg;
 		t_redir *redir;
 
 		printf("===== COMMAND %d =====\n", cmd_index);
@@ -73,10 +73,10 @@ void	print_cmd_structure(t_cmd *cmd)
 		arg = cmd->args;
 		if (!arg)
 			printf("  (none)\n");
-		while (arg)
+		while (*arg)
 		{
-			printf("  - %s\n", arg->value);
-			arg = arg->next;
+			printf("  - %s\n", *arg);
+			arg++;
 		}
 		printf("Redirections:\n");
 		redir = cmd->redirections;

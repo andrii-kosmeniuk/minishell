@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: milija-h <milija-h@student.42vienna.com>   +#+  +:+       +#+        */
+/*   By: milija-h <milija-h@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/13 11:17:33 by milija-h          #+#    #+#             */
-/*   Updated: 2026/01/13 11:17:49 by milija-h         ###   ########.fr       */
+/*   Updated: 2026/01/15 10:56:24 by milija-h         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ static bool	append_var(char **buf, size_t *len, t_env *env, char *var_name)
 	value = get_value(env, var_name);
 	if (!value)
 		return (true);
-	if (!append_str(buf, len, value))
+	if (!append_string(buf, len, value))
 	{
 		free(value);
 		value = NULL;
@@ -53,27 +53,56 @@ static char	*append_exit_code(char **buf, size_t *len, int exit_code)
 	}
 	free(tmp);
 	tmp = NULL;
-	return (exit_str);
+	return (tmp);
 }
 
 char	*expand_string(char *input, t_state state, t_env *env, int exit)
 {
 	char	*output;
 	size_t	len;
-	char	*value;
+	char	*key;
 
 	output = NULL;
 	len = 0;
 	while (*input)
 	{
-		state = determine_state(state, input);
-		if (state != single_q && *input == '$')
+		if (*input == '$' && state != single_q)
 		{
-			if (*(input + 1) == '?')
-			{
-				if (!append_exit_code())
-			}
+		    if (*(input + 1) == '?')
+		    {
+		        if (!append_exit_code(&output, &len, exit))
+		            return (free(output), NULL);
+		        input += 2;
+		    }
+		    else if (is_valid(*(input + 1)))
+		    {
+		        key = read_variable_name(input, input + 1);
+				if (!key)
+					return (free(key), free(output), NULL);
+		        if (!append_var(&output, &len, env, key))
+		            return (free(key), free(output), NULL);
+		        input += 1 + ft_strlen(key);
+		        free(key);
+		    }
+		else
+		    append_char(&output, &len, *input++);
 		}
 	}
 	return (output);
+}
+
+char	**final_argvs(char *input, t_state state, t_env *env, int exit)
+{
+	char	**argv;
+	char	*expanded;
+
+	argv = NULL;
+	expanded = NULL;
+	expanded = expand_string(input, state, env, exit);
+	if (!expanded)
+		return (NULL);
+	argv = word_split(expanded);
+	if (!argv)
+		return (free(expanded), NULL);
+	return (argv);
 }

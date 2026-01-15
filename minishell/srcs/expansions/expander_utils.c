@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: milija-h <milija-h@student.42vienna.com>   +#+  +:+       +#+        */
+/*   By: milija-h <milija-h@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/13 11:41:47 by milija-h          #+#    #+#             */
-/*   Updated: 2026/01/13 11:43:46 by milija-h         ###   ########.fr       */
+/*   Updated: 2026/01/15 10:56:28 by milija-h         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,12 +49,12 @@ bool	append_char(char **buffer, size_t *len, char c)
 {
 	char	*new_buf;
 
-	new_buf = ft_realloc(*buf, &len, *len + 2);
+	new_buf = ft_realloc(*buffer, *len, *len + 2);
 	if (!new_buf)
 		return (false);
-	*buf = new_buf;
-	(*buf)[*len] = c;
-	(*buf)[*len + 1] = '\0';
+	*buffer = new_buf;
+	(*buffer)[*len] = c;
+	(*buffer)[*len + 1] = '\0';
 	(*len)++;
 	return (true);
 }
@@ -67,12 +67,12 @@ bool	append_string(char **buffer, size_t *len, char *str)
 	if (!str)
 		return (true);
 	str_len = ft_strlen(str);
-	new_buf = ft_realloc(*buf, &len, *len + str_len + 1);
+	new_buf = ft_realloc(*buffer, *len, *len + str_len + 1);
 	if (!new_buf)
 		return (false);
-	*buf = new_buf;
-	ft_memcpy(*buf + *len, str, str_len);
+	*buffer = new_buf;
+	ft_memcpy(*buffer + *len, str, str_len);
 	*len += str_len;
-	(*buf)[*len] = '\0';
+	(*buffer)[*len] = '\0';
 	return (true);
 }

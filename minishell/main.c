@@ -22,12 +22,13 @@ int	main(int ac, char **av, char **envp)
 	t_shell	shell;
 	t_token	*tokens = NULL;
 	t_cmd	*cmd = NULL;
-	char	**array;
+	t_state	state;
 
 	(void)ac;
 	(void)av;
 
-	init_shell(&shell, &data, envp);
+	if (!init_shell(&shell, &state, &data, envp))
+		return (printf("error init\n"), -1);
 	list_key_value(&shell, envp, &data);
 	update_shlvl_key(&shell, &data);
 
@@ -73,22 +74,18 @@ int	main(int ac, char **av, char **envp)
 			return (-1); //free necessary stuff upon fail
 		print_cmd_structure(cmd);
 		printf("\n\n");
-
-		array = argument_array(cmd->args);
-		if (!array)
-			return (-1); // free necessary stuff upon fail
 		int i = 0;
-		while (array[i])
+		while (cmd->args[i])
 		{
-			printf("%s\n", array[i]);
+			printf("%s\n", cmd->args[i]);
 			i++;
 		}
 		printf("\n\n");
 	
 	// -------- testing char ** content---------------
 
-		char **argv = final_argv(array[0], shell.environment_p);
-		if (!array)
+		char **argv = final_argvs(cmd->args[0], state, shell.environment_p, 0);
+		if (!cmd->args[0])
 		{
 		   printf("Expansion failed\n");
 			free_command(cmd);
@@ -111,7 +108,7 @@ int	main(int ac, char **av, char **envp)
 		}
 		free_command(cmd);
 		cmd = NULL;
-		free(array);
+		//free(array);
 		free_tokens(shell.head);
 		shell.head = NULL;
 		free(line);

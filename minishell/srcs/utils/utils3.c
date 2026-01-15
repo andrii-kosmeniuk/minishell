@@ -39,7 +39,7 @@ bool	is_single_word(char *expanded)
 {
 	while (*expanded)
 	{
-		if (ft_isspace(*expanded))
+		if (my_isspace(*expanded))
 			return (false);
 		expanded++;
 	}

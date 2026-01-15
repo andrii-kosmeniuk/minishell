@@ -18,7 +18,7 @@ t_cmd	*parse(t_shell *shell, t_token *tokens)
 	t_cmd	*current;
 	t_token	*t_oken;
 	t_redir	*redir;
-	t_arg	*arg;
+	t_cmd	*arg;
 
 	if ((!shell || !tokens) || (!syntax_check(shell)))
 		return (NULL);

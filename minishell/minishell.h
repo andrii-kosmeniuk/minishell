@@ -107,7 +107,8 @@ typedef struct s_arg
 
 typedef struct s_cmd
 {
-	t_arg			*args; //linked list of arguments;
+	char			**args;
+	int				argc;
 	t_redir			*redirections; //linked list of redirections
 	struct s_cmd	*next; //next command if there is a pipe
 }	t_cmd;
@@ -127,14 +128,14 @@ typedef struct s_shell
 }	t_shell;
 
 //initialization
-void	init_shell(t_shell *shell, t_data *data, char **envp);
+bool	init_shell(t_shell *shell, t_state *state, t_data *data, char **envp);
 
 //memory managment
 void	free_array(char **array);
 void	allocation_failed(char **array, int last_allocated_string);
 void	free_env_list(t_shell *shell, t_env *env);
 void	free_key_value(char *key, char *value);
-void	free_all(t_token *tokens, t_shell *shell);
+void	free_all(t_token *taokens, t_shell *shell);
 void	free_tokens(t_token *tokens);
 void	free_on_cmd_failure(t_shell *shell);
 void	free_command(t_cmd *cmds);
@@ -169,7 +170,7 @@ void	add_cmd_back(t_cmd **head, t_cmd *new_command);
 t_cmd	*create_command(void);
 t_redir	*add_redir(t_redir **head, t_type type, char *target);
 bool	syntax_check(t_shell *shell);
-t_arg	*add_args(t_cmd *args, t_token *token);
+t_cmd	*add_args(t_cmd *cmd, t_token *token);
 t_cmd	*parse(t_shell *shell, t_token *token);
 void	handle_pipe(t_cmd **current);
 char	**argument_array(t_arg *args);
@@ -183,8 +184,9 @@ bool	is_valid(char c);
 char	*read_variable_name(char *input, char *start_of_variable);
 char	**word_split(char *expanded);
 t_state	determine_state(t_state state, char *input);
+char	**final_argvs(char *input, t_state, t_env *env, int exit);
+//char	**final_argv(char *input, t_env *env);
 
-char	**final_argv(char *input, t_env *env);
 char	*final_expand(char *input, t_env *env);
 
 //heredoc and append redir

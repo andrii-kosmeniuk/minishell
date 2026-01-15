@@ -19,7 +19,6 @@ char	**word_split(char *expanded)
 	char	*start;
 
 	words = NULL;
-	word_count = 0;
 	while (*expanded)
 	{
 		while (*expanded && my_isspace(*expanded))
@@ -29,7 +28,7 @@ char	**word_split(char *expanded)
 		start = expanded; // keep track of word_start
 		while (*expanded && !my_isspace(*expanded))
 			expanded++; // at the end of the word
-		word = ft_calloc(expanded - start + 1, sizeof(char))
+		word = ft_calloc(expanded - start + 1, sizeof(char));
 		if (!word)
 			return (free_array(words), NULL);
 		*words = ft_calloc(ft_strlen(word) + 1, sizeof(char)); //individual alloc

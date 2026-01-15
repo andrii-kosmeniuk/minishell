@@ -26,7 +26,7 @@ static void	free_redir(t_redir *redir)
 	}
 }
 
-static void	free_args(t_arg *args)
+/*static void	free_args(t_arg *args)
 {
 	t_arg	*cur;
 
@@ -37,7 +37,7 @@ static void	free_args(t_arg *args)
 		free(args);
 		args = cur;
 	}
-}
+}*/
 
 void	free_command(t_cmd *cmds)
 {
@@ -48,7 +48,7 @@ void	free_command(t_cmd *cmds)
 	while (cmds)
 	{
 		cur = cmds->next;
-		free_args(cmds->args);
+		free_array(cmds->args);
 		free_redir(cmds->redirections);
 		free(cmds);
 		cmds = cur;

@@ -12,14 +12,16 @@
 
 #include "../../minishell.h"
 
-void	init_shell(t_shell *shell, t_data *data, char **envp)
+bool	init_shell(t_shell *shell, t_state *state, t_data *data, char **envp)
 {
 	data->shlvl = 1;
+	*state = normal;
 	shell->redir_error = 0;
 	data->heredoc_number = 0;
 	shell->env_array = ft_calloc(env_size(envp + 1), sizeof(char *));
 	if (!shell->env_array)
-		return ;
+		return (false);
 	shell->environment_p = NULL;
 	shell->head = NULL;
+	return (true);
 }
