@@ -6,7 +6,7 @@
 /*   By: milija-h <milija-h@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 15:14:05 by milija-h          #+#    #+#             */
-/*   Updated: 2025/12/15 21:22:45 by milija-h         ###   ########.fr       */
+/*   Updated: 2026/01/16 21:32:03 by milija-h         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -183,9 +183,9 @@ char	*get_value(t_env *env, char *variable_name);
 bool	is_valid(char c);
 char	*read_variable_name(char *input, char *start_of_variable);
 char	**word_split(char *expanded);
-t_state	determine_state(t_state state, char *input);
-char	**final_argvs(char *input, t_state, t_env *env, int exit);
-//char	**final_argv(char *input, t_env *env);
+void	determine_state(t_state state, char *input);
+char	**final_args(char *input, t_state, t_env *env, int exit);
+char	**expand_final_args(char **args, t_state state, t_env *env, int exit);
 
 char	*final_expand(char *input, t_env *env);
 
@@ -193,9 +193,6 @@ char	*final_expand(char *input, t_env *env);
 void	heredoc_append(t_redir *redir);
 //signals
 void	setup_signals(void);
-
-//readline
-char	*prompt(const char *prompt);
 
 //debug
 void	print_env_list(t_env *head);

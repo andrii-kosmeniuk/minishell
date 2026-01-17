@@ -6,7 +6,7 @@
 #    By: milija-h <milija-h@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/11/19 19:13:22 by milija-h          #+#    #+#              #
-#    Updated: 2025/12/03 22:31:51 by milija-h         ###   ########.fr        #
+#    Updated: 2026/01/16 21:31:29 by milija-h         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -26,7 +26,7 @@ SRC = srcs/env/get_envp.c \
 	srcs/clean_up/free_utils.c \
 	srcs/clean_up/free_utils2.c \
 	srcs/debug/debug.c \
-	srcs/signals/signal_handlers.c srcs/prompt/prompt.c \
+	srcs/signals/signal_handlers.c \
 	srcs/init/init.c \
 	srcs/lexer/lexer.c \
 	srcs/lexer/lexer_utils.c \
@@ -36,9 +36,10 @@ SRC = srcs/env/get_envp.c \
 	srcs/parser/parser_clean_up.c \
 	srcs/parser/parser_utils.c \
 	srcs/execution/heredoc_append.c \
-	srcs/expansions/expander.c \
+	srcs/expansions/expand_input_string.c \
 	srcs/expansions/expander_utils.c \
 	srcs/expansions/word_splitting.c \
+	srcs/expansions/main_expander.c \
 	main.c
 
 OBJ = $(SRC:.c=.o)

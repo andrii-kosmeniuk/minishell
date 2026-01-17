@@ -22,7 +22,7 @@ int	alpha_numeric_underscore(int c)
 		return (0);
 }
 
-t_state	determine_state(t_state state, char *input)
+void	determine_state(t_state state, char *input)
 {
 	if (state == normal && *input == '\'')
 		state = single_q;
@@ -32,7 +32,6 @@ t_state	determine_state(t_state state, char *input)
 		state = normal;
 	else if (state == double_q && *input == '"')
 		state = normal;
-	return (state);
 }
 
 bool	is_single_word(char *expanded)

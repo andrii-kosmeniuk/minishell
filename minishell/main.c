@@ -83,9 +83,8 @@ int	main(int ac, char **av, char **envp)
 		printf("\n\n");
 	
 	// -------- testing char ** content---------------
-
-		char **argv = final_argvs(cmd->args[0], state, shell.environment_p, 0);
-		if (!cmd->args[0])
+		char **argv = expand_final_args(cmd->args, state, shell.environment_p, 0);
+		if (!argv)
 		{
 		   printf("Expansion failed\n");
 			free_command(cmd);
@@ -108,10 +107,10 @@ int	main(int ac, char **av, char **envp)
 		}
 		free_command(cmd);
 		cmd = NULL;
-		//free(array);
 		free_tokens(shell.head);
 		shell.head = NULL;
 		free(line);
+		free_array(argv);
 	}
 	if (shell.head)
 	{

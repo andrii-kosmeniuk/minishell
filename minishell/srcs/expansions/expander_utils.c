@@ -49,7 +49,7 @@ bool	append_char(char **buffer, size_t *len, char c)
 {
 	char	*new_buf;
 
-	new_buf = ft_realloc(*buffer, *len, *len + 2);
+	new_buf = ft_realloc(*buffer, *len + 1, *len + 2);
 	if (!new_buf)
 		return (false);
 	*buffer = new_buf;
@@ -67,7 +67,7 @@ bool	append_string(char **buffer, size_t *len, char *str)
 	if (!str)
 		return (true);
 	str_len = ft_strlen(str);
-	new_buf = ft_realloc(*buffer, *len, *len + str_len + 1);
+	new_buf = ft_realloc(*buffer, *len + 1, *len + str_len + 1);
 	if (!new_buf)
 		return (false);
 	*buffer = new_buf;

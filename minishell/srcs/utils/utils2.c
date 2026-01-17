@@ -6,7 +6,7 @@
 /*   By: milija-h <milija-h@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/12 22:34:49 by milija-h          #+#    #+#             */
-/*   Updated: 2025/12/12 22:35:16 by milija-h         ###   ########.fr       */
+/*   Updated: 2026/01/16 21:30:13 by milija-h         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ char	**argument_array(t_arg *arg)
 char	*substring(char *input, char *start_of_word, size_t len)
 {
 	char	*substr;
-	
+
 	if (!input || !start_of_word)
 		return (NULL);
 	if (len > ft_strlen(input))

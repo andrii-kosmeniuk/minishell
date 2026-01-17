@@ -6,7 +6,7 @@
 /*   By: milija-h <milija-h@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/10 18:31:40 by milija-h          #+#    #+#             */
-/*   Updated: 2025/12/24 10:46:38 by milija-h         ###   ########.fr       */
+/*   Updated: 2026/01/16 21:29:23 by milija-h         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,17 +46,16 @@ void	add_cmd_back(t_cmd **head, t_cmd *new_command)
 	}
 }
 
-
-t_cmd *add_args(t_cmd *cmd, t_token *token)
+t_cmd	*add_args(t_cmd *cmd, t_token *token)
 {
 	char	**cmd_args;
 	int		i;
 
 	if (!cmd || !token || !token->content)
-		return NULL;
+		return (NULL);
 	cmd_args = ft_calloc((cmd->argc + 2), sizeof(char *));
 	if (!cmd_args)
-		return NULL;
+		return (NULL);
 	i = 0;
 	while (i < cmd->argc)
 	{
@@ -73,7 +72,6 @@ t_cmd *add_args(t_cmd *cmd, t_token *token)
 	cmd->argc += 1;
 	return (cmd);
 }
-
 
 void	handle_pipe(t_cmd **current)
 {

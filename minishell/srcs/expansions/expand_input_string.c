@@ -1,24 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   expander.c                                         :+:      :+:    :+:   */
+/*   expand_input_string.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: milija-h <milija-h@student.42.fr>          +#+  +:+       +#+        */
+/*   By: milija-h <milija-h@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/01/13 11:17:33 by milija-h          #+#    #+#             */
-/*   Updated: 2026/01/15 10:56:24 by milija-h         ###   ########.fr       */
+/*   Created: 2026/01/16 21:22:04 by milija-h          #+#    #+#             */
+/*   Updated: 2026/01/16 21:25:21 by milija-h         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
-
-int		expand_command(t_cmd *cmd, t_env *env, int exit_code);
-int		expand_arguments(t_cmd *cmd, t_env *env, int exit_code);
-char	*expand_string(char *input, t_state state, t_env *env, int exit_code);
-int		expand_redirections(t_cmd *cmd, t_env *env, int exit_code);
-char	**expand_word(char *word, t_state state, t_env *env, int exit_code);
-char	*expand_target(char *target, t_state state, t_env *env, int exit_code);
-char	**word_split(char *expanded);
 
 static bool	append_var(char **buf, size_t *len, t_env *env, char *var_name)
 {
@@ -38,7 +30,7 @@ static bool	append_var(char **buf, size_t *len, t_env *env, char *var_name)
 	return (true);
 }
 
-static char	*append_exit_code(char **buf, size_t *len, int exit_code)
+static bool	append_exit_code(char **buf, size_t *len, int exit_code)
 {
 	char	*tmp;
 
@@ -48,12 +40,10 @@ static char	*append_exit_code(char **buf, size_t *len, int exit_code)
 	if (!append_string(buf, len, tmp))
 	{
 		free(tmp);
-		tmp = NULL;
 		return (false);
 	}
 	free(tmp);
-	tmp = NULL;
-	return (tmp);
+	return (true);
 }
 
 char	*expand_string(char *input, t_state state, t_env *env, int exit)
@@ -63,35 +53,40 @@ char	*expand_string(char *input, t_state state, t_env *env, int exit)
 	char	*key;
 
 	output = NULL;
+	key = NULL;
 	len = 0;
 	while (*input)
 	{
+		determine_state(state, input);
 		if (*input == '$' && state != single_q)
 		{
-		    if (*(input + 1) == '?')
-		    {
-		        if (!append_exit_code(&output, &len, exit))
-		            return (free(output), NULL);
-		        input += 2;
-		    }
-		    else if (is_valid(*(input + 1)))
-		    {
-		        key = read_variable_name(input, input + 1);
+			if (*(input + 1) == '?')
+			{
+				if (!append_exit_code(&output, &len, exit))
+					return (free(output), NULL);
+				input += 2;
+				continue ;
+			}
+			else if (is_valid(*(input + 1)))
+			{
+				key = read_variable_name(input, input + 1);
 				if (!key)
-					return (free(key), free(output), NULL);
-		        if (!append_var(&output, &len, env, key))
-		            return (free(key), free(output), NULL);
-		        input += 1 + ft_strlen(key);
-		        free(key);
-		    }
-		else
-		    append_char(&output, &len, *input++);
+					return (free(output), NULL);
+				if (!append_var(&output, &len, env, key))
+					return (free(output), NULL);
+				input += 1 + ft_strlen(key);
+				free(key);
+				continue ;
+			}
 		}
+		if (!append_char(&output, &len, *input))
+			return (free(output), NULL);
+		input++;
 	}
 	return (output);
 }
 
-char	**final_argvs(char *input, t_state state, t_env *env, int exit)
+char	**final_args(char *input, t_state state, t_env *env, int exit)
 {
 	char	**argv;
 	char	*expanded;
