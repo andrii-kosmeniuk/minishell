@@ -13,7 +13,6 @@
 #include "../../minishell.h"
 
 // redirections not shown in shell
-// quoted input not indentified
 
 static bool	redirections(t_token *token)
 {
@@ -49,7 +48,7 @@ t_cmd	*parse(t_shell *shell, t_token *tokens)
 	{
 		if (!redirections(t_oken))
 			return (NULL);
-		else if (t_oken->type == WORD)
+		else if (t_oken->type == 8 || t_oken->type == 0 || t_oken->type == 1)
 		{
 			arg = add_args(current, t_oken);
 			if (!arg)

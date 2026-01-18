@@ -56,20 +56,20 @@ typedef enum s_state
 {
 	normal = 0,
 	single_q = 1,
-	double_q = 2,
+	double_q = 2
 }	t_state;
 
 typedef enum s_type
 {
-	S_QUOTE,// ''
-	D_QUOTE,// "" 
-	R_INPUT,// <
-	R_OUTPUT,// >
-	HERE_DOC,// <<
-	R_APPEND,// >>
-	PIPE,// |
-	EXPAND,// $
-	WORD
+	S_QUOTE = 0,// ''
+	D_QUOTE = 1,// "" 
+	R_INPUT = 2,// <
+	R_OUTPUT = 3,// >
+	HERE_DOC = 4,// <<
+	R_APPEND = 5,// >>
+	PIPE = 6,// |
+	EXPAND = 7,// $
+	WORD = 8
 }	t_type;
 
 typedef struct s_redir

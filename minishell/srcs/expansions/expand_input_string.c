@@ -99,5 +99,6 @@ char	**final_args(char *input, t_state state, t_env *env, int exit)
 	argv = word_split(expanded);
 	if (!argv)
 		return (free(expanded), NULL);
+	free(expanded);
 	return (argv);
 }

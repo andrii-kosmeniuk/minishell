@@ -40,11 +40,10 @@ char	**expand_final_args(char **args, t_state state, t_env *env, int exit)
 {
 	char	**argv;
 	char	**buffer;
-	size_t	total;
+	size_t	j;
 	size_t	i;
 
-	total = total_length(args, state, env, exit);
-	argv = ft_calloc(total + 1, sizeof(char *));
+	argv = ft_calloc(total_length(args, state, env, exit) + 1, sizeof(char *));
 	if (!argv)
 		return (NULL);
 	buffer = NULL;
@@ -54,8 +53,16 @@ char	**expand_final_args(char **args, t_state state, t_env *env, int exit)
 		buffer = final_args(*args, state, env, exit);
 		if (!buffer)
 			return (free_array(argv), NULL);
-		while (*buffer)
-			argv[i++] = ft_strdup(*(buffer++));
+		j = 0;
+		while (buffer[j])
+		{
+			argv[i] = ft_strdup(buffer[j]);
+			if (!argv[i])
+				return (free_array(buffer), free_array(argv), NULL);
+			i++;
+			j++;
+		}
+		free_array(buffer);
 		args++;
 	}
 	argv[i] = NULL;
