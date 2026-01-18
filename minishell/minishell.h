@@ -6,7 +6,7 @@
 /*   By: milija-h <milija-h@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 15:14:05 by milija-h          #+#    #+#             */
-/*   Updated: 2026/01/16 21:32:03 by milija-h         ###   ########.fr       */
+/*   Updated: 2026/01/17 18:25:00 by milija-h         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -147,6 +147,7 @@ void	add_to_list(t_env **head, t_env *neww);
 char	*substring(char *input, char *start_of_word, size_t len);
 int		alpha_numeric_underscore(int c);
 bool	my_isspace(char input);
+bool	is_word_quoted(t_token *token);
 //environment
 t_env	*list_key_value(t_shell *shell, char **envp, t_data *data);
 char	**copy_of_envp(t_shell *shell, char **envp);

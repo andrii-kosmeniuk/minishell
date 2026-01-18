@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   linked_list_utils.c                                :+:      :+:    :+:   */
+/*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: milija-h <milija-h@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/22 16:15:37 by milija-h          #+#    #+#             */
-/*   Updated: 2025/11/22 16:15:38 by milija-h         ###   ########.fr       */
+/*   Updated: 2026/01/17 18:24:37 by milija-h         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ bool	syntax_check(t_shell *shell)
 		if ((cur->type == R_INPUT || cur->type == R_OUTPUT
 				|| cur->type == R_APPEND || cur->type == HERE_DOC)
 			&& (next == NULL
-				|| next-> type != WORD))
+				|| !(is_word_quoted(cur))))
 			return (printf(NO_TARGET), false);
 		cur = next;
 	}

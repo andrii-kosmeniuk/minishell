@@ -26,19 +26,6 @@ static void	free_redir(t_redir *redir)
 	}
 }
 
-/*static void	free_args(t_arg *args)
-{
-	t_arg	*cur;
-
-	while (args)
-	{
-		cur = args->next;
-		free(args->value);
-		free(args);
-		args = cur;
-	}
-}*/
-
 void	free_command(t_cmd *cmds)
 {
 	t_cmd	*cur;

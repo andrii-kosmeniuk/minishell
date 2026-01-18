@@ -6,7 +6,7 @@
 /*   By: milija-h <milija-h@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/12 18:00:42 by milija-h          #+#    #+#             */
-/*   Updated: 2026/01/12 18:01:48 by milija-h         ###   ########.fr       */
+/*   Updated: 2026/01/17 18:28:51 by milija-h         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,5 +42,12 @@ bool	is_single_word(char *expanded)
 			return (false);
 		expanded++;
 	}
+	return (true);
+}
+
+bool	is_word_quoted(t_token *token)
+{
+	if (token->type == WORD || token->type == S_QUOTE || token->type == D_QUOTE)
+		return (false);
 	return (true);
 }
