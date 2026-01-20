@@ -23,7 +23,9 @@ int	main(int ac, char **av, char **envp)
 	t_token	*tokens = NULL;
 	t_cmd	*cmd = NULL;
 	t_state	state;
-
+	int		only_spaces;
+	int		i;
+	size_t	len;
 	(void)ac;
 	(void)av;
 
@@ -42,6 +44,25 @@ int	main(int ac, char **av, char **envp)
 			printf("exit1\n");
 			break;
 		}
+		only_spaces = 1;
+		i = 0;
+		while (line[i])
+		{
+			if (line[i] != ' ' && line[i] != '\t')
+			{
+				only_spaces = 0;
+				break ;
+			}
+			i++;
+		}
+		if (only_spaces)
+		{
+			free(line);
+			continue ;
+		}
+		len = ft_strlen(line);
+		while (len > 0 && (line[len - 1] == ' ' || line[len - 1] == '\t'))
+			line[--len] = '\0';
 		if (*line)
 			add_history(line);
 		if (shell.head)
@@ -71,22 +92,22 @@ int	main(int ac, char **av, char **envp)
 		//--------- testing command structure
 		cmd = parse(&shell, tokens);
 		if (!cmd)
-			return (-1); //free necessary stuff upon fail
+			return (printf("error parsing\n"), -1); //free necessary stuff upon fail
 		print_cmd_structure(cmd);
 		printf("\n\n");
-		int i = 0;
+		i = 0;
 		while (cmd->args[i])
 		{
 			printf("%s\n", cmd->args[i]);
 			i++;
 		}
 		printf("\n\n");
-	
-	// -------- testing char ** content---------------
+
+		// -------- testing char ** content---------------
 		char **argv = expand_final_args(cmd->args, state, shell.environment_p, 0);
 		if (!argv)
 		{
-		   printf("Expansion failed\n");
+			printf("Expansion failed\n");
 			free_command(cmd);
 			cmd = NULL;
 			free(line);

@@ -73,10 +73,13 @@ t_cmd	*add_args(t_cmd *cmd, t_token *token)
 	return (cmd);
 }
 
-void	handle_pipe(t_cmd **current)
+bool	handle_pipe(t_cmd **current)
 {
 	(*current)->next = create_command();
+	if (!(*current)->next)
+		return (false);
 	*current = (*current)->next;
+	return (true);
 }
 
 t_redir	*add_redir(t_redir **head, t_type type, char *target)
@@ -89,7 +92,7 @@ t_redir	*add_redir(t_redir **head, t_type type, char *target)
 		return (NULL);
 	new_redir->type = type;
 	new_redir->target = ft_strdup(target);
-	if (!new_redir)
+	if (!new_redir->target)
 		return (free(new_redir), NULL);
 	new_redir->next = NULL;
 	if (*head == NULL)

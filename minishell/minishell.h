@@ -173,7 +173,7 @@ t_redir	*add_redir(t_redir **head, t_type type, char *target);
 bool	syntax_check(t_shell *shell);
 t_cmd	*add_args(t_cmd *cmd, t_token *token);
 t_cmd	*parse(t_shell *shell, t_token *token);
-void	handle_pipe(t_cmd **current);
+bool	handle_pipe(t_cmd **current);
 char	**argument_array(t_arg *args);
 
 // expansions

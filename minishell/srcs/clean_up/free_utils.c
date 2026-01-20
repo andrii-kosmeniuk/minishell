@@ -19,8 +19,11 @@ void	free_array(char **array)
 	i = 0;
 	while (array[i])
 		free(array[i++]);
-	free(array);
-	array = NULL;
+	if (array)
+	{
+		free(array);
+		array = NULL;
+	}
 }
 
 void	allocation_failed(char **array, int last_allocated_string)
