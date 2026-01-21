@@ -22,16 +22,31 @@ int	alpha_numeric_underscore(int c)
 		return (0);
 }
 
-void	determine_state(t_state state, char *input)
+void	determine_state(t_state state, char c)
 {
-	if (state == normal && *input == '\'')
+	printf("state started as: %d\n", state);
+	printf("check1\n");
+	if (state == normal && c == '\'')
+	{
 		state = single_q;
-	else if (state == normal && *input == '"')
+		printf("1 state is: %d\n", state);
+	}
+	else if (state == normal && c == '"')
+	{
 		state = double_q;
-	else if (state == single_q && *input == '\'')
+		printf("2 state is: %d\n", state);
+	}
+	else if (state == single_q && c == '\'')
+	{
 		state = normal;
-	else if (state == double_q && *input == '"')
+		printf("3 state is: %d\n", state);
+	}
+	else if (state == double_q && c == '"')
+	{
 		state = normal;
+		printf("4 state is %d\n", state);
+	}
+	printf("state is %d\n", state);
 }
 
 bool	is_single_word(char *expanded)

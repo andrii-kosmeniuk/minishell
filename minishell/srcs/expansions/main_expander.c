@@ -12,58 +12,68 @@
 
 #include "../../minishell.h"
 
-static size_t	total_length(char **args, t_state state, t_env *env, int exit)
+static size_t	total_length(t_token *token, t_env *env, int exit)
 {
 	char	**tmp;
 	size_t	j;
 	size_t	count;
+	t_token	*cur;
 
 	count = 0;
-	while (*args)
+	cur = token;
+	while (cur)
 	{
-		tmp = final_args(*args, state, env, exit);
-		if (!tmp)
-			return (0);
-		j = 0;
-		while (tmp[j])
+		if (cur->type == WORD || cur->type == S_QUOTE || cur->type == D_QUOTE)
 		{
-			count++;
-			j++;
+			tmp = final_args(cur->content, cur->should_expand, env, exit);
+			if (!tmp)
+				return (0);
+			j = 0;
+			while (tmp[j])
+			{
+				count++;
+				j++;
+			}
+			free_array(tmp);
 		}
-		free_array(tmp);
-		args++;
+		cur = cur->next;
 	}
 	return (count);
 }
 
-char	**expand_final_args(char **args, t_state state, t_env *env, int exit)
+char	**expand_final_args(t_token *tokens, t_env *env, int exit)
 {
 	char	**argv;
 	char	**buffer;
 	size_t	j;
 	size_t	i;
+	t_token	*cur;
 
-	argv = ft_calloc(total_length(args, state, env, exit) + 1, sizeof(char *));
+	argv = ft_calloc(total_length(tokens, env, exit) + 1, sizeof(char *));
 	if (!argv)
 		return (NULL);
 	buffer = NULL;
 	i = 0;
-	while (*args)
+	cur = tokens;
+	while (cur)
 	{
-		buffer = final_args(*args, state, env, exit);
-		if (!buffer)
-			return (free_array(argv), NULL);
-		j = 0;
-		while (buffer[j])
+		if (cur->type == WORD || cur->type == S_QUOTE || cur->type == D_QUOTE)
 		{
-			argv[i] = ft_strdup(buffer[j]);
-			if (!argv[i])
-				return (free_array(buffer), free_array(argv), NULL);
-			i++;
-			j++;
+			buffer = final_args(cur->content, cur->should_expand, env, exit);
+			if (!buffer)
+				return (free_array(argv), NULL);
+			j = 0;
+			while (buffer[j])
+			{
+				argv[i] = ft_strdup(buffer[j]);
+				if (!argv[i])
+					return (free_array(buffer), free_array(argv), NULL);
+				i++;
+				j++;
+			}
+			free_array(buffer);
 		}
-		free_array(buffer);
-		args++;
+		cur = cur->next;
 	}
 	argv[i] = NULL;
 	return (argv);

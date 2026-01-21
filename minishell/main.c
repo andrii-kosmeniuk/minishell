@@ -104,7 +104,7 @@ int	main(int ac, char **av, char **envp)
 		printf("\n\n");
 
 		// -------- testing char ** content---------------
-		char **argv = expand_final_args(cmd->args, state, shell.environment_p, 0);
+		char **argv = expand_final_args(tokens, shell.environment_p, 0);
 		if (!argv)
 		{
 			printf("Expansion failed\n");

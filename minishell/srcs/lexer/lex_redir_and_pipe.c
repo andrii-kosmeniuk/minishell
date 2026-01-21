@@ -17,13 +17,13 @@ bool	tokenize_input_redirect(const char *input, t_shell *shell, int *len)
 	if (input[1] == '<')
 	{
 		*len = 2;
-		if (is_operator(input[2]) || !build_list(shell, normal, HERE_DOC, "<<"))
+		if (is_operator(input[2]) || !build_list(shell, HERE_DOC, "<<", false))
 			return (false);
 	}
 	else
 	{
 		*len = 1;
-		if (!build_list(shell, normal, R_INPUT, "<"))
+		if (!build_list(shell, R_INPUT, "<", false))
 			return (false);
 	}
 	return (true);
@@ -34,13 +34,13 @@ bool	tokenize_output_redirect(const char *input, t_shell *shell, int *len)
 	if (input[1] == '>')
 	{
 		*len = 2;
-		if (is_operator(input[2]) || !build_list(shell, normal, R_APPEND, ">>"))
+		if (is_operator(input[2]) || !build_list(shell, R_APPEND, ">>", false))
 			return (false);
 	}
 	else
 	{
 		*len = 1;
-		if (!build_list(shell, normal, R_OUTPUT, ">"))
+		if (!build_list(shell, R_OUTPUT, ">", false))
 			return (false);
 	}
 	return (true);
@@ -51,7 +51,7 @@ bool	tokenize_pipe(const char *input, t_shell *shell, int *len)
 	if (input[0] == '|')
 	{
 		*len = 1;
-		if (is_operator(input[1]) || !build_list(shell, normal, PIPE, "|"))
+		if (is_operator(input[1]) || !build_list(shell, PIPE, "|", false))
 		{
 			shell->redir_error = 1;
 			return (false);

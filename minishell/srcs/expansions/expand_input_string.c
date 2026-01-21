@@ -46,7 +46,7 @@ static bool	append_exit_code(char **buf, size_t *len, int exit_code)
 	return (true);
 }
 
-char	*expand_string(char *input, t_state state, t_env *env, int exit)
+char	*expand_string(char *input, t_env *env, int exit)
 {
 	char	*output;
 	size_t	len;
@@ -57,8 +57,7 @@ char	*expand_string(char *input, t_state state, t_env *env, int exit)
 	len = 0;
 	while (*input)
 	{
-		determine_state(state, input);
-		if (*input == '$' && state != single_q)
+		if (*input == '$')
 		{
 			if (*(input + 1) == '?')
 			{
@@ -86,14 +85,17 @@ char	*expand_string(char *input, t_state state, t_env *env, int exit)
 	return (output);
 }
 
-char	**final_args(char *input, t_state state, t_env *env, int exit)
+char	**final_args(char *input, bool should_expand, t_env *env, int exit)
 {
 	char	**argv;
 	char	*expanded;
 
-	argv = NULL;
-	expanded = NULL;
-	expanded = expand_string(input, state, env, exit);
+	if (!should_expand)
+		expanded = ft_strdup(input);
+	else if (ft_strchr(input, '$'))
+		expanded = expand_string(input, env, exit);
+	else
+		expanded = ft_strdup(input);
 	if (!expanded)
 		return (NULL);
 	argv = word_split(expanded);

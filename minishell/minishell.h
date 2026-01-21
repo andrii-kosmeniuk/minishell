@@ -85,6 +85,7 @@ typedef struct s_token
 	t_state			state;
 	t_redir			*redir;
 	char			*content;
+	bool			should_expand;
 	struct s_token	*next;
 }	t_token;
 
@@ -148,16 +149,19 @@ char	*substring(char *input, char *start_of_word, size_t len);
 int		alpha_numeric_underscore(int c);
 bool	my_isspace(char input);
 bool	is_word_quoted(t_token *token);
+void	get_state(t_shell *shell, char quote);
 //environment
 t_env	*list_key_value(t_shell *shell, char **envp, t_data *data);
 char	**copy_of_envp(t_shell *shell, char **envp);
 int		calculate_new_shlvl(t_shell *shell);
 int		update_shlvl_key(t_shell *shell, t_data *data);
 //lexer
-t_token	*create_token(char *content, t_state state, t_type type);
+t_token	*create_token(char *content, t_state state, t_type type,
+			bool should_expand);
 void	add_token(t_token **head, t_token *new_token);
 t_token	*build_token_list(const char *input, t_shell *shell);
-t_token	*build_list(t_shell *shell, t_state state, t_type type, char *value);
+t_token	*build_list(t_shell *shell, t_type type, char *value,
+			bool should_expand);
 bool	tokenize_input_redirect(const char *input, t_shell *shell, int *len);
 bool	tokenize_output_redirect(const char *input, t_shell *shell, int *len);
 bool	tokenize_pipe(const char *input, t_shell *shell, int *len);
@@ -179,14 +183,13 @@ char	**argument_array(t_arg *args);
 // expansions
 bool	append_string(char **buffer, size_t *len, char *str);
 bool	append_char(char **buffer, size_t *len, char c);
-char	*expand_string(char *input, t_state state, t_env *env, int exit);
 char	*get_value(t_env *env, char *variable_name);
 bool	is_valid(char c);
 char	*read_variable_name(char *input, char *start_of_variable);
 char	**word_split(char *expanded);
-void	determine_state(t_state state, char *input);
-char	**final_args(char *input, t_state, t_env *env, int exit);
-char	**expand_final_args(char **args, t_state state, t_env *env, int exit);
+char	**final_args(char *input, bool should_expand, t_env *env, int exit);
+char	**expand_final_args(t_token *tokens, t_env *env, int exit);
+char	*process_tokens(t_token *tokens, t_env *env, int exit);
 
 char	*final_expand(char *input, t_env *env);
 

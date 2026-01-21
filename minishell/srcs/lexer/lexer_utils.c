@@ -12,7 +12,8 @@
 
 #include "../../minishell.h"
 
-t_token	*create_token(char *content, t_state state, t_type type)
+t_token	*create_token(char *content, t_state state, t_type type,
+						bool should_expand)
 {
 	t_token	*token;
 
@@ -24,6 +25,7 @@ t_token	*create_token(char *content, t_state state, t_type type)
 		return (free(token), NULL);
 	token->state = state;
 	token->type = type;
+	token->should_expand = should_expand;
 	token->next = NULL;
 	return (token);
 }
@@ -48,11 +50,12 @@ void	add_token(t_token **head, t_token *new_token)
 	}
 }
 
-t_token	*build_list(t_shell *shell, t_state state, t_type type, char *value)
+t_token	*build_list(t_shell *shell, t_type type, char *value,
+				bool should_expand)
 {
 	t_token	*t_node;
 
-	t_node = create_token(value, state, type);
+	t_node = create_token(value, shell->state, type, should_expand);
 	if (!t_node)
 		return (NULL);
 	add_token(&shell->head, t_node);

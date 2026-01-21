@@ -25,6 +25,7 @@ static bool	handle_redirection(t_cmd *current, t_token **token)
 	*token = (*token)->next;
 	return (true);
 }
+
 t_cmd	*parse(t_shell *shell, t_token *tokens)
 {
 	t_cmd	*head;

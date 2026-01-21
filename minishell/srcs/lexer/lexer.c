@@ -45,12 +45,12 @@ static bool	quotes(t_shell *shell, const char *input, int *len)
 	char	quote;
 
 	quote = *input;
-	if (quote == '\'')
+	if (shell->state == normal && quote == '\'')
 	{
 		if (!tokenize_single_quotes(shell, (char *)input, len))
 			return (false);
 	}
-	else if (quote == '\"')
+	else if (shell->state == normal && quote == '\"')
 	{
 		if (!tokenize_double_quotes(shell, (char *)input, len))
 			return (false);
@@ -63,10 +63,13 @@ t_token	*build_token_list(const char *input, t_shell *shell)
 	int		len;
 
 	len = 0;
+	shell->state = normal;
 	while (*input)
 	{
 		while (*input && my_isspace(*input))
 			input++;
+		if (*input == '\'' || *input == '"')
+			get_state(shell, *input);
 		if (*input == '<' || *input == '>' || *input == '|')
 			redir_pipe(shell, (char *)input, &len);
 		else if (*input == '\'' || *input == '\"')
