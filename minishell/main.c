@@ -93,7 +93,6 @@ int	main(int ac, char **av, char **envp)
 		cmd = parse(&shell, tokens);
 		if (!cmd)
 			return (printf("error parsing\n"), -1); //free necessary stuff upon fail
-		print_cmd_structure(cmd);
 		printf("\n\n");
 		i = 0;
 		while (cmd->args[i])

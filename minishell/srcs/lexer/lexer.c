@@ -68,8 +68,8 @@ t_token	*build_token_list(const char *input, t_shell *shell)
 	{
 		while (*input && my_isspace(*input))
 			input++;
-		if (*input == '\'' || *input == '"')
-			get_state(shell, *input);
+		if (!*input)
+			break ;
 		if (*input == '<' || *input == '>' || *input == '|')
 			redir_pipe(shell, (char *)input, &len);
 		else if (*input == '\'' || *input == '\"')
@@ -77,7 +77,7 @@ t_token	*build_token_list(const char *input, t_shell *shell)
 			if (!quotes(shell, (char *)input, &len))
 				shell->redir_error = 1;
 		}
-		else
+		else if (*input)
 		{
 			if (!tokenize_word((char *)input, shell, &len))
 				shell->redir_error = 1;
