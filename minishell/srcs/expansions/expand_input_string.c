@@ -82,6 +82,8 @@ char	*expand_string(char *input, t_env *env, int exit)
 			return (free(output), NULL);
 		input++;
 	}
+	if (!output)
+		return (ft_strdup(""));
 	return (output);
 }
 
@@ -97,7 +99,7 @@ char	**final_args(char *input, bool should_expand, t_env *env, int exit)
 	else
 		expanded = ft_strdup(input);
 	if (!expanded)
-		return (NULL);
+		return (perror("failed final args"), NULL);
 	argv = word_split(expanded);
 	if (!argv)
 		return (free(expanded), NULL);

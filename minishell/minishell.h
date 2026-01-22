@@ -145,7 +145,7 @@ void	free_command(t_cmd *cmds);
 t_env	*create_node(char *name, char *value);
 size_t	env_size(char **array);
 void	add_to_list(t_env **head, t_env *neww);
-char	*substring(char *input, char *start_of_word, size_t len);
+char	*substring(char *start_of_word, size_t len);
 int		alpha_numeric_underscore(int c);
 bool	my_isspace(char input);
 bool	is_word_quoted(t_token *token);

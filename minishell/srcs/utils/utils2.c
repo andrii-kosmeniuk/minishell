@@ -74,14 +74,12 @@ char	**argument_array(t_arg *arg)
 	return (array);
 }
 
-char	*substring(char *input, char *start_of_word, size_t len)
+char	*substring(char *start_of_word, size_t len)
 {
 	char	*substr;
 
-	if (!input || !start_of_word)
+	if (!start_of_word)
 		return (NULL);
-	if (len > ft_strlen(input))
-		len = ft_strlen(start_of_word);
 	substr = ft_calloc(len + 1, sizeof(char));
 	if (!substr)
 		return (NULL);

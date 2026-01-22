@@ -35,11 +35,11 @@ char	*read_variable_name(char *input, char *start_of_variable)
 
 	input = start_of_variable;
 	if (!is_valid(*input))
-		return (NULL);
+		return (ft_strdup(""));
 	while (alpha_numeric_underscore(*input))
 		input++;
 	length = input - start_of_variable;
-	variable_name = substring(input, start_of_variable, length);
+	variable_name = substring(start_of_variable, length);
 	if (!variable_name)
 		return (NULL);
 	return (variable_name);
