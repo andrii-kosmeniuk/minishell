@@ -35,6 +35,7 @@ SRC = srcs/env/get_envp.c \
 	srcs/parser/parser.c \
 	srcs/parser/parser_clean_up.c \
 	srcs/parser/parser_utils.c \
+	srcs/parser/redir_utils.c \
 	srcs/execution/heredoc_append.c \
 	srcs/expansions/expand_input_string.c \
 	srcs/expansions/expander_utils.c \

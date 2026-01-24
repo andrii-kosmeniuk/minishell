@@ -29,7 +29,7 @@
 # define CYAN  "\033[0;36m"
 # define RESET "\033[0m"
 
-//errror messages
+//error messages
 # define PIPE_FIRST		"bash: syntax error near unexpected token `|'\n"
 # define PIPE_END		"bash: syntax error near unexpected token `|'\n"
 # define NO_TARGET		"bash: syntax error near unexpected token `newline'\n"
@@ -76,6 +76,7 @@ typedef struct s_redir
 {
 	t_type			type;
 	char			*target;
+	bool			expand_heredoc;
 	struct s_redir	*next;
 }	t_redir;
 
@@ -88,16 +89,6 @@ typedef struct s_token
 	bool			should_expand;
 	struct s_token	*next;
 }	t_token;
-
-typedef struct s_expand_ctx
-{
-	t_env	*env;
-	int		exit_status;
-	t_state	state;
-	char	*result;
-	size_t	pos;
-	int		calc_mode; // 1 = calculate size, 0 = actually expand
-}	t_expand;
 
 typedef struct s_arg
 {

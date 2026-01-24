@@ -12,7 +12,6 @@
 
 #include "../../minishell.h"
 
-// redirections not shown in shell
 static bool	handle_redirection(t_cmd *current, t_token **token)
 {
 	if (!token || !*token || !current)

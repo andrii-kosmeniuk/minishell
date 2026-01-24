@@ -17,9 +17,9 @@ static bool	handle_append(t_redir *redir)
 	int	fd;
 
 	fd = open(redir->target, O_WRONLY | O_CREAT | O_APPEND, 0664);
-	if (!fd)
+	if (fd < 0)
 		return (false);
-	if (!dup2(fd, STDOUT_FILENO))
+	if (dup2(fd, STDOUT_FILENO) < 0)
 		return (close(fd), false);
 	close(fd);
 	return (true);
@@ -31,27 +31,33 @@ static void	write_to_pipe(int fd[2], char *line)
 	write(fd[1], "\n", 1);
 }
 
-static void	dup_close_pipes_free(int fd[2], char *str)
+static void	dup_close_pipes(int fd[2])
 {
-	(void)str;
 	close(fd[1]);
-	if (!dup2(fd[0], STDIN_FILENO))
+	if (dup2(fd[0], STDIN_FILENO) < 0)
+	{
+		close(fd[0]);
 		return ;
+	}
 	close(fd[0]);
-	free(str);
 }
 
-static bool	here_doc(char *line, t_redir *redir, int pipe[2])
+static bool	here_doc(t_redir *redir, int pipe_fd[2])
 {
-	line = readline("heredoc>");
-	if (!line)
-		return (false);
-	while (ft_strcmp(line, redir->target) != 0)
+	char	*line;
+
+	while (1)
 	{
 		line = readline("heredoc>");
 		if (!line)
-			return (false);
-		write_to_pipe(pipe, line);
+			return (printf("\n"), false);
+		if (ft_strcmp(line, redir->target) == 0)
+		{
+			free(line);
+			break ;
+		}
+		write_to_pipe(pipe_fd, line);
+		free(line);
 	}
 	return (true);
 }
@@ -59,25 +65,26 @@ static bool	here_doc(char *line, t_redir *redir, int pipe[2])
 void	heredoc_append(t_redir	*redir)
 {
 	int			pipe_fd[2];
-	char		*line;
 	static int	backup = -1;
 
-	line = NULL;
 	if (redir->type == R_APPEND)
 	{
 		if (!handle_append(redir))
 			return ;
+		return ;
 	}
-	if (backup == -1)
-		backup = dup(STDIN_FILENO);
-	else if (redir->type == HERE_DOC)
+	if (redir->type == HERE_DOC)
 	{
+		if (backup == -1)
+			backup = dup(STDIN_FILENO);
 		if (pipe(pipe_fd) < 0)
 			return ;
-		if (!dup2(backup, STDIN_FILENO))
+		if (!here_doc(redir, pipe_fd))
+		{
+			close(pipe_fd[0]);
+			close(pipe_fd[1]);
 			return ;
-		if (!here_doc(line, redir, pipe_fd))
-			return ;
-		dup_close_pipes_free(pipe_fd, line);
+		}
+		dup_close_pipes(pipe_fd);
 	}
 }

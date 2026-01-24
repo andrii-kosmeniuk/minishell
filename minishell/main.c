@@ -11,7 +11,6 @@
 /* ************************************************************************** */
 
 #include "minishell.h"
-//note env - i bash gives you empty list
 
 //extern volatile		sig_atomic_t	g_exit_status = 0;
 
@@ -95,10 +94,13 @@ int	main(int ac, char **av, char **envp)
 			return (printf("error parsing\n"), -1); //free necessary stuff upon fail
 		printf("\n\n");
 		i = 0;
-		while (cmd->args[i])
+		if (cmd->args)
 		{
-			printf("%s\n", cmd->args[i]);
-			i++;
+			while (cmd->args[i])
+			{
+				printf("%s\n", cmd->args[i]);
+				i++;
+			}
 		}
 		printf("\n\n");
 
@@ -118,12 +120,13 @@ int	main(int ac, char **av, char **envp)
 			printf("argv[%d] = [%s]\n", i, argv[i]);
 			i++;
 		}
-		t_token *tok = tokens;
-		while (tok)
+		t_redir *redir = cmd->redirections;
+		while (redir)
 		{
-			if (tok->redir && tok->redir->type == HERE_DOC)
-			heredoc_append(tok->redir);
-			tok = tok->next;
+			if (redir->type == HERE_DOC
+				|| redir->type == R_APPEND)
+				heredoc_append(redir);
+			redir = redir->next;
 		}
 		free_command(cmd);
 		cmd = NULL;

@@ -35,8 +35,10 @@ void	free_command(t_cmd *cmds)
 	while (cmds)
 	{
 		cur = cmds->next;
-		free_array(cmds->args);
-		free_redir(cmds->redirections);
+		if (cmds->args)
+			free_array(cmds->args);
+		if (cmds->redirections)
+			free_redir(cmds->redirections);
 		free(cmds);
 		cmds = cur;
 	}
