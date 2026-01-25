@@ -180,6 +180,7 @@ char	*read_variable_name(char *input, char *start_of_variable);
 char	**word_split(char *expanded);
 char	**final_args(char *input, bool should_expand, t_env *env, int exit);
 char	**expand_final_args(t_token *tokens, t_env *env, int exit);
+char	*expand_string(char *input, t_env *env, int exit);
 char	*process_tokens(t_token *tokens, t_env *env, int exit);
 
 char	*final_expand(char *input, t_env *env);
