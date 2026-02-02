@@ -59,6 +59,7 @@ static t_redir	*create_here_doc(char *delimeter)
 		return (free(redir), redir = NULL, NULL);
 	redir->type = HERE_DOC;
 	redir->target = eof;
+	redir->heredoc_fd = -1;
 	return (redir);
 }
 

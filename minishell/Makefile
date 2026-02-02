@@ -36,14 +36,14 @@ SRC = srcs/env/get_envp.c \
 	srcs/parser/parser_clean_up.c \
 	srcs/parser/parser_utils.c \
 	srcs/parser/redir_utils.c \
-	srcs/execution/heredoc_append.c \
 	srcs/execution/here_doc.c \
+	srcs/execution/heredoc_utils.c \
 	srcs/expansions/expand_input_string.c \
 	srcs/expansions/expander_utils.c \
 	srcs/expansions/word_splitting.c \
 	srcs/expansions/main_expander.c \
 	srcs/syntax/syntax_check.c \
-	#main.c
+	main.c
 
 OBJ = $(SRC:.c=.o)
 

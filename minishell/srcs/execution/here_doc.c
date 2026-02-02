@@ -12,54 +12,60 @@
 
 #include "../../minishell.h"
 
-//static int	choose_file_name();
-
-static char	*here_doc_content(char *delimeter, t_env *env, int exit)
+static int	heredoc_tmp(char *delimiter, char **file_name, t_env *env, int exit)
 {
-	char	*buffer;
 	char	*line;
 	char	*content;
-	size_t	prev_len;
+	int		fd;
 
-	buffer = NULL;
-	content = ft_calloc(1, sizeof(char));
-	if (!content)
-		return (printf("1\n"), NULL);
+	fd = open_temp_file(file_name);
+	if (fd < 0)
+		return (-1);
 	while (1)
 	{
 		line = readline("heredoc>");
 		if (!line)
-			return (free(buffer), free(content), NULL);
-		if (ft_strcmp(line, delimeter) == 0)
-		{
-			free(line);
-			break ;
-		}
-		buffer = expand_string(line, env, exit);
-		if (!buffer)
-			return (free(buffer), free(line), NULL);
-		if (content == NULL)
-			prev_len = 0;
-		else
-			prev_len = ft_strlen(content);
-		content = ft_realloc(content, prev_len, ft_strlen(buffer) + prev_len + 2);
+			return (close(fd), free(*file_name), -1);
+		if (ft_strcmp(delimiter, line) == 0)
+			return (free(line), close(fd), 0);
+		content = here_doc_content(line, env, exit);
+		free(line);
 		if (!content)
-			return (free(line), free(buffer), NULL);
-		ft_strcat(content, buffer);
-		ft_strcat(content, "\n");
+			return (close(fd), free(*file_name), -1);
+		write_to_file(fd, content);
+		free(content);
 	}
-	return (content);
+	return (-1);
 }
 
-int main(int ac, char **av, char **envp)
+static bool	open_heredoc_file(t_redir *redir, char *file_name)
 {
-	(void)ac;
-	(void)av;
-	t_shell shell;
-	t_data data;
+	redir->heredoc_fd = open(file_name, O_RDONLY);
+	unlink(file_name);
+	free(file_name);
+	return (redir->heredoc_fd >= 0);
+}
 
-	t_env *env = list_key_value(&shell, envp, &data);
-	char	*hd = here_doc_content("eof", env, 0);
-	printf("%s\n", hd);
-	return 0;
+static bool	here_doc(t_redir *redir, t_env *env, int exit)
+{
+	char	*file_name;
+
+	file_name = NULL;
+	if (heredoc_tmp(redir->target, &file_name, env, exit) < 0)
+		return (false);
+	return (open_heredoc_file(redir, file_name));
+}
+
+void	heredoc_append(t_redir *redir, t_env *env, int exit)
+{
+	if (redir->type == R_APPEND)
+	{
+		if (!handle_append(redir))
+			return ;
+	}
+	if (redir->type == HERE_DOC)
+	{
+		if (!here_doc(redir, env, exit))
+			return ;
+	}
 }

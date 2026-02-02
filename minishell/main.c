@@ -123,9 +123,8 @@ int	main(int ac, char **av, char **envp)
 		t_redir *redir = cmd->redirections;
 		while (redir)
 		{
-			if (redir->type == HERE_DOC
-				|| redir->type == R_APPEND)
-				heredoc_append(redir);
+			if (redir->type == HERE_DOC || redir->type == R_APPEND)
+				heredoc_append(redir, shell.environment_p, 0);
 			redir = redir->next;
 		}
 		free_command(cmd);

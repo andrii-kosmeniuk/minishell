@@ -35,6 +35,7 @@
 # define NO_TARGET		"bash: syntax error near unexpected token `newline'\n"
 # define REDIR_PIPE		"bash: syntax error near unexpected token `|'\n"
 # define HERE_DOC_ERROR	"bash: syntax error near unexpected token `newline'\n"
+# define ERROR_OPENING_FILE "heredoc: error opening heredoc file\n"
 
 //extern volatile sig_atomic_t	g_exit_status;
 
@@ -76,6 +77,7 @@ typedef struct s_redir
 {
 	t_type			type;
 	char			*target;
+	int				heredoc_fd;
 	bool			expand_heredoc;
 	struct s_redir	*next;
 }	t_redir;
@@ -186,7 +188,13 @@ char	*process_tokens(t_token *tokens, t_env *env, int exit);
 char	*final_expand(char *input, t_env *env);
 
 //heredoc and append redir
-void	heredoc_append(t_redir *redir);
+void	heredoc_append(t_redir *redir, t_env *env, int exit);
+bool	handle_append(t_redir *redir);
+char	*choose_file_name(void);
+int	open_temp_file(char **filename);
+void	write_to_file(int fd, char *content);
+char	*here_doc_content(char *line, t_env *env, int exit);
+
 //signals
 void	setup_signals(void);
 
