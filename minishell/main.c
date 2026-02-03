@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-//extern volatile		sig_atomic_t	g_exit_status = 0;
+volatile sig_atomic_t g_signal = 0;
 
 int	main(int ac, char **av, char **envp)
 {
@@ -32,11 +32,11 @@ int	main(int ac, char **av, char **envp)
 		return (printf("error init\n"), -1);
 	list_key_value(&shell, envp, &data);
 	update_shlvl_key(&shell, &data);
-
+	init_readline();
+	setup_signals();
 	while (1)
 	{
 		shell.redir_error = 0;
-		setup_signals();
 		line = readline(CYAN"👹-minis(hell)>" RESET);
 		if (!line)
 		{
@@ -123,10 +123,12 @@ int	main(int ac, char **av, char **envp)
 		t_redir *redir = cmd->redirections;
 		while (redir)
 		{
+			rl_signal_event_hook = NULL;
 			if (redir->type == HERE_DOC || redir->type == R_APPEND)
 				heredoc_append(redir, shell.environment_p, 0);
 			redir = redir->next;
 		}
+		rl_signal_event_hook = readline_event;
 		free_command(cmd);
 		cmd = NULL;
 		free_tokens(shell.head);

@@ -11,24 +11,24 @@
 /* ************************************************************************** */
 
 #include "../../minishell.h"
-//child processes will inherit from parent the signals
-//for heredoc use a volatile struct
-/*void	forward_signal(pid_t child_pid, int signun)
-{
-	;
-}*/
 
-//remove readline() functions, undefined behaviour
-//readline_event_hook()
-//re-write all
-static void	sigint_handler(int signum)
+void	sigint_handler(int sig)
 {
-	(void)signum;
-	//g_exit_status = 130;
-	write(1, "\n", 1);
-	rl_on_new_line();
-	rl_replace_line("", 0);
-	rl_redisplay();
+	(void)sig;
+	g_signal = SIGINT;
+}
+
+int	readline_event(void)
+{
+	if (g_signal == SIGINT)
+	{
+		g_signal = 0;
+		rl_replace_line("", 0);
+		rl_on_new_line();
+		write(STDOUT_FILENO, "\n", 1);
+		rl_redisplay();
+	}
+	return (0);
 }
 
 void	setup_signals(void)

@@ -37,8 +37,9 @@
 # define HERE_DOC_ERROR	"bash: syntax error near unexpected token `newline'\n"
 # define ERROR_OPENING_FILE "heredoc: error opening heredoc file\n"
 # define ERROR_EXPANDING_HEREDOC "could not expand heredoc\n"
+# define HEREDOC_ABORTED 130
 
-//extern volatile sig_atomic_t	g_exit_status;
+extern volatile sig_atomic_t g_signal;
 
 typedef struct s_env
 {
@@ -198,6 +199,8 @@ char	*expand_heredoc(t_redir *redir, char *line, t_env *env, int exit);
 
 //signals
 void	setup_signals(void);
+void	init_readline(void);
+int		readline_event(void);
 
 //debug
 void	print_env_list(t_env *head);

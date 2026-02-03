@@ -25,3 +25,8 @@ bool	init_shell(t_shell *shell, t_state *state, t_data *data, char **envp)
 	shell->head = NULL;
 	return (true);
 }
+
+void	init_readline(void)
+{
+	rl_signal_event_hook = readline_event;
+}
