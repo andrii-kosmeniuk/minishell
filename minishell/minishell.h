@@ -36,6 +36,7 @@
 # define REDIR_PIPE		"bash: syntax error near unexpected token `|'\n"
 # define HERE_DOC_ERROR	"bash: syntax error near unexpected token `newline'\n"
 # define ERROR_OPENING_FILE "heredoc: error opening heredoc file\n"
+# define ERROR_EXPANDING_HEREDOC "could not expand heredoc\n"
 
 //extern volatile sig_atomic_t	g_exit_status;
 
@@ -193,7 +194,8 @@ bool	handle_append(t_redir *redir);
 char	*choose_file_name(void);
 int	open_temp_file(char **filename);
 void	write_to_file(int fd, char *content);
-char	*here_doc_content(char *line, t_env *env, int exit);
+//char	*here_doc_content(char *line, t_env *env, int exit);
+char	*expand_heredoc(t_redir *redir, char *line, t_env *env, int exit);
 
 //signals
 void	setup_signals(void);

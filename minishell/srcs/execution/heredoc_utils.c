@@ -51,6 +51,7 @@ int	open_temp_file(char **file_name)
 	fd = open(*file_name, O_CREAT | O_WRONLY | O_TRUNC, 0664);
 	if (fd < 0)
 	{
+		printf("%s\n", ERROR_OPENING_FILE);
 		free(*file_name);
 		*file_name = NULL;
 		return (-1);
@@ -64,22 +65,25 @@ void	write_to_file(int fd, char *content)
 	write(fd, "\n", 1);
 }
 
-char	*here_doc_content(char *line, t_env *env, int exit)
+char	*expand_heredoc(t_redir *redir, char *line, t_env *env, int exit)
 {
-	char	*buffer;
-	char	*content;
+	char	*expanded_heredoc;
 	size_t	len;
 
-	buffer = expand_string(line, env, exit);
-	if (!buffer)
-		return (NULL);
-	len = ft_strlen(buffer);
-	content = malloc(len + 2);
-	if (!content)
-		return (free(buffer), NULL);
-	ft_memcpy(content, buffer, len);
-	content[len] = '\n';
-	content[len + 1] = '\0';
-	free(buffer);
-	return (content);
+	len = 0;
+	expanded_heredoc = NULL;
+	if (redir->expand_heredoc == true)
+	{
+		expanded_heredoc = expand_string(line, env, exit);
+		if (!expanded_heredoc)
+			return (ERROR_EXPANDING_HEREDOC, NULL);
+		return (expanded_heredoc);
+	}
+	while(*line)
+	{
+		if(!append_char(&expanded_heredoc, &len, *line))
+			return (ERROR_EXPANDING_HEREDOC, NULL);
+		line++;
+	}
+	return (expanded_heredoc);
 }
