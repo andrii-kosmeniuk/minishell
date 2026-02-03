@@ -21,7 +21,6 @@ static char	*here_doc_content(t_redir *redir, char *line, t_env *env, int exit)
 	buffer = expand_heredoc(redir, line, env, exit);
 	if (!buffer)
 		return (NULL);
-	printf("expanded heredoc: %s\n", buffer);
 	len = ft_strlen(buffer);
 	content = malloc(len + 2);
 	if (!content)

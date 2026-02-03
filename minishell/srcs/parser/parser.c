@@ -18,7 +18,7 @@ static bool	handle_redirection(t_cmd *current, t_token **token)
 		return (false);
 	if (!(*token)->next || !(*token)->next->content)
 		return (false);
-	if (!add_redir(&current->redirections, (*token)->type,
+	if (!add_redir(*token, &current->redirections, (*token)->type,
 			(*token)->next->content))
 		return (false);
 	*token = (*token)->next;

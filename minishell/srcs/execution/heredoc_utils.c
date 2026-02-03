@@ -51,10 +51,9 @@ int	open_temp_file(char **file_name)
 	fd = open(*file_name, O_CREAT | O_WRONLY | O_TRUNC, 0664);
 	if (fd < 0)
 	{
-		printf("%s\n", ERROR_OPENING_FILE);
 		free(*file_name);
 		*file_name = NULL;
-		return (-1);
+		return (ERROR_OPENING_FILE, -1);
 	}
 	return (fd);
 }
@@ -79,9 +78,9 @@ char	*expand_heredoc(t_redir *redir, char *line, t_env *env, int exit)
 			return (ERROR_EXPANDING_HEREDOC, NULL);
 		return (expanded_heredoc);
 	}
-	while(*line)
+	while (*line)
 	{
-		if(!append_char(&expanded_heredoc, &len, *line))
+		if (!append_char(&expanded_heredoc, &len, *line))
 			return (ERROR_EXPANDING_HEREDOC, NULL);
 		line++;
 	}

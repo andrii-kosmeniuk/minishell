@@ -167,7 +167,7 @@ bool	is_argument(t_token *token);
 bool	is_redirection(t_token *token);
 void	add_cmd_back(t_cmd **head, t_cmd *new_command);
 t_cmd	*create_command(void);
-t_redir	*add_redir(t_redir **head, t_type type, char *target);
+t_redir	*add_redir(t_token *tokens, t_redir **head, t_type type, char *target);
 bool	syntax_check(t_shell *shell);
 t_cmd	*add_args(t_cmd *cmd, t_token *token);
 t_cmd	*parse(t_shell *shell, t_token *token);
@@ -192,9 +192,8 @@ char	*final_expand(char *input, t_env *env);
 void	heredoc_append(t_redir *redir, t_env *env, int exit);
 bool	handle_append(t_redir *redir);
 char	*choose_file_name(void);
-int	open_temp_file(char **filename);
+int		open_temp_file(char **filename);
 void	write_to_file(int fd, char *content);
-//char	*here_doc_content(char *line, t_env *env, int exit);
 char	*expand_heredoc(t_redir *redir, char *line, t_env *env, int exit);
 
 //signals

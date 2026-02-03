@@ -12,49 +12,19 @@
 
 #include "../../minishell.h"
 
-static char	*remove_quotes(char *str)
-{
-	char	*removed_quotes;
-	char	quote;
-	size_t	i;
-	size_t	j;
-
-	if (str[0] == '\'' || str[0] == '"')
-		quote = str[0];
-	i = 1;
-	while (str[i] && str[i] != quote)
-		i++;
-	removed_quotes = ft_calloc(i + 1, sizeof(char));
-	if (!removed_quotes)
-		return (NULL);
-	j = 0;
-	i = 1;
-	while (str[i] && str[i] != quote)
-		removed_quotes[j++] = str[i++];
-	removed_quotes[j] = '\0';
-	return (removed_quotes);
-}
-
-static t_redir	*create_here_doc(char *delimeter)
+static t_redir	*create_here_doc(t_token *tokens, char *delimeter)
 {
 	t_redir	*redir;
 	char	*eof;
-	bool	has_quotes;
 
 	redir = ft_calloc(1, sizeof(t_redir));
 	if (!redir)
 		return (NULL);
-	has_quotes = (delimeter[0] == '\'' || delimeter[0] == '"');
-	if (has_quotes)
-	{
-		eof = remove_quotes(delimeter);
+	if (tokens->next->type == D_QUOTE || tokens->next->type == S_QUOTE)
 		redir->expand_heredoc = false;
-	}
 	else
-	{
-		eof = ft_strdup(delimeter);
 		redir->expand_heredoc = true;
-	}
+	eof = ft_strdup(delimeter);
 	if (!eof)
 		return (free(redir), redir = NULL, NULL);
 	redir->type = HERE_DOC;
@@ -78,13 +48,13 @@ static t_redir	*create_redir(t_type type, char *target)
 	return (new_redir);
 }
 
-t_redir	*add_redir(t_redir **head, t_type type, char *target)
+t_redir	*add_redir(t_token *tokens, t_redir **head, t_type type, char *target)
 {
 	t_redir	*cur;
 	t_redir	*redir;
 
 	if (type == HERE_DOC)
-		redir = create_here_doc(target);
+		redir = create_here_doc(tokens, target);
 	else
 		redir = create_redir(type, target);
 	if (!redir)
