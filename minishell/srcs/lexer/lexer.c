@@ -6,7 +6,7 @@
 /*   By: milija-h <milija-h@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/01 17:09:27 by milija-h          #+#    #+#             */
-/*   Updated: 2025/12/15 22:26:20 by milija-h         ###   ########.fr       */
+/*   Updated: 2026/02/04 13:46:02 by milija-h         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ static void	redir_pipe(t_shell *shell, const char *input, int *len)
 	}
 }
 
-static bool	quotes(t_shell *shell, const char *input, int *len)
+static int	quotes(t_shell *shell, const char *input, int *len)
 {
 	char	quote;
 
@@ -48,14 +48,14 @@ static bool	quotes(t_shell *shell, const char *input, int *len)
 	if (shell->state == normal && quote == '\'')
 	{
 		if (!tokenize_single_quotes(shell, (char *)input, len))
-			return (false);
+			return (1);
 	}
 	else if (shell->state == normal && quote == '\"')
 	{
 		if (!tokenize_double_quotes(shell, (char *)input, len))
-			return (false);
+			return (1);
 	}
-	return (true);
+	return (0);
 }
 
 t_token	*build_token_list(const char *input, t_shell *shell)
@@ -73,14 +73,12 @@ t_token	*build_token_list(const char *input, t_shell *shell)
 		if (*input == '<' || *input == '>' || *input == '|')
 			redir_pipe(shell, (char *)input, &len);
 		else if (*input == '\'' || *input == '\"')
-		{
-			if (!quotes(shell, (char *)input, &len))
-				shell->redir_error = 1;
-		}
+			shell->redir_error = quotes(shell, (char *)input, &len);
 		else if (*input)
 		{
-			if (!tokenize_word((char *)input, shell, &len))
-				shell->redir_error = 1;
+			shell->redir_error = tokenize_word((char *)input, shell, &len);
+			if (shell->redir_error == 1)
+				printf("error here mate\n");
 		}
 		if (shell->redir_error == 1)
 			return (free_tokens(shell->head), shell->head = NULL, NULL);

@@ -64,7 +64,7 @@ void	write_to_file(int fd, char *content)
 	write(fd, "\n", 1);
 }
 
-char	*expand_heredoc(t_redir *redir, char *line, t_env *env, int exit)
+char	*expand_heredoc(t_redir *redir, t_env *env, char *line, int exit)
 {
 	char	*expanded_heredoc;
 	size_t	len;

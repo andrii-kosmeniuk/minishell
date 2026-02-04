@@ -39,7 +39,7 @@
 # define ERROR_EXPANDING_HEREDOC "could not expand heredoc\n"
 # define HEREDOC_ABORTED 130
 
-extern volatile sig_atomic_t g_signal;
+extern volatile sig_atomic_t	g_signal;
 
 typedef struct s_env
 {
@@ -109,6 +109,14 @@ typedef struct s_cmd
 	struct s_cmd	*next; //next command if there is a pipe
 }	t_cmd;
 
+typedef struct s_expand
+{
+	char	*output;
+	t_env	*env;
+	size_t	len;
+	int		exit_code;
+}	t_expand;
+
 typedef struct s_shell
 {
 	t_env	*environment_p; // pointer to copied key-value variables
@@ -160,7 +168,7 @@ t_token	*build_list(t_shell *shell, t_type type, char *value,
 bool	tokenize_input_redirect(const char *input, t_shell *shell, int *len);
 bool	tokenize_output_redirect(const char *input, t_shell *shell, int *len);
 bool	tokenize_pipe(const char *input, t_shell *shell, int *len);
-bool	tokenize_word(const char *input, t_shell *shell, int *len);
+int		tokenize_word(const char *input, t_shell *shell, int *len);
 bool	tokenize_double_quotes(t_shell *shell, char *input, int *len);
 bool	tokenize_single_quotes(t_shell *shell, char *input, int *len);
 //parser
@@ -182,11 +190,10 @@ char	*get_value(t_env *env, char *variable_name);
 bool	is_valid(char c);
 char	*read_variable_name(char *input, char *start_of_variable);
 char	**word_split(char *expanded);
-char	**final_args(char *input, bool should_expand, t_env *env, int exit);
+char	**final_args(char *input, t_env *env, bool should_expand, int exit);
 char	**expand_final_args(t_token *tokens, t_env *env, int exit);
 char	*expand_string(char *input, t_env *env, int exit);
 char	*process_tokens(t_token *tokens, t_env *env, int exit);
-
 char	*final_expand(char *input, t_env *env);
 
 //heredoc and append redir
@@ -195,7 +202,7 @@ bool	handle_append(t_redir *redir);
 char	*choose_file_name(void);
 int		open_temp_file(char **filename);
 void	write_to_file(int fd, char *content);
-char	*expand_heredoc(t_redir *redir, char *line, t_env *env, int exit);
+char	*expand_heredoc(t_redir *redir, t_env *env, char *line, int exit);
 
 //signals
 void	setup_signals(void);

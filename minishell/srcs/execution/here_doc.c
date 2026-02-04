@@ -12,13 +12,13 @@
 
 #include "../../minishell.h"
 
-static char	*here_doc_content(t_redir *redir, char *line, t_env *env, int exit)
+static char	*here_doc_content(t_redir *redir, t_env *env, char *line, int exit)
 {
 	char	*buffer;
 	char	*content;
 	size_t	len;
 
-	buffer = expand_heredoc(redir, line, env, exit);
+	buffer = expand_heredoc(redir, env, line, exit);
 	if (!buffer)
 		return (NULL);
 	len = ft_strlen(buffer);
@@ -32,7 +32,7 @@ static char	*here_doc_content(t_redir *redir, char *line, t_env *env, int exit)
 	return (content);
 }
 
-static int	heredoc_tmp(t_redir *redir, char **file_name, t_env *env, int exit)
+static int	heredoc_tmp(t_redir *redir, t_env *env, char **file_name, int exit)
 {
 	char	*line;
 	char	*content;
@@ -48,7 +48,7 @@ static int	heredoc_tmp(t_redir *redir, char **file_name, t_env *env, int exit)
 			return (close(fd), free(*file_name), -1);
 		if (ft_strcmp(redir->target, line) == 0)
 			return (free(line), close(fd), 0);
-		content = here_doc_content(redir, line, env, exit);
+		content = here_doc_content(redir, env, line, exit);
 		free(line);
 		if (!content)
 			return (close(fd), free(*file_name), -1);
@@ -71,7 +71,7 @@ static bool	here_doc(t_redir *redir, t_env *env, int exit)
 	char	*file_name;
 
 	file_name = NULL;
-	if (heredoc_tmp(redir, &file_name, env, exit) < 0)
+	if (heredoc_tmp(redir, env, &file_name, exit) < 0)
 		return (false);
 	return (open_heredoc_file(redir, file_name));
 }

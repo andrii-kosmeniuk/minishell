@@ -87,12 +87,10 @@ int	main(int ac, char **av, char **envp)
 			free(line);
 			continue;
 		}
-
 		//--------- testing command structure
 		cmd = parse(&shell, tokens);
 		if (!cmd)
 			return (printf("error parsing\n"), -1); //free necessary stuff upon fail
-		printf("\n\n");
 		i = 0;
 		if (cmd->args)
 		{
@@ -102,8 +100,6 @@ int	main(int ac, char **av, char **envp)
 				i++;
 			}
 		}
-		printf("\n\n");
-
 		// -------- testing char ** content---------------
 		char **argv = expand_final_args(tokens, shell.environment_p, 0);
 		if (!argv)

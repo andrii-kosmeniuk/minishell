@@ -25,13 +25,28 @@ static bool	handle_redirection(t_cmd *current, t_token **token)
 	return (true);
 }
 
+static bool	handle_token(t_cmd **current, t_token **token)
+{
+	if ((*token)->type == R_INPUT || (*token)->type == R_OUTPUT
+		|| (*token)->type == R_APPEND || (*token)->type == HERE_DOC)
+		return (handle_redirection(*current, token));
+	else if ((*token)->type == 0 || (*token)->type == 1 || (*token)->type == 8)
+	{
+		if (!add_args(*current, *token))
+			return (false);
+	}
+	else if ((*token)->type == PIPE)
+		return (handle_pipe(current));
+	return (true);
+}
+
 t_cmd	*parse(t_shell *shell, t_token *tokens)
 {
 	t_cmd	*head;
 	t_cmd	*current;
 	t_token	*t_oken;
 
-	if ((!shell || !tokens) || (!syntax_check(shell)))
+	if (!shell || !tokens || !syntax_check(shell))
 		return (NULL);
 	head = create_command();
 	if (!head)
@@ -40,22 +55,8 @@ t_cmd	*parse(t_shell *shell, t_token *tokens)
 	t_oken = tokens;
 	while (t_oken)
 	{
-		if (t_oken->type == R_INPUT || t_oken->type == R_OUTPUT
-			|| t_oken->type == R_APPEND || t_oken->type == HERE_DOC)
-		{
-			if (!handle_redirection(current, &t_oken))
-				return (free_command(head), NULL);
-		}
-		else if (t_oken->type == 8 || t_oken->type == 0 || t_oken->type == 1)
-		{
-			if (!add_args(current, t_oken))
-				return (free_command(head), NULL);
-		}
-		else if (t_oken->type == PIPE)
-		{
-			if (!handle_pipe(&current))
-				return (free_command(head), NULL);
-		}
+		if (handle_token(&current, &t_oken) == false)
+			return (free_command(head), NULL);
 		t_oken = t_oken->next;
 	}
 	return (head);

@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   lex_word_and_quotes.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: milija-h <milija-h@student.42vienna.com>   +#+  +:+       +#+        */
+/*   By: milija-h <milija-h@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/16 21:27:20 by milija-h          #+#    #+#             */
-/*   Updated: 2026/01/16 21:27:25 by milija-h         ###   ########.fr       */
+/*   Updated: 2026/02/04 13:51:37 by milija-h         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-bool	tokenize_word(const char *input, t_shell *shell, int *len)
+int	tokenize_word(const char *input, t_shell *shell, int *len)
 {
 	const char	*start_of_word;
 	char		*token_word;
@@ -26,14 +26,14 @@ bool	tokenize_word(const char *input, t_shell *shell, int *len)
 	word_len = input - start_of_word;
 	token_word = ft_calloc(word_len + 1, sizeof(char));
 	if (!token_word)
-		return (false);
+		return (1);
 	ft_strncpy(token_word, start_of_word, word_len);
 	should_expand = (shell->state != single_q);
 	if (!build_list(shell, WORD, token_word, should_expand))
-		return (free(token_word), false);
+		return (free(token_word), 1);
 	*len = ft_strlen(token_word);
 	free(token_word);
-	return (true);
+	return (0);
 }
 
 void	get_state(t_shell *shell, char quote)
