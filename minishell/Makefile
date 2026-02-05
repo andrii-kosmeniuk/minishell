@@ -44,6 +44,7 @@ SRC = srcs/env/get_envp.c \
 	srcs/expansions/word_splitting.c \
 	srcs/expansions/main_expander.c \
 	srcs/syntax/syntax_check.c \
+	srcs/main/main_utils.c \
 	main.c
 
 OBJ = $(SRC:.c=.o)

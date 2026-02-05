@@ -138,6 +138,13 @@ typedef struct s_shell
 	int		redir_error;
 }	t_shell;
 
+//main
+void	add_process_free(char *line, t_shell *shell);
+void	shell_loop(t_shell*shell);
+int		process_line(char *line, t_shell *shell);
+int		init_minishell(t_shell *shell, t_state *state,
+			t_data *data, char **envp);
+
 //initialization
 bool	init_shell(t_shell *shell, t_state *state, t_data *data, char **envp);
 
@@ -150,6 +157,8 @@ void	free_all(t_token *taokens, t_shell *shell);
 void	free_tokens(t_token *tokens);
 void	free_on_cmd_failure(t_shell *shell);
 void	free_command(t_cmd *cmds);
+void	cleanup_shell(t_shell *shell);
+void	cleanup_tokens(t_shell *shell);
 
 //utils
 t_env	*create_node(char *name, char *value);

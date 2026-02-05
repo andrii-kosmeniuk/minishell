@@ -11,7 +11,6 @@
 /* ************************************************************************** */
 
 #include "../../minishell.h"
-#include <string.h>
 
 int	alpha_numeric_underscore(int c)
 {
@@ -38,4 +37,11 @@ bool	is_word_quoted(t_token *token)
 	if (token->type == WORD || token->type == S_QUOTE || token->type == D_QUOTE)
 		return (false);
 	return (true);
+}
+
+void	add_process_free(char *line, t_shell *shell)
+{
+	add_history(line);
+	process_line(line, shell);
+	free(line);
 }

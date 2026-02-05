@@ -30,3 +30,23 @@ void	free_on_cmd_failure(t_shell *shell)
 	free_tokens(shell->head);
 	free_env_list(shell, shell->environment_p);
 }
+
+void	cleanup_shell(t_shell *shell)
+{
+	if (shell->head)
+	{
+		free_tokens(shell->head);
+		shell->head = NULL;
+	}
+	free_env_list(shell, shell->environment_p);
+	rl_clear_history();
+}
+
+void	cleanup_tokens(t_shell *shell)
+{
+	if (shell->head)
+	{
+		free_tokens(shell->head);
+		shell->head = NULL;
+	}
+}
