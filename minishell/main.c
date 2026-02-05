@@ -6,7 +6,7 @@
 /*   By: milija-h <milija-h@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/22 20:38:51 by milija-h          #+#    #+#             */
-/*   Updated: 2026/01/12 14:33:27 by milija-h         ###   ########.fr       */
+/*   Updated: 2026/02/05 15:55:03 by milija-h         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,23 +25,29 @@ int	main(int ac, char **av, char **envp)
 	int		only_spaces;
 	int		i;
 	size_t	len;
+	
 	(void)ac;
 	(void)av;
-
 	if (!init_shell(&shell, &state, &data, envp))
-		return (printf("error init\n"), -1);
+		return (printf("Error initializing shell\n"), -1);
 	list_key_value(&shell, envp, &data);
 	update_shlvl_key(&shell, &data);
-	init_readline();
-	setup_signals();
+	setup_interactive_signals();
 	while (1)
 	{
 		shell.redir_error = 0;
+		g_signal = 0;
 		line = readline(CYAN"👹-minis(hell)>" RESET);
 		if (!line)
 		{
-			printf("exit1\n");
-			break;
+			printf("exit\n");
+			break ;
+		}
+		if (g_signal == 1)
+		{
+			g_signal = 0;
+			free(line);
+			continue;
 		}
 		only_spaces = 1;
 		i = 0;
@@ -73,7 +79,7 @@ int	main(int ac, char **av, char **envp)
 		{
 			printf("\033[H\033[2J");
 			free(line);
-			continue;
+			continue ;
 		}
 		tokens = build_token_list(line, &shell);
 		if (!tokens || shell.redir_error)
@@ -85,12 +91,41 @@ int	main(int ac, char **av, char **envp)
 				shell.head = NULL;
 			}
 			free(line);
-			continue;
+			continue ;
 		}
-		//--------- testing command structure
 		cmd = parse(&shell, tokens);
 		if (!cmd)
-			return (printf("error parsing\n"), -1); //free necessary stuff upon fail
+		{
+			printf("Error parsing\n");
+			free_tokens(shell.head);
+			shell.head = NULL;
+			free(line);
+			continue ;
+		}
+		char **argv = expand_final_args(tokens, shell.environment_p, 0);
+		if (!argv)
+		{
+			printf("Expansion failed\n");
+			free_command(cmd);
+			cmd = NULL;
+			free(line);
+			continue ;
+		}
+		t_redir	*redir = cmd->redirections;
+		while (redir)
+		{
+			if (redir->type == HERE_DOC || redir->type == R_APPEND)
+			{
+				setup_heredoc_signals();
+				if (!heredoc_append(redir, shell.environment_p, 0))
+				{
+					restore_interactive_signals();
+					break ;
+				}
+				restore_interactive_signals();
+			}
+			redir = redir->next;
+		}
 		i = 0;
 		if (cmd->args)
 		{
@@ -100,35 +135,19 @@ int	main(int ac, char **av, char **envp)
 				i++;
 			}
 		}
-		// -------- testing char ** content---------------
-		char **argv = expand_final_args(tokens, shell.environment_p, 0);
-		if (!argv)
-		{
-			printf("Expansion failed\n");
-			free_command(cmd);
-			cmd = NULL;
-			free(line);
-			continue;
-		}
 		i = 0;
 		while (argv[i])
 		{
 			printf("argv[%d] = [%s]\n", i, argv[i]);
 			i++;
 		}
-		t_redir *redir = cmd->redirections;
-		while (redir)
-		{
-			rl_signal_event_hook = NULL;
-			if (redir->type == HERE_DOC || redir->type == R_APPEND)
-				heredoc_append(redir, shell.environment_p, 0);
-			redir = redir->next;
-		}
-		rl_signal_event_hook = readline_event;
 		free_command(cmd);
 		cmd = NULL;
-		free_tokens(shell.head);
-		shell.head = NULL;
+		if (shell.head)
+		{
+			free_tokens(shell.head);
+			shell.head = NULL;
+		}
 		free(line);
 		free_array(argv);
 	}

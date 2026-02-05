@@ -12,38 +12,46 @@
 
 #include "../../minishell.h"
 
-void	sigint_handler(int sig)
+void	heredoc_sigint_handler(int sig)
 {
 	(void)sig;
-	g_signal = SIGINT;
+	g_signal = 2;
+	write(STDOUT_FILENO, "\n", 1);
+	rl_done = 1;
 }
 
-int	readline_event(void)
+int	handle_heredoc_signal_event(void)
 {
-	if (g_signal == SIGINT)
+	if (g_signal == 2)
 	{
-		g_signal = 0;
-		rl_replace_line("", 0);
-		rl_on_new_line();
-		write(STDOUT_FILENO, "\n", 1);
-		rl_redisplay();
+		rl_done = 1;
 	}
 	return (0);
 }
 
-void	setup_signals(void)
+void	setup_heredoc_signals(void)
+{
+	struct sigaction	sa;
+
+	sigemptyset(&sa.sa_mask);
+	sa.sa_handler = heredoc_sigint_handler;
+	sa.sa_flags = 0;
+	sigaction(SIGINT, &sa, NULL);
+	rl_event_hook = handle_heredoc_signal_event;
+}
+
+void	setup_interactive_signals(void)
 {
 	struct sigaction	sa_int;
 	struct sigaction	sa_quit;
 
-	ft_memset(&sa_int, 0, sizeof(sa_int));
-	sa_int.sa_handler = sigint_handler;
 	sigemptyset(&sa_int.sa_mask);
-	sa_int.sa_flags = SA_RESTART;
+	sa_int.sa_handler = sigint_handler;
+	sa_int.sa_flags = 0;
 	sigaction(SIGINT, &sa_int, NULL);
-	ft_memset(&sa_quit, 0, sizeof(sa_quit));
-	sa_quit.sa_handler = SIG_IGN;
 	sigemptyset(&sa_quit.sa_mask);
-	sa_quit.sa_flags = SA_RESTART;
+	sa_quit.sa_handler = SIG_IGN;
+	sa_quit.sa_flags = 0;
 	sigaction(SIGQUIT, &sa_quit, NULL);
+	rl_event_hook = handle_signal_event;
 }

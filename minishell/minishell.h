@@ -25,6 +25,8 @@
 # include <readline/history.h>
 # include <stdbool.h>
 # include <fcntl.h>
+# include <termios.h>
+# include <sys/ioctl.h>
 
 # define CYAN  "\033[0;36m"
 # define RESET "\033[0m"
@@ -36,8 +38,13 @@
 # define REDIR_PIPE		"bash: syntax error near unexpected token `|'\n"
 # define HERE_DOC_ERROR	"bash: syntax error near unexpected token `newline'\n"
 # define ERROR_OPENING_FILE "heredoc: error opening heredoc file\n"
-# define ERROR_EXPANDING_HEREDOC "could not expand heredoc\n"
-# define HEREDOC_ABORTED 130
+# define ERROR_EXPANDING_HEREDOC	"could not expand heredoc\n"
+# define HEREDOC_ABORTED	130
+
+# define NORMAL 0x00
+# define CTRL_C 0x01
+# define INSIDE_HEREDOC 0x02
+# define HEREDOC_CTRL  0x03
 
 extern volatile sig_atomic_t	g_signal;
 
@@ -197,7 +204,7 @@ char	*process_tokens(t_token *tokens, t_env *env, int exit);
 char	*final_expand(char *input, t_env *env);
 
 //heredoc and append redir
-void	heredoc_append(t_redir *redir, t_env *env, int exit);
+bool	heredoc_append(t_redir *redir, t_env *env, int exit);
 bool	handle_append(t_redir *redir);
 char	*choose_file_name(void);
 int		open_temp_file(char **filename);
@@ -205,10 +212,12 @@ void	write_to_file(int fd, char *content);
 char	*expand_heredoc(t_redir *redir, t_env *env, char *line, int exit);
 
 //signals
-void	setup_signals(void);
-void	init_readline(void);
-int		readline_event(void);
-
+void	restore_interactive_signals(void);
+void	sigint_handler(int sig);
+int		handle_signal_event(void);
+void	heredoc_sigint_handler(int sig);
+void	setup_heredoc_signals(void);
+void	setup_interactive_signals(void);
 //debug
 void	print_env_list(t_env *head);
 void	print_tokens(t_token *token);

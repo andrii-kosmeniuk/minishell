@@ -1,91 +1,126 @@
-signal_functions
+o que sao signals?
 
-1- void	void (*signal(int sig, void (*handler)(int)))(int)
-- function returns a pointer to a function that takes an int as input
-and returns a void
+signals sao notificacoes assincronas, ou seja, quando o
+Operating System ativa o signal, ele o executa mesmo imediata-
+mente, independente do que o programa estiver fazendo.
 
-sig = the signal number
-handler == a pointer to a function, could be:
-void	handler(int signum) -> return value the previous signal
-handler
+se podem vizualizar da seguinte maneira:
+"OS: toma essa notificacao, da um jeito de resolver"
 
-example:
+sinais interrompem o flow do programa e o kernel pode ariva-los
+quando quiser.
 
-void my_handler(int signum) {
-    printf("Caught %d\n", signum);
-}
+para meu minishell:
 
-int main() {
-    signal(SIGINT, my_handler);
-    while (1);
-}
+CTRL-C: signal = SIGNINT, simplesmente interrompe o programa.
+CTRL-\: signal = SIGQUIT, quit, interrompe mas cause um core dump
+(nao deve agir dessa forma na nossa interpretacao)
+CTRL-D: tecnicamente nao é um signal, indica EOF à funcao readline
 
-a better alternative would be:
+como signals podem ser ativados a qualquer instante, mesmo no meio
+do programa, isso significa que:
+- o seu codigo pode ser interrompido no meio de sua operacao
+- voce deve ser cuidadoso para que seu signal handler nao opere
+de maneira perigosa
 
-2- int	sigaction(int signum, const struct sigaction *act,
-struct sigaction *oldact)
+para nosso projeto devemos lidar com eles de maneira customizada,
+para isso devemos "instalar" nosso handler (a funcao/acao) que o
+signal vai ter
 
-meaning:
+para isso declaramos assim:
 
-signum = the signal number in question;
-act = a pointer to a struct sigaction, that describes what i want
-the new handler to be
-oldact = if not NULL, the kernel fills this up with the previous
-action for that signal
+	struct sigaction sa;
+	sa.sa_handler = my_handler;
+	sigemptyset(&sa.sa_mask);
+	sa.sa_flags = 0;
+	sigaction(SIGINT, &sa, NULL);
+	
+	my_handler no caso é uma funcao que define a maneira que o
+	sinal vai se comportar
+linha por linha agora:
+- struct sigaction sa: aqui declaramos uma estrutura que descreve
+como o processo quer tratar um sinal.
+- essa struct diz ao OS:
+"quando esse sinal chegar, faca X, bloqueia Y, com tais regras"
+- ela tem, entre outros, 3 campos importantissimos:
+1) sa_handler -> basicamente o que fazer quando o sinal chegar
+2) sa_mask -> quais sinais devem ser bloqueados durante o handler
+3) sa_flags ->detalhes extras do comportamento
 
-struct sigaction {
- void     (*sa_handler)(int); // simple signal handler
- void     (*sa_sigaction)(int, siginfo_t *, void *); // advanced handler
- sigset_t   sa_mask;	 // collection of signals to block while handler runs
- int        sa_flags;   // special flags controlling behavior
-};
+mais detalhes:
+sa.sa_handler = my_handler: aqui voce define o comportamento do
+sinal.
+- quando o SIGINT for entregue ao processo, o kernel vai:
+	- pausar o fluxo normal do programa
+	- chamar my_handler(SIGINT)
+	- voltar a onde estava
+sigemptyset(&sa.sa_mask): em OP, uma mask é um conjunto bits usado
+para ligar/desligar opcoes, permitir/bloquear certas coisas.
 
-3- int	sigemptyset(sigset_t *set)
-- this function initializes a signal set so that it contains no signals
+portanto, essa linha de codigo define que enquanto o handler esta
+rodando, sigemptyset inicializa uma mascara como vazia, ou seja,
+nenhum sinal extra sera bloqueado. cada bit representa uma opcao:
+1 = ativo, 0 inativo
 
-so, if sigset_t is a bag of signals, sigemptyset() makes the bag empty
+sa:sa_flags = 0: aqui se definem opcoes expeciais, 0 significa usar
+comportamento padrao
 
-we could do:
-struct sigaction sa;
-sigemptyset(&sa.sa_mask); this means "while running the signal handler, do
-not block any additional signals"
+sigaction(SIGINT, &sa, NULL): essa é a chamada que instala o
+handler de fato. SIGINT qual o sinal, &sa como o sinal deve ser
+tratado e NULL, nao queremos guardar a configuracao antiga
 
-4- int	sigaddset(sigset_t *set, int signum)
+SIGNAL SAFETY
 
-adds a signal to a signal set, lets say signals are nodes in a list, this
-function adds signals to it
+para prevenir UB e potencias crashs, dentro de um handler podem-se
+usar apenas operacoes mega seguras, por exemplo:
+- usar uma volatile sig_atomic_t flag
+- write to a pipe
+- call write()
+nao se pode:
+- usar malloc ou printf ou chamar funcoes normais
 
-so we use sigemptyset() to empty the bag and sigaddset() to add a specific
-signal into it
 
-so we could do the following:
+quando um sinal chega, readiline (funcao usada para ler os cmd),
+nao executa a logica pesada direto no handler (isso seria peri-
+goso), em vez disso, ela agenda trbalaho para ser feito no loop
+principal
 
-struct sigaction sa;
-sigemptyset(&sa.sa_mask);             // start with an empty set
-sigaddset(&sa.sa_mask, SIGTERM);      // block SIGTERM while handler runs
-sigaddset(&sa.sa_mask, SIGHUP);       // block SIGHUP while handler runs
+é ai que entra o rl_signal_event_hook, ela é uma ponteiro para
+uma funcao, mas fora do handler, num contexto seguro, ou seja
+"quando receber um signal, chama essa funcao assim que for se-
+guro fazer isso"
 
-so when the handling runs, the selected signals cant  interrupt it
+assinatura: 
+int (*rl_signal_event_hook)(void);
+ou seja, retorna int, n tem argumentos
 
-5- int	kill(pid_t pid, int sig)
-kill() sends a signal to a process or a group of processes
+exemplo usando ctrl-c
+- programa recebe CTRL-C, readline marca que o sinal ocorreu
+- no main loop, chama rl_signal_event_hook
+- bash limpa (free) a linha atual e mostra um prompt novo
 
-pid = identifies the target of the signal
-if pid > 0 -> send the signal to process with that PID
-if pid == 0 -> send signal to all processes in the same process group
-as the caller
-if pid < -1 -> send signal to all processes in the process group w id
-abs(pid)
-if pid == -1 -> send to all processes the caller has permission to signal
 
-return values
-0 → success
 
--1 → failure (check errno for reason,
-e.g., EPERM for permission denied or ESRCH if process doesn’t exist)
 
-to initialize the signal struct is important to set all the bytes of memory to 0
-to avoid undefined behaviour
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -27,6 +27,7 @@ SRC = srcs/env/get_envp.c \
 	srcs/clean_up/free_utils2.c \
 	srcs/debug/debug.c \
 	srcs/signals/signal_handlers.c \
+	srcs/signals/signal_utils.c \
 	srcs/init/init.c \
 	srcs/lexer/lexer.c \
 	srcs/lexer/lexer_utils.c \

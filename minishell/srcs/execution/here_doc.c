@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   here_doc.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: milija-h <milija-h@student.42vienna.com>   +#+  +:+       +#+        */
+/*   By: milija-h <milija-h@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/25 14:36:00 by milija-h          #+#    #+#             */
-/*   Updated: 2026/01/25 14:36:18 by milija-h         ###   ########.fr       */
+/*   Updated: 2026/02/05 15:54:02 by milija-h         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,17 +43,19 @@ static int	heredoc_tmp(t_redir *redir, t_env *env, char **file_name, int exit)
 		return (-1);
 	while (1)
 	{
-		line = readline("heredoc>");
+		line = readline("heredoc> ");
+		if (g_signal == 2)
+			return (free(line), g_signal = 0, printf("\n"), close(fd),
+				unlink(*file_name), free(*file_name), -1);
 		if (!line)
 			return (close(fd), free(*file_name), -1);
 		if (ft_strcmp(redir->target, line) == 0)
 			return (free(line), close(fd), 0);
 		content = here_doc_content(redir, env, line, exit);
-		free(line);
 		if (!content)
-			return (close(fd), free(*file_name), -1);
+			return (free(line), close(fd), free(*file_name), -1);
+		free(line);
 		write_to_file(fd, content);
-		free(content);
 	}
 	return (-1);
 }
@@ -76,16 +78,17 @@ static bool	here_doc(t_redir *redir, t_env *env, int exit)
 	return (open_heredoc_file(redir, file_name));
 }
 
-void	heredoc_append(t_redir *redir, t_env *env, int exit)
+bool	heredoc_append(t_redir *redir, t_env *env, int exit)
 {
 	if (redir->type == R_APPEND)
 	{
 		if (!handle_append(redir))
-			return ;
+			return (false);
 	}
 	if (redir->type == HERE_DOC)
 	{
 		if (!here_doc(redir, env, exit))
-			return ;
+			return (false);
 	}
+	return (true);
 }
