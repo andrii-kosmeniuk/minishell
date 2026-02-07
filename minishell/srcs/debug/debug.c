@@ -12,102 +12,125 @@
 
 #include "../../minishell.h"
 
-void	print_env_list(t_env *head)
+/*const char *type_to_string(t_type type)
 {
-	while (head)
-	{
-		if (head->value)
-		{
-			printf("KEY=\"%s\" VALUE=\"%s\"\n", head->key,
-				head->value);
-		}
-		else
-		{
-			printf("KEY=\"%s\" VALUE=\"%s\"\n", head->key,
-				"NULL");
-		}
-		head = head->next;
-	}
+    if (type == WORD) return "WORD";
+    if (type == PIPE) return "PIPE";
+    if (type == R_INPUT) return "R_INPUT (<)";
+    if (type == R_OUTPUT) return "R_OUTPUT (>)";
+    if (type == R_APPEND) return "R_APPEND (>>)";
+    if (type == HERE_DOC) return "HERE_DOC (<<)";
+    return "UNKNOWN";
 }
 
-void	print_tokens(t_token *token)
+void print_tokens(t_token *tokens)
 {
-	while (token)
-	{
-		if (token->content)
-		{
-			printf("the token is: %s\nits state is: %d\nits type is: %d\n",
-				token->content, token->state, token->type);
-		}
-		else
-			printf("Error building token\n");
-		token = token->next;
-	}
+    printf("\n========= TOKENS =========\n");
+
+    int i = 0;
+
+    while (tokens)
+    {
+        printf("[%d]\n", i);
+        printf(" type    : %s\n", type_to_string(tokens->type));
+        printf(" content : %s\n", tokens->content ? tokens->content : "NULL");
+        printf(" next    : %p\n", (void *)tokens->next);
+        printf("------------------------\n");
+
+        tokens = tokens->next;
+        i++;
+    }
+
+    printf("======= END TOKENS =======\n\n");
 }
 
-void	print_num_of_tokens(t_token *tokens)
-{
-	int	i;
 
-	i = 0;
-	while (tokens)
-	{
-		tokens = tokens->next;
-		i++;
-	}
-	printf("The number of tokens is: %d\n", i);
+void print_redirs(t_redir *redir)
+{
+    if (!redir)
+    {
+        printf("    (none)\n");
+        return;
+    }
+
+    int i = 0;
+
+    while (redir)
+    {
+        printf("    [%d]\n", i);
+        printf("     type   : %s\n", type_to_string(redir->type));
+        printf("     target : %s\n", redir->target);
+        printf("     next   : %p\n", (void *)redir->next);
+        redir = redir->next;
+        i++;
+    }
 }
 
-void	print_cmd_structure(t_cmd *cmd)
+
+void print_argv(char **argv)
 {
-	int	cmd_index;
+    if (!argv)
+    {
+        printf("    argv: NULL\n");
+        return;
+    }
 
-	cmd_index = 0;
-	while (cmd)
-	{
-		char **arg;
-		t_redir *redir;
+    int i = 0;
 
-		printf("===== COMMAND %d =====\n", cmd_index);
-		printf("Arguments:\n");
-		arg = cmd->args;
-		if (!arg)
-			printf("  (none)\n");
-		while (*arg)
-		{
-			printf("  - %s\n", *arg);
-			arg++;
-		}
-		printf("Redirections:\n");
-		redir = cmd->redirections;
-		if (!redir)
-			printf("  (none)\n");
-		while (redir)
-		{
-			printf("  - type: %d, target: %s\n",
-				redir->type, redir->target);
-			redir = redir->next;
-		}
-		cmd = cmd->next;
-		cmd_index++;
-	}
+    while (argv[i])
+    {
+        printf("    argv[%d] = [%s]\n", i, argv[i]);
+        i++;
+    }
 }
 
-void	print_array(char **array)
-{
-	int	i;
-	int	j;
 
-	i = 0;
-	while (array[i])
-	{
-		j = 0;
-		while (array[i][j])
-		{
-			printf("%c", array[i][j]);
-			j++;
-		}
-		printf("\n");
-		i++;
-	}
+void print_commands(t_cmd *cmd)
+{
+    printf("\n=========== COMMAND LIST ===========\n");
+
+    int cmd_i = 0;
+
+    while (cmd)
+    {
+        printf("\n===== COMMAND %d =====\n", cmd_i);
+
+        printf("  argv pointer : %p\n", (void *)cmd->args);
+        printf("  redir pointer: %p\n", (void *)cmd->redirections);
+        printf("  next pointer : %p\n\n", (void *)cmd->next);
+
+        printf("  ARGUMENTS:\n");
+        print_argv(cmd->args);
+
+        printf("\n  REDIRECTIONS:\n");
+        print_redirs(cmd->redirections);
+
+        printf("\n============================\n");
+
+        cmd = cmd->next;
+        cmd_i++;
+    }
+
+    printf("\n========= END COMMANDS =========\n\n");
 }
+
+
+void debug_print_all_argv(t_cmd *cmd)
+{
+    int i;
+
+    while (cmd)
+    {
+        i = 0;
+        printf("COMMAND:\n");
+
+        while (cmd->args && cmd->args[i])
+        {
+            printf("argv[%d] = [%s]\n", i, cmd->args[i]);
+            i++;
+        }
+
+        printf("\n");
+        cmd = cmd->next;
+    }
+}*/

@@ -3,14 +3,34 @@
 /*                                                        :::      ::::::::   */
 /*   syntax_check.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: milija-h <milija-h@student.42vienna.com>   +#+  +:+       +#+        */
+/*   By: milija-h <milija-h@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/20 15:04:41 by milija-h          #+#    #+#             */
-/*   Updated: 2026/01/20 15:18:13 by milija-h         ###   ########.fr       */
+/*   Updated: 2026/02/07 15:40:36 by milija-h         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
+
+static bool	validate_pipe(t_token *token)
+{
+	if (!token)
+		return (false);
+	if (token->type == PIPE)
+		return (false);
+	while (token)
+	{
+		if (token->type == PIPE)
+		{
+			if (!token->next)
+				return (false);
+			if (token->next->type == PIPE)
+				return (false);
+		}
+		token = token->next;
+	}
+	return (true);
+}
 
 bool	syntax_check(t_shell *shell)
 {
@@ -18,13 +38,14 @@ bool	syntax_check(t_shell *shell)
 	t_token	*next;
 
 	cur = shell->head;
-	if (cur->type == PIPE)
-		return (fprintf(stderr, PIPE_FIRST), false);
 	while (cur)
 	{
 		next = cur->next;
-		if (cur->type == PIPE && next == NULL)
-			return (printf(PIPE_END), false);
+		if (cur->type == PIPE)
+		{
+			if (validate_pipe(cur))
+				return (printf(PIPE_END), false);
+		}
 		if ((cur->type == R_OUTPUT || cur->type == R_INPUT
 				|| cur->type == HERE_DOC || cur->type == R_APPEND)
 			&& (next && next->type == PIPE))

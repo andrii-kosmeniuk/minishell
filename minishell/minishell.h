@@ -169,11 +169,13 @@ int		alpha_numeric_underscore(int c);
 bool	my_isspace(char input);
 bool	is_word_quoted(t_token *token);
 void	get_state(t_shell *shell, char quote);
+
 //environment
 t_env	*list_key_value(t_shell *shell, char **envp, t_data *data);
 char	**copy_of_envp(t_shell *shell, char **envp);
 int		calculate_new_shlvl(t_shell *shell);
 int		update_shlvl_key(t_shell *shell, t_data *data);
+
 //lexer
 t_token	*create_token(char *content, t_state state, t_type type,
 			bool should_expand);
@@ -187,6 +189,7 @@ bool	tokenize_pipe(const char *input, t_shell *shell, int *len);
 int		tokenize_word(const char *input, t_shell *shell, int *len);
 bool	tokenize_double_quotes(t_shell *shell, char *input, int *len);
 bool	tokenize_single_quotes(t_shell *shell, char *input, int *len);
+
 //parser
 bool	is_argument(t_token *token);
 bool	is_redirection(t_token *token);
@@ -207,10 +210,10 @@ bool	is_valid(char c);
 char	*read_variable_name(char *input, char *start_of_variable);
 char	**word_split(char *expanded);
 char	**final_args(char *input, t_env *env, bool should_expand, int exit);
-char	**expand_final_args(t_token *tokens, t_env *env, int exit);
 char	*expand_string(char *input, t_env *env, int exit);
 char	*process_tokens(t_token *tokens, t_env *env, int exit);
 char	*final_expand(char *input, t_env *env);
+bool	expand_all(t_cmd *cmd, t_token *tkn, t_env *env, int exit_code);
 
 //heredoc and append redir
 bool	heredoc_append(t_redir *redir, t_env *env, int exit);
@@ -228,10 +231,13 @@ void	heredoc_sigint_handler(int sig);
 void	setup_heredoc_signals(void);
 void	setup_interactive_signals(void);
 //debug
-void	print_env_list(t_env *head);
-void	print_tokens(t_token *token);
-void	print_num_of_tokens(t_token *tokens);
-void	print_cmd_structure(t_cmd *cmd);
-void	print_array(char **array);
+
+/*void		print_env_list(t_env *head);
+const char	*type_to_string(t_type type);
+void		print_tokens(t_token *tokens);
+void		print_redirs(t_redir *redir);
+void		print_argv(char **argv);
+void		print_commands(t_cmd *cmd);
+void		debug_print_all_argv(t_cmd *cmd);*/
 
 #endif

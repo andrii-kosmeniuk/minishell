@@ -60,11 +60,15 @@ int	process_line(char *line, t_shell *shell)
 	if (ft_strcmp(line, "clear") == 0)
 		return (printf("\033[H\033[2J"), 1);
 	tokens = build_token_list(line, shell);
-	if (!tokens || shell->redir_error)
+	if (!tokens || shell->redir_error || syntax_check(shell))
 		return (printf("syntax error\n"), cleanup_tokens(shell), 0);
+	print_tokens(tokens);
 	cmd = parse(shell, tokens);
 	if (!cmd)
 		return (printf("Error parsing\n"), cleanup_tokens(shell), 0);
+	if (!expand_all(cmd, tokens, shell->environment_p, 0))
+		return (printf("Error expanding\n"), free_command(cmd),
+			cleanup_tokens(shell), 0);
 	if (!process_heredocs(cmd, shell->environment_p))
 		return (free_command(cmd), cleanup_tokens(shell), 0);
 	// execute_command(cmd, shell);

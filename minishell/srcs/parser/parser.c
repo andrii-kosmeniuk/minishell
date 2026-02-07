@@ -27,16 +27,16 @@ static bool	handle_redirection(t_cmd *current, t_token **token)
 
 static bool	handle_token(t_cmd **current, t_token **token)
 {
+	if ((*token)->type == PIPE)
+		return (handle_pipe(current));
 	if ((*token)->type == R_INPUT || (*token)->type == R_OUTPUT
 		|| (*token)->type == R_APPEND || (*token)->type == HERE_DOC)
 		return (handle_redirection(*current, token));
-	else if ((*token)->type == 0 || (*token)->type == 1 || (*token)->type == 8)
+	if ((*token)->type == 0 || (*token)->type == 1 || (*token)->type == 8)
 	{
 		if (!add_args(*current, *token))
 			return (false);
 	}
-	else if ((*token)->type == PIPE)
-		return (handle_pipe(current));
 	return (true);
 }
 
@@ -46,7 +46,7 @@ t_cmd	*parse(t_shell *shell, t_token *tokens)
 	t_cmd	*current;
 	t_token	*t_oken;
 
-	if (!shell || !tokens || !syntax_check(shell))
+	if (!shell || !tokens)
 		return (NULL);
 	head = create_command();
 	if (!head)
