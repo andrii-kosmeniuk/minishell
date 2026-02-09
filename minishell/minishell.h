@@ -106,6 +106,7 @@ typedef struct s_arg
 typedef struct s_cmd
 {
 	char			**args;
+	char			*path
 	int				argc;
 	t_redir			*redirections; //linked list of redirections
 	struct s_cmd	*next; //next command if there is a pipe
@@ -237,6 +238,10 @@ void	close_fds(void);
 int		open_input_file(char *filename);
 int		open_output_file(char *filename, bool append);
 bool	apply_redirections(t_redir *redir);
+void	execve_error(char *cmd_name);
+char	*handle_path(t_cmd *cmd, char **envp);
+void	execute_in_child(t_cmd *cmd, t_shell *shell);
+int		wait_for_child(pid_t pid);
 
 //debug
 

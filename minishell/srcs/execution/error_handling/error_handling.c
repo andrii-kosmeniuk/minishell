@@ -12,3 +12,26 @@
 
 #include "../../../minishell.h"
 
+void	execve_error(char *cmd_name)
+{
+	if (errno == ENOENT)
+	{
+		perror(cmd_name);
+		exit(127);
+	}
+	else if (errno == EACCESS)
+	{
+		perror(cmd_name);
+		exir(126);
+	}
+	else
+	{
+		perror(cmd_name);
+		exit(126);
+	}
+}
+
+void	fork_error(void)
+{
+	perror("fork");
+}

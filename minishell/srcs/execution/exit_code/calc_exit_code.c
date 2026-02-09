@@ -11,3 +11,15 @@
 /* ************************************************************************** */
 
 #include "../../../minishell.h"
+
+int	wait_for_child(pid_t pid)
+{
+	int	status;
+
+	waitpid(pid, &status, 0);
+	if (WIFEXITED(status))
+		return (WEXITSTATUS(status));
+	if (WIFSIGNALED(status))
+		return (128 + WTERMSIG(status));
+	return (1);
+}
