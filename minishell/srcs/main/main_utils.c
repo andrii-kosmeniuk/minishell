@@ -62,7 +62,6 @@ int	process_line(char *line, t_shell *shell)
 	tokens = build_token_list(line, shell);
 	if (!tokens || shell->redir_error || syntax_check(shell))
 		return (printf("syntax error\n"), cleanup_tokens(shell), 0);
-	print_tokens(tokens);
 	cmd = parse(shell, tokens);
 	if (!cmd)
 		return (printf("Error parsing\n"), cleanup_tokens(shell), 0);
@@ -79,7 +78,7 @@ int	process_line(char *line, t_shell *shell)
 
 int	init_minishell(t_shell *shell, t_state *state, t_data *data, char **envp)
 {
-	if (!init_shell(shell, state, data, envp))
+	if (!init_shell(shell, state, data))
 		return (printf("Error initializing shell\n"), 0);
 	list_key_value(shell, envp, data);
 	update_shlvl_key(shell, data);

@@ -37,8 +37,18 @@ SRC = srcs/env/get_envp.c \
 	srcs/parser/parser_clean_up.c \
 	srcs/parser/parser_utils.c \
 	srcs/parser/redir_utils.c \
-	srcs/execution/here_doc.c \
-	srcs/execution/heredoc_utils.c \
+	srcs/execution/heredoc/here_doc.c \
+	srcs/execution/error_handling/error_handling.c \
+	srcs/execution/execution/execute_in_child.c \
+	srcs/execution/execution/execution.c \
+	srcs/execution/execution/execution_utils.c \
+	srcs/execution/exit_code/calc_exit_code.c \
+	srcs/execution/pipes/pipes.c \
+	srcs/execution/redirections/fd_utils.c \
+	srcs/execution/redirections/redirection_utils.c \
+	srcs/execution/redirections/redirections.c \
+	srcs/execution/utils/signal_handling.c \
+	srcs/execution/heredoc/heredoc_utils.c \
 	srcs/expansions/expand_input_string.c \
 	srcs/expansions/expander_utils.c \
 	srcs/expansions/word_splitting.c \

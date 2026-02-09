@@ -28,7 +28,7 @@ void	free_tokens(t_token *tokens)
 void	free_on_cmd_failure(t_shell *shell)
 {
 	free_tokens(shell->head);
-	free_env_list(shell, shell->environment_p);
+	free_env_list(shell->environment_p);
 }
 
 void	cleanup_shell(t_shell *shell)
@@ -38,7 +38,7 @@ void	cleanup_shell(t_shell *shell)
 		free_tokens(shell->head);
 		shell->head = NULL;
 	}
-	free_env_list(shell, shell->environment_p);
+	free_env_list(shell->environment_p);
 	rl_clear_history();
 }
 

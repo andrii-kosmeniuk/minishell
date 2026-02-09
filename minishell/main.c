@@ -22,6 +22,7 @@ int	main(int ac, char **av, char **envp)
 
 	(void)ac;
 	(void)av;
+	(void)envp;
 	if (!init_minishell(&shell, &state, &data, envp))
 		return (-1);
 	shell_loop(&shell);

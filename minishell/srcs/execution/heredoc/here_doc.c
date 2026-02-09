@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../minishell.h"
+#include "../../../minishell.h"
 
 static char	*here_doc_content(t_redir *redir, t_env *env, char *line, int exit)
 {

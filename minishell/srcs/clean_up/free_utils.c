@@ -40,7 +40,7 @@ void	allocation_failed(char **array, int last_allocated_string)
 	array = NULL;
 }
 
-void	free_env_list(t_shell *shell, t_env *env)
+void	free_env_list(t_env *env)
 {
 	t_env	*tmp;
 
@@ -52,7 +52,6 @@ void	free_env_list(t_shell *shell, t_env *env)
 		free(env);
 		env = tmp;
 	}
-	free(shell->env_array);
 }
 
 void	free_key_value(char *key, char *value)
@@ -72,5 +71,5 @@ void	free_all(t_token *tokens, t_shell *shell)
 		free(tokens);
 		tokens = tmp_token;
 	}
-	free_env_list(shell, shell->environment_p);
+	free_env_list(shell->environment_p);
 }

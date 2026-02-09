@@ -19,24 +19,6 @@
 //to build each env variable which by default are strings, we must also allocate
 //memory for each of them (remember, env variables follow a KEY=value design)
 //this will be later passed to execve()
-char	**copy_of_envp(t_shell *shell, char **envp)
-{
-	int	i;
-
-	if (!envp)
-		return (NULL);
-	i = 0;
-	while (envp[i])
-	{
-		shell->env_array[i] = malloc(ft_strlen(envp[i]) + 1);
-		if (!shell->env_array[i])
-			return (allocation_failed(envp, i), NULL);
-		ft_strcpy(shell->env_array[i], envp[i]);
-		i++;
-	}
-	shell->env_array[env_size(envp)] = NULL;
-	return (shell->env_array);
-}
 
 int	calculate_new_shlvl(t_shell *shell)
 {

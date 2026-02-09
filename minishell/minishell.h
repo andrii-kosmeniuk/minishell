@@ -25,8 +25,8 @@
 # include <readline/history.h>
 # include <stdbool.h>
 # include <fcntl.h>
-# include <termios.h>
-# include <sys/ioctl.h>
+//# include <termios.h>
+//# include <sys/ioctl.h>
 
 # define CYAN  "\033[0;36m"
 # define RESET "\033[0m"
@@ -40,11 +40,6 @@
 # define ERROR_OPENING_FILE "heredoc: error opening heredoc file\n"
 # define ERROR_EXPANDING_HEREDOC	"could not expand heredoc\n"
 # define HEREDOC_ABORTED	130
-
-# define NORMAL 0x00
-# define CTRL_C 0x01
-# define INSIDE_HEREDOC 0x02
-# define HEREDOC_CTRL  0x03
 
 extern volatile sig_atomic_t	g_signal;
 
@@ -130,7 +125,7 @@ typedef struct s_shell
 	t_token	*head; //list of tokens
 	t_state	state;
 	t_type	type;
-	char	**env_array; //copy of envp, passed to execve
+	//char	**env_array; //copy of envp, passed to execve
 	char	*current_line; // gets its input from readline
 	char	*prompt; //minishell promt
 	int		interactive; // signals representend by ints
@@ -146,12 +141,12 @@ int		init_minishell(t_shell *shell, t_state *state,
 			t_data *data, char **envp);
 
 //initialization
-bool	init_shell(t_shell *shell, t_state *state, t_data *data, char **envp);
+bool	init_shell(t_shell *shell, t_state *state, t_data *data);
 
 //memory managment
 void	free_array(char **array);
 void	allocation_failed(char **array, int last_allocated_string);
-void	free_env_list(t_shell *shell, t_env *env);
+void	free_env_list(t_env *env);
 void	free_key_value(char *key, char *value);
 void	free_all(t_token *taokens, t_shell *shell);
 void	free_tokens(t_token *tokens);
@@ -230,6 +225,19 @@ int		handle_signal_event(void);
 void	heredoc_sigint_handler(int sig);
 void	setup_heredoc_signals(void);
 void	setup_interactive_signals(void);
+void	child_signals_setup(void);
+void	parent_signal_setup(void);
+
+//execution utils
+bool	is_builtin(char *cmd);
+int		check_file_access(char *path, int mode);
+char	**list_to_envp(t_shell *shell);
+bool	safe_dup2(int old_fd, int new_fd);
+void	close_fds(void);
+int		open_input_file(char *filename);
+int		open_output_file(char *filename, bool append);
+bool	apply_redirections(t_redir *redir);
+
 //debug
 
 /*void		print_env_list(t_env *head);
