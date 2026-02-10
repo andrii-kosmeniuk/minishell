@@ -22,7 +22,7 @@ t_cmd	*create_command(void)
 	cmd->args = NULL;
 	cmd->argc = 0;
 	cmd->redirections = NULL;
-	cmd->path = 
+	cmd->path = NULL;
 	cmd->next = NULL;
 	return (cmd);
 }

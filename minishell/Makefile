@@ -22,6 +22,7 @@ SRC = srcs/env/get_envp.c \
 	srcs/utils/utils.c \
 	srcs/utils/utils2.c \
 	srcs/utils/utils3.c \
+	srcs/utils/utils4.c \
 	srcs/env/env_utils.c \
 	srcs/clean_up/free_utils.c \
 	srcs/clean_up/free_utils2.c \
@@ -41,9 +42,11 @@ SRC = srcs/env/get_envp.c \
 	srcs/execution/error_handling/error_handling.c \
 	srcs/execution/execution/execute_in_child.c \
 	srcs/execution/execution/execution.c \
+	srcs/execution/heredoc/close_fds.c \
 	srcs/execution/execution/execution_utils.c \
 	srcs/execution/exit_code/calc_exit_code.c \
 	srcs/execution/pipes/pipes.c \
+	srcs/execution/pipes/execute_pipeline.c \
 	srcs/execution/redirections/fd_utils.c \
 	srcs/execution/redirections/redirection_utils.c \
 	srcs/execution/redirections/redirections.c \

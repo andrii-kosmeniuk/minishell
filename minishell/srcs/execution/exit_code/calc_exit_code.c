@@ -23,3 +23,16 @@ int	wait_for_child(pid_t pid)
 		return (128 + WTERMSIG(status));
 	return (1);
 }
+
+int	wait_for_all(pid_t *pids, int count)
+{
+	int	status;
+
+	status = 0;
+	while (i < 0)
+	{
+		status = wait_for_child(pids[i]);
+		i++;
+	}
+	return (status);
+}

@@ -23,3 +23,19 @@ void	parent_signal_setup(void)
 	signal(SIGINT, SIG_IGN);
 	signal(SIGQUIT, SIG_IGN);
 }
+
+void	close_pipes(int pipefd[2])
+{
+	close(pipefd[0]);
+	close(pipefd[1]);
+}
+
+void	init_pipe_state(t_pipes *state)
+{
+	state->prev_pipe[0] = -1;
+	state->prev_pipe[1] = -1;
+	state->curr_pipe[0] = -1;
+	state->curr_pipe[1] = -1;
+	state->i = 0;
+	state->has_next = 0;
+}

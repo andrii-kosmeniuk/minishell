@@ -25,6 +25,7 @@
 # include <readline/history.h>
 # include <stdbool.h>
 # include <fcntl.h>
+# include <errno.h>
 //# include <termios.h>
 //# include <sys/ioctl.h>
 
@@ -106,7 +107,7 @@ typedef struct s_arg
 typedef struct s_cmd
 {
 	char			**args;
-	char			*path
+	char			*path;
 	int				argc;
 	t_redir			*redirections; //linked list of redirections
 	struct s_cmd	*next; //next command if there is a pipe
@@ -133,6 +134,14 @@ typedef struct s_shell
 	int		signal_received;
 	int		redir_error;
 }	t_shell;
+
+typedef struct s_pipes
+{
+	int	prev_pipe[2];
+	int	curr_pipe[2];
+	int	i;
+	int	has_next;
+}	t_pipes;
 
 //main
 void	add_process_free(char *line, t_shell *shell);
@@ -242,6 +251,19 @@ void	execve_error(char *cmd_name);
 char	*handle_path(t_cmd *cmd, char **envp);
 void	execute_in_child(t_cmd *cmd, t_shell *shell);
 int		wait_for_child(pid_t pid);
+void	close_heredoc_fds(t_cmd *cmd);
+void	unlink_files(t_cmd *cmd);
+int		execute_simple_command(t_cmd *cmd, t_shell *shell);
+bool	safe_pipe(int pipefd[2]);
+void	reading_end(int pipefd[2]);
+void	writing_end(int pipefd[2]);
+void	close_pipes(int pipefd[2]);
+void	fork_error(void);
+char	**list_to_envp(t_shell *shell);
+int		wait_for_all(pid_t *pids, int count);
+t_cmd	*get_last_command(t_cmd *cmd);
+int		command_count(t_cmd *cmd);
+void	init_pipe_state(t_pipes *state);
 
 //debug
 

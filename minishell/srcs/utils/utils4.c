@@ -51,7 +51,7 @@ static char	*join_env(char *key, char *value)
 	ft_memcpy(str, key, key_len);
 	str[key_len] = '=';
 	ft_memcpy(str + key_len + 1, value, value_len);
-	str[key_ken + value_len + 1] = '\0';
+	str[key_len + value_len + 1] = '\0';
 	return (str);
 }
 

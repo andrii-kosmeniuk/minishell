@@ -13,11 +13,9 @@
 #include "../../../minishell.h"
 
 //improve exit codes
-
 void	execute_in_child(t_cmd *cmd, t_shell *shell)
 {
 	char	**env;
-
 
 	child_signals_setup();
 	if (!apply_redirections(cmd->redirections))
@@ -28,14 +26,13 @@ void	execute_in_child(t_cmd *cmd, t_shell *shell)
 	{
 		perror("env error");
 		exit(1);
-
 	}
 	if (!cmd->path)
 	{
-		cmd->path = handle_path(cmd, env); 
+		cmd->path = handle_path(cmd, env);
 		if (!cmd->path)
 			exit (1);
 	}
 	execve(cmd->path, cmd->args, env);
-	execve_error(cmd);
+	execve_error(cmd->path);
 }

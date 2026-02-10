@@ -71,11 +71,11 @@ static char	*find_cmd_path(t_cmd *cmds)
 		res = ft_strjoin(t, cmds->args[0]);
 		free(t);
 		if (access(res, X_OK) == 0)
-			return (free_arr(&temp), res);
+			return (free_array(temp), res);
 		free(res);
 		i++;
 	}
-	free_arr(&temp);
+	free_array(temp);
 	return (NULL);
 }
 
