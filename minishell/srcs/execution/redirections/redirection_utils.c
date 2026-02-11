@@ -72,11 +72,11 @@ static bool	apply_single_redirection(t_redir *redir)
 	return (false);
 }
 
-bool	apply_redirections(t_redir *redir)
+bool	apply_redirections(t_cmd *cmd)
 {
-	t_redir	*cur;
+	t_redir *cur;
 
-	cur = redir;
+	cur = cmd->redirections;
 	while (cur)
 	{
 		if (!apply_single_redirection(cur))

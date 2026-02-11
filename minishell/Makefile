@@ -46,6 +46,7 @@ SRC = srcs/env/get_envp.c \
 	srcs/execution/execution/execution_utils.c \
 	srcs/execution/exit_code/calc_exit_code.c \
 	srcs/execution/pipes/pipes.c \
+	srcs/execution/pipes/pipes_utils.c \
 	srcs/execution/pipes/execute_pipeline.c \
 	srcs/execution/redirections/fd_utils.c \
 	srcs/execution/redirections/redirection_utils.c \

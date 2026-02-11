@@ -39,9 +39,12 @@ bool	is_word_quoted(t_token *token)
 	return (true);
 }
 
-void	add_process_free(char *line, t_shell *shell)
+int	add_process_free(char *line, t_shell *shell)
 {
+	int	exit_status;
+
 	add_history(line);
-	process_line(line, shell);
+	exit_status = process_line(line, shell);
 	free(line);
+	return (exit_status);
 }

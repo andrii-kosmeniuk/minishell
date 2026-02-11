@@ -144,8 +144,8 @@ typedef struct s_pipes
 }	t_pipes;
 
 //main
-void	add_process_free(char *line, t_shell *shell);
-void	shell_loop(t_shell*shell);
+int		add_process_free(char *line, t_shell *shell);
+int		shell_loop(t_shell*shell);
 int		process_line(char *line, t_shell *shell);
 int		init_minishell(t_shell *shell, t_state *state,
 			t_data *data, char **envp);
@@ -246,7 +246,7 @@ bool	safe_dup2(int old_fd, int new_fd);
 void	close_fds(void);
 int		open_input_file(char *filename);
 int		open_output_file(char *filename, bool append);
-bool	apply_redirections(t_redir *redir);
+bool	apply_redirections(t_cmd *cmd);
 void	execve_error(char *cmd_name);
 char	*handle_path(t_cmd *cmd, char **envp);
 void	execute_in_child(t_cmd *cmd, t_shell *shell);
@@ -264,6 +264,9 @@ int		wait_for_all(pid_t *pids, int count);
 t_cmd	*get_last_command(t_cmd *cmd);
 int		command_count(t_cmd *cmd);
 void	init_pipe_state(t_pipes *state);
+int		fork_children(t_cmd *cmd, t_shell *shell, pid_t *pids);
+int		execute_pipeline(t_cmd *cmd, t_shell *shell);
+void	close_pipe(int pipefd[2]);
 
 //debug
 

@@ -27,9 +27,11 @@ int	wait_for_child(pid_t pid)
 int	wait_for_all(pid_t *pids, int count)
 {
 	int	status;
+	int	i;
 
 	status = 0;
-	while (i < 0)
+	i = 0;
+	while (i < count)
 	{
 		status = wait_for_child(pids[i]);
 		i++;

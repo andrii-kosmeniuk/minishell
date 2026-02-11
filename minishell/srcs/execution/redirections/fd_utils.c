@@ -59,3 +59,11 @@ int	open_output_file(char *filename, bool append)
 		perror(filename);
 	return (fd);
 }
+
+void	close_pipe(int pipefd[2])
+{
+	if (pipefd[0] != -1)
+		close(pipefd[0]);
+	if (pipefd[1] != -1)
+		close(pipefd[1]);
+}

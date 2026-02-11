@@ -44,17 +44,17 @@ bool	syntax_check(t_shell *shell)
 		if (cur->type == PIPE)
 		{
 			if (validate_pipe(cur))
-				return (printf(PIPE_END), false);
+				return (PIPE_END, false);
 		}
 		if ((cur->type == R_OUTPUT || cur->type == R_INPUT
 				|| cur->type == HERE_DOC || cur->type == R_APPEND)
 			&& (next && next->type == PIPE))
-			return (printf(REDIR_PIPE), false);
+			return (REDIR_PIPE, false);
 		if ((cur->type == R_INPUT || cur->type == R_OUTPUT
 				|| cur->type == R_APPEND || cur->type == HERE_DOC)
 			&& (next == NULL
 				|| !(is_word_quoted(cur))))
-			return (printf(NO_TARGET), false);
+			return (NO_TARGET, false);
 		cur = next;
 	}
 	return (true);

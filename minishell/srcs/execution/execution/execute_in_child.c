@@ -18,7 +18,7 @@ void	execute_in_child(t_cmd *cmd, t_shell *shell)
 	char	**env;
 
 	child_signals_setup();
-	if (!apply_redirections(cmd->redirections))
+	if (!apply_redirections(cmd))
 		exit(1);
 	close_fds();
 	env = list_to_envp(shell);
