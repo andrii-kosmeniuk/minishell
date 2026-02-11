@@ -28,13 +28,14 @@ int	calculate_new_shlvl(t_shell *shell)
 
 	cur_variable = shell->environment_p;
 	new_value = 0;
+	current_value = 0;
 	while (cur_variable)
 	{
 		if (ft_strcmp(cur_variable->key, "SHLVL") == 0)
 		{
 			if (cur_variable->value)
 			{
-				current_value = ft_atoi(cur_variable->value);
+				current_value += ft_atoi(cur_variable->value);
 				if (current_value <= 0 || current_value >= 1000)
 				{
 					new_value = 1;

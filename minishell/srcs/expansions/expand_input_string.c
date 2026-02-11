@@ -30,11 +30,12 @@ static bool	append_var(char **buf, size_t *len, t_env *env, char *var_name)
 	return (true);
 }
 
-static bool	append_exit_code(char **buf, size_t *len, int exit_code)
+//find a way to use last $? here
+static bool	append_exit_code(char **buf, size_t *len)
 {
 	char	*tmp;
 
-	tmp = ft_itoa(exit_code);
+	tmp = ft_itoa(0);
 	if (!tmp)
 		return (false);
 	if (!append_string(buf, len, tmp))
@@ -53,7 +54,7 @@ static bool	handle_expansions(char **input, t_expand *expand)
 	key = NULL;
 	if (*(*input + 1) == '?')
 	{
-		if (!append_exit_code(&expand->output, &expand->len, expand->exit_code))
+		if (!append_exit_code(&expand->output, &expand->len))
 			return (false);
 		(*input) += 2;
 	}
@@ -70,13 +71,13 @@ static bool	handle_expansions(char **input, t_expand *expand)
 	return (true);
 }
 
-char	*expand_string(char *input, t_env *env, int exit)
+char	*expand_string(char *input, t_env *env)
 {
 	t_expand	p;
 
 	p.output = NULL;
 	p.len = 0;
-	p.exit_code = exit;
+	p.exit_code = 0;
 	p.env = env;
 	while (*input)
 	{
@@ -95,7 +96,7 @@ char	*expand_string(char *input, t_env *env, int exit)
 	return (p.output);
 }
 
-char	**final_args(char *input, t_env *env, bool should_expand, int exit)
+char	**final_args(char *input, t_env *env, bool should_expand)
 {
 	char	**argv;
 	char	*expanded;
@@ -103,7 +104,7 @@ char	**final_args(char *input, t_env *env, bool should_expand, int exit)
 	if (!should_expand)
 		expanded = ft_strdup(input);
 	else if (ft_strchr(input, '$'))
-		expanded = expand_string(input, env, exit);
+		expanded = expand_string(input, env);
 	else
 		expanded = ft_strdup(input);
 	if (!expanded)

@@ -40,7 +40,7 @@ static int	process_heredocs(t_cmd *cmd, t_env *env)
 		if (redir->type == HERE_DOC || redir->type == R_APPEND)
 		{
 			setup_heredoc_signals();
-			if (!heredoc_append(redir, env, 0))
+			if (!heredoc_append(redir, env))
 			{
 				restore_interactive_signals();
 				return (0);
@@ -66,7 +66,7 @@ int	process_line(char *line, t_shell *shell)
 	cmd = parse(shell, tokens);
 	if (!cmd)
 		return (printf("Error parsing\n"), cleanup_tokens(shell), 0);
-	if (!expand_all(cmd, tokens, shell->environment_p, 0))
+	if (!expand_all(cmd, shell->environment_p))
 		return (printf("Error expanding\n"), free_command(cmd),
 			cleanup_tokens(shell), 0);
 	if (!process_heredocs(cmd, shell->environment_p))

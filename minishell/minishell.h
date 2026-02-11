@@ -214,19 +214,19 @@ char	*get_value(t_env *env, char *variable_name);
 bool	is_valid(char c);
 char	*read_variable_name(char *input, char *start_of_variable);
 char	**word_split(char *expanded);
-char	**final_args(char *input, t_env *env, bool should_expand, int exit);
-char	*expand_string(char *input, t_env *env, int exit);
-char	*process_tokens(t_token *tokens, t_env *env, int exit);
+char	**final_args(char *input, t_env *env, bool should_expand);
+char	*expand_string(char *input, t_env *env);
+char	*process_tokens(t_token *tokens, t_env *env);
 char	*final_expand(char *input, t_env *env);
-bool	expand_all(t_cmd *cmd, t_token *tkn, t_env *env, int exit_code);
+bool	expand_all(t_cmd *cmd, t_env *env);
 
 //heredoc and append redir
-bool	heredoc_append(t_redir *redir, t_env *env, int exit);
+bool	heredoc_append(t_redir *redir, t_env *env);
 bool	handle_append(t_redir *redir);
 char	*choose_file_name(void);
 int		open_temp_file(char **filename);
 void	write_to_file(int fd, char *content);
-char	*expand_heredoc(t_redir *redir, t_env *env, char *line, int exit);
+char	*expand_heredoc(t_redir *redir, t_env *env, char *line);
 
 //signals
 void	restore_interactive_signals(void);

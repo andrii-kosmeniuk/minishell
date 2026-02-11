@@ -12,49 +12,46 @@
 
 #include "../../minishell.h"
 
-static size_t	total_length(t_token *token, t_env *env, int exit)
+static size_t	total_length(char **args, t_env *env)
 {
 	char	**tmp;
 	size_t	j;
 	size_t	count;
-	t_token	*cur;
+	int		i;
 
 	count = 0;
-	cur = token;
-	while (cur)
+	i = 0;
+	while (args[i])
 	{
-		if (cur->type == WORD || cur->type == S_QUOTE || cur->type == D_QUOTE)
+		tmp = final_args(args[i], env, true);
+		if (!tmp)
+			return (0);
+		j = 0;
+		while (tmp[j])
 		{
-			tmp = final_args(cur->content, env, cur->should_expand, exit);
-			if (!tmp)
-				return (0);
-			j = 0;
-			while (tmp[j])
-			{
-				count++;
-				j++;
-			}
-			free_array(tmp);
+			count++;
+			j++;
 		}
-		cur = cur->next;
+		free_array(tmp);
+		i++;
 	}
 	return (count);
 }
 
-static char	**expand_final_args(char **args, t_token *tkn, t_env *env, int exit)
+static char	**expand_final_args(char **args, t_env *env)
 {
 	char	**argv;
 	char	**buffer;
 	size_t	i;
 	size_t	j;
 
-	argv = ft_calloc(total_length(tkn, env, exit) + 1, sizeof(char *));
+	argv = ft_calloc(total_length(args, env) + 1, sizeof(char *));
 	if (!argv)
 		return (NULL);
 	i = 0;
 	while (*args)
 	{
-		buffer = final_args(*args, env, 1, exit);
+		buffer = final_args(*args, env, 1);
 		if (!buffer)
 			return (free_array(argv), NULL);
 		j = 0;
@@ -67,16 +64,24 @@ static char	**expand_final_args(char **args, t_token *tkn, t_env *env, int exit)
 	return (argv);
 }
 
-bool	expand_all(t_cmd *cmd, t_token *tkn, t_env *env, int exit_code)
+bool	expand_all(t_cmd *cmd, t_env *env)
 {
 	t_cmd	*cur;
+	char	**expanded;
 
 	cur = cmd;
 	while (cur)
 	{
-		cur->args = expand_final_args(cur->args, tkn, env, exit_code);
 		if (!cur->args)
+		{
+			cur = cur->next;
+			continue ;
+		}
+		expanded = expand_final_args(cur->args, env);
+		if (!expanded)
 			return (false);
+		free_array(cur->args);
+		cur->args = expanded;
 		cur = cur->next;
 	}
 	return (true);

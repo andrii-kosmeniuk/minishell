@@ -12,7 +12,7 @@
 
 #include "../../../minishell.h"
 
-static	int	cleanup_pipe(pid_t *pids, int count)
+static int	cleanup_pipe(pid_t *pids, int count)
 {
 	int	i;
 
@@ -43,7 +43,7 @@ static void	handle_pipeline_parent(t_pipes *state)
 }
 
 static void	handle_pipeline_child(t_cmd *cmd, t_shell *shell,
-								  t_pipes *state)
+									t_pipes *state)
 {
 	child_signals_setup();
 	if (state->i > 0)
@@ -57,7 +57,7 @@ static void	handle_pipeline_child(t_cmd *cmd, t_shell *shell,
 }
 
 static int	fork_one_child(t_cmd *cmd, t_shell *shell, pid_t *pids,
-						  t_pipes *state)
+							t_pipes *state)
 {
 	pid_t	pid;
 

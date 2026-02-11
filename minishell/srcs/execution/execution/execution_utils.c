@@ -93,7 +93,6 @@ char	*handle_path(t_cmd *cmds, char **envp)
 	cmds->path = find_path(envp, "PATH");
 	if (!cmds->path)
 		return (NULL);
-	printf("%s\n\n\n", cmds->path);
 	res = find_cmd_path(cmds);
 	free(cmds->path);
 	cmds->path = NULL;
