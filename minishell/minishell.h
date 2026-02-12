@@ -78,6 +78,18 @@ typedef enum s_type
 	WORD = 8
 }	t_type;
 
+typedef enum s_builtin
+{
+	NONE = 0,
+	ECHO,
+	CD,
+	PWD,
+	EXPORT,
+	UNSET,
+	ENV,
+	EXIT
+}	t_builtin;
+
 typedef struct s_redir
 {
 	t_type			type;
@@ -110,6 +122,7 @@ typedef struct s_cmd
 	char			*path;
 	int				argc;
 	t_redir			*redirections; //linked list of redirections
+	t_builtin		type;
 	struct s_cmd	*next; //next command if there is a pipe
 }	t_cmd;
 
@@ -248,7 +261,7 @@ int		open_input_file(char *filename);
 int		open_output_file(char *filename, bool append);
 bool	apply_redirections(t_cmd *cmd);
 void	execve_error(char *cmd_name);
-char	*handle_path(t_cmd *cmd, char **envp);
+char	*handle_path(t_cmd *cmds, t_shell *shell);
 void	execute_in_child(t_cmd *cmd, t_shell *shell);
 int		wait_for_child(pid_t pid);
 void	close_heredoc_fds(t_cmd *cmd);
@@ -267,6 +280,18 @@ void	init_pipe_state(t_pipes *state);
 int		fork_children(t_cmd *cmd, t_shell *shell, pid_t *pids);
 int		execute_pipeline(t_cmd *cmd, t_shell *shell);
 void	close_pipe(int pipefd[2]);
+bool	is_builtin(char *cmd);
+void	handle_builtin(t_cmd *cmd, t_shell *shell);
+char	*get_env_value(t_shell *shell, char *key);
+
+//builtins
+int		ft_unset(t_cmd *cmd);
+int		ft_export(t_cmd *cmd);
+int		ft_pwd(void);
+int		ft_cd(t_cmd *cmd, t_shell *shell);
+int		ft_echo(t_cmd *cmd);
+int		ft_env(t_shell *shell);
+int		ft_exit(t_cmd *cmd);
 
 //debug
 

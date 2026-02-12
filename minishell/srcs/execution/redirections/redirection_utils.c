@@ -19,7 +19,7 @@ static int	output_redirections(t_redir *redir)
 
 	if (redir->type == R_OUTPUT)
 	{
-		fd = open_output_file(redir->target, false);
+		fd = open_output_file(redir->target, true);
 		if (fd < 0)
 			return (0);
 		result = safe_dup2(fd, STDOUT_FILENO);
@@ -74,7 +74,7 @@ static bool	apply_single_redirection(t_redir *redir)
 
 bool	apply_redirections(t_cmd *cmd)
 {
-	t_redir *cur;
+	t_redir	*cur;
 
 	cur = cmd->redirections;
 	while (cur)

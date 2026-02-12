@@ -12,49 +12,26 @@
 
 #include "../../../minishell.h"
 
-bool	is_builtin(char *cmd)
-{
-	int			i;
-	static char	**builtins;
-
-	builtins = (char *[]){"", "echo", "cd", "pwd", "export",
-		"unset", "env", "exit", NULL};
-	i = 0;
-	while (builtins[i] != NULL)
-	{
-		if (ft_strcmp(cmd, builtins[i]) == 0)
-			return (true);
-		i++;
-	}
-	return (false);
-}
-
 int	check_file_access(char *path, int mode)
 {
 	return (access(path, mode) == 0);
 }
 
-static char	*find_path(char **envp, char *str)
+char	*get_env_value(t_shell *shell, char *key)
 {
-	char	*path;
-	int		i;
-	int		len;
+	t_env	*current;
 
-	i = 0;
-	len = ft_strlen(str);
-	while (envp[i] != NULL)
+	current = shell->environment_p;
+	while (current)
 	{
-		if ((ft_strncmp(str, envp[i], len) == 0) && envp[i][len] == '=')
-		{
-			path = ft_strdup(envp[i] + len + 1);
-			return (path);
-		}
-		++i;
+		if (ft_strcmp(current->key, key) == 0)
+			return (current->value);
+		current = current->next;
 	}
 	return (NULL);
 }
 
-static char	*find_cmd_path(t_cmd *cmds)
+static char	*find_cmd_path(t_cmd *cmds, char *path_value)
 {
 	char	**temp;
 	char	*res;
@@ -62,14 +39,18 @@ static char	*find_cmd_path(t_cmd *cmds)
 	int		i;
 
 	i = 0;
-	if (!cmds->path)
+	if (!path_value)
 		return (NULL);
-	temp = ft_split(cmds->path, ':');
-	while (temp[i] != NULL)
+	temp = ft_split(path_value, ':');
+	if (!temp)
+		return (NULL);
+	while (temp[i])
 	{
 		t = ft_strjoin(temp[i], "/");
 		res = ft_strjoin(t, cmds->args[0]);
 		free(t);
+		if (!res)
+			return (free_array(temp), NULL);
 		if (access(res, X_OK) == 0)
 			return (free_array(temp), res);
 		free(res);
@@ -79,10 +60,13 @@ static char	*find_cmd_path(t_cmd *cmds)
 	return (NULL);
 }
 
-char	*handle_path(t_cmd *cmds, char **envp)
+char	*handle_path(t_cmd *cmds, t_shell *shell)
 {
+	char	*path_value;
 	char	*res;
 
+	if (!cmds->args || !cmds->args[0])
+		return (NULL);
 	if (cmds->args[0][0] == '/' ||
 		(cmds->args[0][0] == '.' && cmds->args[0][1] == '/'))
 	{
@@ -90,11 +74,9 @@ char	*handle_path(t_cmd *cmds, char **envp)
 			return (ft_strdup(cmds->args[0]));
 		return (NULL);
 	}
-	cmds->path = find_path(envp, "PATH");
-	if (!cmds->path)
+	path_value = get_env_value(shell, "PATH");
+	if (!path_value)
 		return (NULL);
-	res = find_cmd_path(cmds);
-	free(cmds->path);
-	cmds->path = NULL;
+	res = find_cmd_path(cmds, path_value);
 	return (res);
 }

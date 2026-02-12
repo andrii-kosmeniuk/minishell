@@ -61,7 +61,7 @@ int	process_line(char *line, t_shell *shell)
 	if (ft_strcmp(line, "clear") == 0)
 		return (printf("\033[H\033[2J"), 1);
 	tokens = build_token_list(line, shell);
-	if (!tokens || shell->redir_error|| !syntax_check(shell))
+	if (!tokens || shell->redir_error || !syntax_check(shell))
 		return (printf("syntax error1\n"), cleanup_tokens(shell), 0);
 	cmd = parse(shell, tokens);
 	if (!cmd)
@@ -71,7 +71,10 @@ int	process_line(char *line, t_shell *shell)
 			cleanup_tokens(shell), 0);
 	if (!process_heredocs(cmd, shell->environment_p))
 		return (free_command(cmd), cleanup_tokens(shell), 0);
-	exit_status = execute_pipeline(cmd, shell);
+	//if (is_builtin(cmd->args[0]))
+		/*exit_status = */handle_builtin(cmd, shell);
+	//else
+		exit_status = execute_pipeline(cmd, shell);
 	free_command(cmd);
 	cleanup_tokens(shell);
 	return (exit_status);

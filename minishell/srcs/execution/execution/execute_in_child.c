@@ -21,18 +21,15 @@ void	execute_in_child(t_cmd *cmd, t_shell *shell)
 	if (!apply_redirections(cmd))
 		exit(1);
 	close_fds();
-	env = list_to_envp(shell);
-	if (!env)
-	{
-		perror("env error");
-		exit(1);
-	}
 	if (!cmd->path)
 	{
-		cmd->path = handle_path(cmd, env);
+		cmd->path = handle_path(cmd, shell);
 		if (!cmd->path)
 			exit (1);
 	}
+	env = list_to_envp(shell);
+	if (!env)
+		return ;
 	execve(cmd->path, cmd->args, env);
 	execve_error(cmd->path);
 }
