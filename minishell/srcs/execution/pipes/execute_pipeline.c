@@ -22,7 +22,7 @@ int	execute_pipeline(t_cmd *cmd, t_shell *shell)
 	pids = ft_calloc(cmd_count, sizeof(pid_t));
 	if (!pids)
 		return (perror("malloc"), 1);
-	exit_status = fork_children(cmd, shell, pids);
+	exit_status = execute_children_parent(cmd, shell, pids);
 	free(pids);
 	return (exit_status);
 }

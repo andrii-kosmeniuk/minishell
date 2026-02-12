@@ -23,6 +23,8 @@ t_cmd	*create_command(void)
 	cmd->argc = 0;
 	cmd->redirections = NULL;
 	cmd->path = NULL;
+	cmd->builtin = false;
+	cmd->b_type = NONE;
 	cmd->next = NULL;
 	return (cmd);
 }

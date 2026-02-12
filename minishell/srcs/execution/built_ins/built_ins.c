@@ -12,7 +12,7 @@
 
 #include "../../../minishell.h"
 
-bool	is_builtin(char *cmd)
+bool	is_builtin(t_cmd *cmd, t_shell *shell)
 {
 	int			i;
 	static char	**builtins;
@@ -22,8 +22,8 @@ bool	is_builtin(char *cmd)
 	i = 0;
 	while (builtins[i] != NULL)
 	{
-		if (ft_strcmp(cmd, builtins[i]) == 0)
-			return (true);
+		if (ft_strcmp(cmd->args[0], builtins[i]) == 0)
+			return (printf("i is %d\n", i), cmd->b_type = i, handle_builtin(cmd, shell), true);
 		i++;
 	}
 	return (false);
@@ -31,18 +31,18 @@ bool	is_builtin(char *cmd)
 
 void	handle_builtin(t_cmd *cmd, t_shell *shell)
 {
-	if (cmd->type == ECHO)
-		ft_echo(cmd);
-	else if (cmd->type == CD)
-		ft_cd(cmd, shell);
-	else if (cmd->type == PWD)
-		ft_pwd();
-	else if (cmd->type == EXPORT)
-		ft_export(cmd);
-	else if (cmd->type == UNSET)
-		ft_unset(cmd);
-	else if (cmd->type == ENV)
-		ft_env(shell);
-	else if (cmd->type == EXIT)
-		ft_exit(cmd);
+	if (cmd->b_type == ECHO)
+		shell->exit_status = ft_echo(cmd);
+	else if (cmd->b_type == CD)
+		shell->exit_status = ft_cd(cmd, shell);
+	else if (cmd->b_type == PWD)
+		shell->exit_status = ft_pwd();
+	else if (cmd->b_type == EXPORT)
+		shell->exit_status = ft_export(cmd);
+	else if (cmd->b_type == UNSET)
+		shell->exit_status = ft_unset(cmd);
+	else if (cmd->b_type == ENV)
+		shell->exit_status = ft_env(shell);
+	else if (cmd->b_type == EXIT)
+		shell->exit_status = ft_exit(cmd);
 }

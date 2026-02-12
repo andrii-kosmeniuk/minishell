@@ -42,6 +42,9 @@ int	ft_cd(t_cmd *cmd, t_shell *shell)
 	char	old_pwd[1024];
 	char	s[100];
 
+
+	printf("entering the function\n");
+
 	printf("%s\n", getcwd(s, 100));
 	if (cmd->args[1] == NULL)
 	{
@@ -64,6 +67,9 @@ int	ft_cd(t_cmd *cmd, t_shell *shell)
 	path = cmd->args[1];
 	if (chdir(path) != 0)
 		perror("minishell: cd: ");
+	
+	printf("exiting the function\n");
+
 	return (1);
 }
 

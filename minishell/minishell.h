@@ -122,7 +122,8 @@ typedef struct s_cmd
 	char			*path;
 	int				argc;
 	t_redir			*redirections; //linked list of redirections
-	t_builtin		type;
+	t_builtin		b_type;
+	bool			builtin;
 	struct s_cmd	*next; //next command if there is a pipe
 }	t_cmd;
 
@@ -140,12 +141,12 @@ typedef struct s_shell
 	t_token	*head; //list of tokens
 	t_state	state;
 	t_type	type;
-	//char	**env_array; //copy of envp, passed to execve
 	char	*current_line; // gets its input from readline
 	char	*prompt; //minishell promt
 	int		interactive; // signals representend by ints
 	int		signal_received;
 	int		redir_error;
+	int		exit_status;
 }	t_shell;
 
 typedef struct s_pipes
@@ -252,7 +253,6 @@ void	child_signals_setup(void);
 void	parent_signal_setup(void);
 
 //execution utils
-bool	is_builtin(char *cmd);
 int		check_file_access(char *path, int mode);
 char	**list_to_envp(t_shell *shell);
 bool	safe_dup2(int old_fd, int new_fd);
@@ -277,10 +277,10 @@ int		wait_for_all(pid_t *pids, int count);
 t_cmd	*get_last_command(t_cmd *cmd);
 int		command_count(t_cmd *cmd);
 void	init_pipe_state(t_pipes *state);
-int		fork_children(t_cmd *cmd, t_shell *shell, pid_t *pids);
+int		execute_children_parent(t_cmd *cmd, t_shell *shell, pid_t *pids);
 int		execute_pipeline(t_cmd *cmd, t_shell *shell);
 void	close_pipe(int pipefd[2]);
-bool	is_builtin(char *cmd);
+bool	is_builtin(t_cmd *cmd, t_shell *shell);
 void	handle_builtin(t_cmd *cmd, t_shell *shell);
 char	*get_env_value(t_shell *shell, char *key);
 

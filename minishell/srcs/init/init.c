@@ -20,5 +20,6 @@ bool	init_shell(t_shell *shell, t_state *state, t_data *data)
 	data->heredoc_number = 0;
 	shell->environment_p = NULL;
 	shell->head = NULL;
+	shell->exit_status = 0;
 	return (true);
 }

@@ -58,6 +58,7 @@ int	process_line(char *line, t_shell *shell)
 	t_cmd	*cmd;
 	int		exit_status;
 
+	exit_status = 0;
 	if (ft_strcmp(line, "clear") == 0)
 		return (printf("\033[H\033[2J"), 1);
 	tokens = build_token_list(line, shell);
@@ -71,9 +72,7 @@ int	process_line(char *line, t_shell *shell)
 			cleanup_tokens(shell), 0);
 	if (!process_heredocs(cmd, shell->environment_p))
 		return (free_command(cmd), cleanup_tokens(shell), 0);
-	//if (is_builtin(cmd->args[0]))
-		/*exit_status = */handle_builtin(cmd, shell);
-	//else
+	if (!is_builtin(cmd, shell))
 		exit_status = execute_pipeline(cmd, shell);
 	free_command(cmd);
 	cleanup_tokens(shell);

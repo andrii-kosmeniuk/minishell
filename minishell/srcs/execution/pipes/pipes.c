@@ -63,6 +63,8 @@ static int	fork_one_child(t_cmd *cmd, t_shell *shell, pid_t *pids,
 
 	if (state->has_next && !safe_pipe(state->curr_pipe))
 		return (0);
+	if (state->has_next == false)
+		handle_pipeline_parent(state);
 	pid = fork();
 	if (pid == -1)
 	{
@@ -74,11 +76,10 @@ static int	fork_one_child(t_cmd *cmd, t_shell *shell, pid_t *pids,
 	if (pid == 0)
 		handle_pipeline_child(cmd, shell, state);
 	pids[state->i] = pid;
-	handle_pipeline_parent(state);
 	return (1);
 }
 
-int	fork_children(t_cmd *cmd, t_shell *shell, pid_t *pids)
+int	execute_children_parent(t_cmd *cmd, t_shell *shell, pid_t *pids)
 {
 	t_pipes	state;
 	t_cmd	*cur;
