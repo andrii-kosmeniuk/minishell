@@ -12,13 +12,6 @@
 
 #include "../../minishell.h"
 
-//this build a linked list full of the key and values of the env variables
-//each node has one key and one value (KEY=value), so we loop until = is found,
-//all to the left is KEY rest is value
-//
-//we can also check for duplicates here, if a duplicate variable is found, we 
-//keep the last (as per what BASH does)
-
 static void	build_minimum_env(t_shell *shell, t_data *data)
 {
 	t_env	*node;

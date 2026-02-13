@@ -30,7 +30,7 @@ static int	is_valid_line(char *line)
 	return (1);
 }
 
-static int	process_heredocs(t_cmd *cmd, t_env *env)
+static int	process_heredocs(t_shell *shell, t_cmd *cmd, t_env *env)
 {
 	t_redir	*redir;
 
@@ -40,7 +40,7 @@ static int	process_heredocs(t_cmd *cmd, t_env *env)
 		if (redir->type == HERE_DOC || redir->type == R_APPEND)
 		{
 			setup_heredoc_signals();
-			if (!heredoc_append(redir, env))
+			if (!heredoc_append(shell, redir, env))
 			{
 				restore_interactive_signals();
 				return (0);
@@ -67,18 +67,21 @@ int	process_line(char *line, t_shell *shell)
 	cmd = parse(shell, tokens);
 	if (!cmd)
 		return (printf("Error parsing\n"), cleanup_tokens(shell), 0);
-	if (!expand_all(cmd, shell->environment_p))
+	if (!expand_all(shell, cmd, shell->environment_p))
 		return (printf("Error expanding\n"), free_command(cmd),
 			cleanup_tokens(shell), 0);
-	if (!process_heredocs(cmd, shell->environment_p))
+	if (!process_heredocs(shell, cmd, shell->environment_p))
 		return (free_command(cmd), cleanup_tokens(shell), 0);
-	if (!is_builtin(cmd, shell))
+	if (builtin_check(cmd) && (cmd->redirections || cmd->next))
+		exit_status = execute_pipeline(cmd, shell);
+	else if (is_builtin(cmd, shell))
+		exit_status = shell->exit_status;
+	else
 		exit_status = execute_pipeline(cmd, shell);
 	free_command(cmd);
 	cleanup_tokens(shell);
 	return (exit_status);
 }
-
 int	init_minishell(t_shell *shell, t_state *state, t_data *data, char **envp)
 {
 	if (!init_shell(shell, state, data))

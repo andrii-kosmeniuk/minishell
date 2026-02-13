@@ -12,66 +12,7 @@
 
 #include "../../minishell.h"
 
-static bool	append_var(char **buf, size_t *len, t_env *env, char *var_name)
-{
-	char	*value;
-
-	value = get_value(env, var_name);
-	if (!value)
-		return (true);
-	if (!append_string(buf, len, value))
-	{
-		free(value);
-		value = NULL;
-		return (false);
-	}
-	free(value);
-	value = NULL;
-	return (true);
-}
-
-//find a way to use last $? here
-static bool	append_exit_code(char **buf, size_t *len)
-{
-	char	*tmp;
-
-	tmp = ft_itoa(0);
-	if (!tmp)
-		return (false);
-	if (!append_string(buf, len, tmp))
-	{
-		free(tmp);
-		return (false);
-	}
-	free(tmp);
-	return (true);
-}
-
-static bool	handle_expansions(char **input, t_expand *expand)
-{
-	char	*key;
-
-	key = NULL;
-	if (*(*input + 1) == '?')
-	{
-		if (!append_exit_code(&expand->output, &expand->len))
-			return (false);
-		(*input) += 2;
-	}
-	else if (is_valid(*(*input + 1)))
-	{
-		key = read_variable_name(*input, *input + 1);
-		if (!key)
-			return (false);
-		if (!append_var(&expand->output, &expand->len, expand->env, key))
-			return (free(key), false);
-		(*input) += 1 + ft_strlen(key);
-		free(key);
-	}
-	return (true);
-}
-
-char	*expand_string(char *input, t_env *env)
+char	*expand_string(t_shell *shell, char *input, t_env *env)
 {
 	t_expand	p;
 
@@ -83,7 +24,7 @@ char	*expand_string(char *input, t_env *env)
 	{
 		if (*input == '$')
 		{
-			if (!handle_expansions(&input, &p))
+			if (!handle_expansions(&input, &p, shell))
 				return (free(p.output), NULL);
 			continue ;
 		}
@@ -96,22 +37,37 @@ char	*expand_string(char *input, t_env *env)
 	return (p.output);
 }
 
-char	**final_args(char *input, t_env *env, bool should_expand)
+static char **split_expanded(char *expanded)
 {
-	char	**argv;
+    char **argv;
+
+    if (!expanded)
+        return (NULL);
+
+    argv = word_split(expanded);
+    free(expanded);
+    return (argv);
+}
+
+char	**no_expansions(char *input)
+{
+	char	*duplicate;
+
+	duplicate = ft_strdup(input);
+	if (!duplicate)
+		return (NULL);
+	return (split_expanded(duplicate));
+}
+
+char	**expand_args(t_shell *shell, char *input, t_env *env)
+{
 	char	*expanded;
 
-	if (!should_expand)
-		expanded = ft_strdup(input);
-	else if (ft_strchr(input, '$'))
-		expanded = expand_string(input, env);
+	if (ft_strchr(input, '$'))
+		expanded = expand_string(shell, input, env);
 	else
 		expanded = ft_strdup(input);
 	if (!expanded)
-		return (perror("failed final args"), NULL);
-	argv = word_split(expanded);
-	if (!argv)
-		return (free(expanded), NULL);
-	free(expanded);
-	return (argv);
+		return (NULL);
+	return (split_expanded(expanded));
 }

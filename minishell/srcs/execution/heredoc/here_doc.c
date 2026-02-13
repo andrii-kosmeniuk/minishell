@@ -12,13 +12,13 @@
 
 #include "../../../minishell.h"
 
-static char	*here_doc_content(t_redir *redir, t_env *env, char *line)
+static char	*here_doc_content(t_shell *s, t_redir *redir, t_env *env, char *line)
 {
 	char	*buffer;
 	char	*content;
 	size_t	len;
 
-	buffer = expand_heredoc(redir, env, line);
+	buffer = expand_heredoc(s, redir, env, line);
 	if (!buffer)
 		return (NULL);
 	len = ft_strlen(buffer);
@@ -32,7 +32,7 @@ static char	*here_doc_content(t_redir *redir, t_env *env, char *line)
 	return (content);
 }
 
-static int	heredoc_tmp(t_redir *redir, t_env *env, char **file_name)
+static int	heredoc_tmp(t_shell *s, t_redir *redir, t_env *env, char **file_name)
 {
 	char	*line;
 	char	*content;
@@ -51,7 +51,7 @@ static int	heredoc_tmp(t_redir *redir, t_env *env, char **file_name)
 			return (close(fd), free(*file_name), -1);
 		if (ft_strcmp(redir->target, line) == 0)
 			return (free(line), close(fd), 0);
-		content = here_doc_content(redir, env, line);
+		content = here_doc_content(s, redir, env, line);
 		if (!content)
 			return (free(line), close(fd), free(*file_name), -1);
 		free(line);
@@ -68,26 +68,26 @@ static bool	open_heredoc_file(t_redir *redir, char *file_name)
 	return (redir->heredoc_fd >= 0);
 }
 
-static bool	here_doc(t_redir *redir, t_env *env)
+static bool	here_doc(t_shell *shell, t_redir *redir, t_env *env)
 {
 	char	*file_name;
 
 	file_name = NULL;
-	if (heredoc_tmp(redir, env, &file_name) < 0)
+	if (heredoc_tmp(shell, redir, env, &file_name) < 0)
 		return (false);
 	return (open_heredoc_file(redir, file_name));
 }
 
-bool	heredoc_append(t_redir *redir, t_env *env)
+bool	heredoc_append(t_shell *shell, t_redir *redir, t_env *env)
 {
-	if (redir->type == R_APPEND)
+	/*if (redir->type == R_APPEND)
 	{
 		if (!handle_append(redir))
 			return (false);
-	}
+	}*/
 	if (redir->type == HERE_DOC)
 	{
-		if (!here_doc(redir, env))
+		if (!here_doc(shell, redir, env))
 			return (false);
 	}
 	return (true);

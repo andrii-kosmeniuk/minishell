@@ -58,6 +58,6 @@ void	writing_end(int pipefd[2])
 {
 	if (!safe_dup2(pipefd[1], STDOUT_FILENO))
 		return ;
+	close(pipefd[0]);
 	close(pipefd[1]);
-	close(pipefd[2]);
 }

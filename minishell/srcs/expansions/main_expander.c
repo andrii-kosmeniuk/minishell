@@ -12,59 +12,71 @@
 
 #include "../../minishell.h"
 
-static size_t	total_length(char **args, t_env *env)
+static size_t	t_len(t_shell *shell, char **args, bool *should_expand, 
+					t_env *env)
 {
-	char	**tmp;
+	size_t	total;
+	char	**buffer;
 	size_t	j;
-	size_t	count;
-	int		i;
 
-	count = 0;
-	i = 0;
-	while (args[i])
+	total = 0;
+	while (*args)
 	{
-		tmp = final_args(args[i], env, true);
-		if (!tmp)
+		if (*should_expand)
+			buffer = expand_args(shell, *args, env);
+		else
+			buffer = no_expansions(*args);
+		if (!buffer)
 			return (0);
 		j = 0;
-		while (tmp[j])
+		while (buffer[j])
 		{
-			count++;
+			total++;
 			j++;
 		}
-		free_array(tmp);
-		i++;
+		free_array(buffer);
+		args++;
 	}
-	return (count);
+	return (total);
 }
 
-static char	**expand_final_args(char **args, t_env *env)
+static char	**expand_final_args(t_shell *shell, char **args, 
+								bool *should_expand, t_env *env)
 {
-	char	**argv;
-	char	**buffer;
+	char	**av;
 	size_t	i;
 	size_t	j;
+	char	**buffer;
 
-	argv = ft_calloc(total_length(args, env) + 1, sizeof(char *));
-	if (!argv)
+	av = ft_calloc(t_len(shell, args, should_expand, env) + 1, sizeof(char *));
+	if (!av)
 		return (NULL);
 	i = 0;
 	while (*args)
 	{
-		buffer = final_args(*args, env, 1);
+		if (*should_expand)
+			buffer = expand_args(shell, *args, env);
+		else
+			buffer = no_expansions(*args);
 		if (!buffer)
-			return (free_array(argv), NULL);
+			return (free_array(av), NULL);
 		j = 0;
 		while (buffer[j])
-			argv[i++] = ft_strdup(buffer[j++]);
+		{
+			av[i] = ft_strdup(buffer[j]);
+			if (!av[i])
+				return (free_array(buffer), free_array(av), NULL);
+			i++;
+			j++;
+		}
 		free_array(buffer);
 		args++;
 	}
-	argv[i] = NULL;
-	return (argv);
+	av[i] = NULL;
+	return (av);
 }
 
-bool	expand_all(t_cmd *cmd, t_env *env)
+bool	expand_all(t_shell *shell, t_cmd *cmd, t_env *env)
 {
 	t_cmd	*cur;
 	char	**expanded;
@@ -77,7 +89,7 @@ bool	expand_all(t_cmd *cmd, t_env *env)
 			cur = cur->next;
 			continue ;
 		}
-		expanded = expand_final_args(cur->args, env);
+		expanded = expand_final_args(shell, cur->args, cur->expand, env);
 		if (!expanded)
 			return (false);
 		free_array(cur->args);

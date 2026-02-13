@@ -40,7 +40,7 @@ static bool	handle_token(t_cmd **current, t_token **token)
 	return (true);
 }
 
-t_cmd	*parse(t_shell *shell, t_token *tokens)
+/*t_cmd	*parse(t_shell *shell, t_token *tokens)
 {
 	t_cmd	*head;
 	t_cmd	*current;
@@ -59,5 +59,34 @@ t_cmd	*parse(t_shell *shell, t_token *tokens)
 			return (free_command(head), NULL);
 		t_oken = t_oken->next;
 	}
+	return (head);
+}*/
+
+t_cmd	*parse(t_shell *shell, t_token *tokens)
+{
+	t_cmd	*head;
+	t_cmd	*current;
+	t_token	*t_oken;
+
+	if (!shell || !tokens)
+		return (NULL);
+	head = create_command();
+	if (!head)
+		return (NULL);
+	current = head;
+	t_oken = tokens;
+	while (t_oken)
+	{
+		printf("Processing token type: %d, content: %s\n", t_oken->type, t_oken->content); // DEBUG
+		if (handle_token(&current, &t_oken) == false)
+			return (free_command(head), NULL);
+		t_oken = t_oken->next;
+	}
+	
+	// DEBUG: Print redirections after parsing
+	printf("After parsing, cmd->redirections: %p\n", head->redirections);
+	if (head->redirections)
+		printf("First redir type: %d, target: %s\n", head->redirections->type, head->redirections->target);
+	
 	return (head);
 }

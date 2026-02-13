@@ -59,6 +59,7 @@ SRC = srcs/env/get_envp.c \
 	srcs/expansions/expander_utils.c \
 	srcs/expansions/word_splitting.c \
 	srcs/expansions/main_expander.c \
+	srcs/expansions/expand_utils.c \
 	srcs/syntax/syntax_check.c \
 	srcs/main/main_utils.c \
 	main.c

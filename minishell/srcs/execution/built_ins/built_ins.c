@@ -12,18 +12,39 @@
 
 #include "../../../minishell.h"
 
-bool	is_builtin(t_cmd *cmd, t_shell *shell)
+bool	builtin_check(t_cmd *cmd)
 {
 	int			i;
 	static char	**builtins;
 
+	if (!cmd || !cmd->args || !cmd->args[0])
+		return (false);
 	builtins = (char *[]){"", "echo", "cd", "pwd", "export",
 		"unset", "env", "exit", NULL};
 	i = 0;
 	while (builtins[i] != NULL)
 	{
 		if (ft_strcmp(cmd->args[0], builtins[i]) == 0)
-			return (printf("i is %d\n", i), cmd->b_type = i, handle_builtin(cmd, shell), true);
+			return (cmd->b_type = i, true);
+		i++;
+	}
+	return (false);
+}
+
+bool	is_builtin(t_cmd *cmd, t_shell *shell)
+{
+	int			i;
+	static char	**builtins;
+
+	if (!cmd || !cmd->args || !cmd->args[0])
+		return (false);
+	builtins = (char *[]){"", "echo", "cd", "pwd", "export",
+		"unset", "env", "exit", NULL};
+	i = 0;
+	while (builtins[i] != NULL)
+	{
+		if (ft_strcmp(cmd->args[0], builtins[i]) == 0)
+			return (cmd->b_type = i, handle_builtin(cmd, shell), true);
 		i++;
 	}
 	return (false);

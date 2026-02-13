@@ -12,18 +12,18 @@
 
 #include "../../../minishell.h"
 
-bool	handle_append(t_redir *redir)
+/*bool	handle_append(t_redir *redir)
 {
 	int	fd;
 
 	fd = open(redir->target, O_WRONLY | O_CREAT | O_APPEND, 0664);
 	if (fd < 0)
 		return (false);
-	if (dup2(fd, STDOUT_FILENO) < 0)
+	if (!safe_dup2(fd, STDOUT_FILENO))
 		return (close(fd), false);
 	close(fd);
 	return (true);
-}
+}*/
 
 char	*choose_file_name(void)
 {
@@ -65,7 +65,7 @@ void	write_to_file(int fd, char *content)
 	free(content);
 }
 
-char	*expand_heredoc(t_redir *redir, t_env *env, char *line)
+char	*expand_heredoc(t_shell *shell, t_redir *redir, t_env *env, char *line)
 {
 	char	*expanded_heredoc;
 	size_t	len;
@@ -74,7 +74,7 @@ char	*expand_heredoc(t_redir *redir, t_env *env, char *line)
 	expanded_heredoc = NULL;
 	if (redir->expand_heredoc == true)
 	{
-		expanded_heredoc = expand_string(line, env);
+		expanded_heredoc = expand_string(shell, line, env);
 		if (!expanded_heredoc)
 			return (ERROR_EXPANDING_HEREDOC, NULL);
 		return (expanded_heredoc);

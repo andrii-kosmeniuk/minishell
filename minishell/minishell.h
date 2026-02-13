@@ -124,6 +124,7 @@ typedef struct s_cmd
 	t_redir			*redirections; //linked list of redirections
 	t_builtin		b_type;
 	bool			builtin;
+	bool			*expand;
 	struct s_cmd	*next; //next command if there is a pipe
 }	t_cmd;
 
@@ -220,7 +221,9 @@ t_cmd	*add_args(t_cmd *cmd, t_token *token);
 t_cmd	*parse(t_shell *shell, t_token *token);
 bool	handle_pipe(t_cmd **current);
 char	**argument_array(t_arg *args);
-
+bool	append_var(char **buf, size_t *len, t_env *env, char *var_name);
+bool	append_exit_code(t_shell *shell, char **buf, size_t *len);
+bool	handle_expansions(char **input, t_expand *expand, t_shell *shell);
 // expansions
 bool	append_string(char **buffer, size_t *len, char *str);
 bool	append_char(char **buffer, size_t *len, char c);
@@ -228,19 +231,21 @@ char	*get_value(t_env *env, char *variable_name);
 bool	is_valid(char c);
 char	*read_variable_name(char *input, char *start_of_variable);
 char	**word_split(char *expanded);
-char	**final_args(char *input, t_env *env, bool should_expand);
-char	*expand_string(char *input, t_env *env);
+char	**final_args(t_shell *shell, char *input, t_env *env,
+					bool should_expand);
+char	*expand_string(t_shell *shell, char *input, t_env *env);
 char	*process_tokens(t_token *tokens, t_env *env);
 char	*final_expand(char *input, t_env *env);
-bool	expand_all(t_cmd *cmd, t_env *env);
-
+bool	expand_all(t_shell *shell, t_cmd *cmd, t_env *env);
+char	**no_expansions(char *input);
+char	**expand_args(t_shell *shell, char *input, t_env *env);
 //heredoc and append redir
-bool	heredoc_append(t_redir *redir, t_env *env);
+bool	heredoc_append(t_shell *shell, t_redir *redir, t_env *env);
 bool	handle_append(t_redir *redir);
 char	*choose_file_name(void);
 int		open_temp_file(char **filename);
 void	write_to_file(int fd, char *content);
-char	*expand_heredoc(t_redir *redir, t_env *env, char *line);
+char	*expand_heredoc(t_shell *shell, t_redir *redir, t_env *env, char *line);
 
 //signals
 void	restore_interactive_signals(void);
@@ -283,6 +288,7 @@ void	close_pipe(int pipefd[2]);
 bool	is_builtin(t_cmd *cmd, t_shell *shell);
 void	handle_builtin(t_cmd *cmd, t_shell *shell);
 char	*get_env_value(t_shell *shell, char *key);
+bool	builtin_check(t_cmd *cmd);
 
 //builtins
 int		ft_unset(t_cmd *cmd);

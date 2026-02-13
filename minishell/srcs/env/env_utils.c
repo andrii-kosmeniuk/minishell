@@ -11,14 +11,6 @@
 /* ************************************************************************** */
 
 #include "../../minishell.h"
-//this build our own envp linked list
-//env_array is allocated for total len of envp + NULL terminator at the end
-//this stores enough space for the full length of the array from envp[1][i] to
-//envp[n][last char]
-//
-//to build each env variable which by default are strings, we must also allocate
-//memory for each of them (remember, env variables follow a KEY=value design)
-//this will be later passed to execve()
 
 int	calculate_new_shlvl(t_shell *shell)
 {

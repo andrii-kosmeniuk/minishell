@@ -19,7 +19,7 @@ static int	output_redirections(t_redir *redir)
 
 	if (redir->type == R_OUTPUT)
 	{
-		fd = open_output_file(redir->target, true);
+		fd = open_output_file(redir->target, false);
 		if (fd < 0)
 			return (0);
 		result = safe_dup2(fd, STDOUT_FILENO);
@@ -57,28 +57,38 @@ static int	input_redirections(t_redir *redir)
 
 static bool	apply_single_redirection(t_redir *redir)
 {
-	int		result;
-
-	while (redir)
-	{
-		if (redir->type == HERE_DOC)
-			return (safe_dup2(redir->heredoc_fd, STDIN_FILENO));
-		if (redir->type == R_OUTPUT || redir->type == R_APPEND)
-			return (result = output_redirections(redir));
-		if (redir->type == R_INPUT)
-			return (result = input_redirections(redir));
-		redir = redir->next;
-	}
+	if (redir->type == HERE_DOC)
+		return (safe_dup2(redir->heredoc_fd, STDIN_FILENO));
+	if (redir->type == R_OUTPUT || redir->type == R_APPEND)
+		return (output_redirections(redir));
+	if (redir->type == R_INPUT)
+		return (input_redirections(redir));
 	return (false);
 }
 
+/*bool	apply_redirections(t_cmd *cmd)
+{
+	t_redir	*cur;
+
+	cmd->redirections = ;
+	while (cur)
+	{
+		printf("a\n");
+		if (!apply_single_redirection(cur))
+			return (false);
+		cur = cur->next;
+	}
+	return (true);
+}*/
 bool	apply_redirections(t_cmd *cmd)
 {
 	t_redir	*cur;
 
+	printf("apply_redirections called, cmd->redirections: %p\n", cmd->redirections); // DEBUG
 	cur = cmd->redirections;
 	while (cur)
 	{
+		printf("Applying redir type: %d, target: %s\n", cur->type, cur->target); // DEBUG
 		if (!apply_single_redirection(cur))
 			return (false);
 		cur = cur->next;
