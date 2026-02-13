@@ -18,12 +18,14 @@ static size_t	t_len(t_shell *shell, char **args, bool *should_expand,
 	size_t	total;
 	char	**buffer;
 	size_t	j;
+	size_t	i;
 
 	total = 0;
-	while (*args)
+	i = 0;
+	while (args[i])
 	{
-		if (*should_expand)
-			buffer = expand_args(shell, *args, env);
+		if (should_expand[i])
+			buffer = expand_args(shell, &should_expand[i], *args, env);
 		else
 			buffer = no_expansions(*args);
 		if (!buffer)
@@ -35,7 +37,7 @@ static size_t	t_len(t_shell *shell, char **args, bool *should_expand,
 			j++;
 		}
 		free_array(buffer);
-		args++;
+		i++;
 	}
 	return (total);
 }
@@ -46,33 +48,35 @@ static char	**expand_final_args(t_shell *shell, char **args,
 	char	**av;
 	size_t	i;
 	size_t	j;
+	size_t	k;
 	char	**buffer;
 
 	av = ft_calloc(t_len(shell, args, should_expand, env) + 1, sizeof(char *));
 	if (!av)
 		return (NULL);
 	i = 0;
-	while (*args)
+	k = 0;
+	while (args[i])
 	{
-		if (*should_expand)
-			buffer = expand_args(shell, *args, env);
+		if (should_expand[i])
+			buffer = expand_args(shell, &should_expand[i], args[i], env);
 		else
-			buffer = no_expansions(*args);
+			buffer = no_expansions(args[i]);
 		if (!buffer)
 			return (free_array(av), NULL);
 		j = 0;
 		while (buffer[j])
 		{
-			av[i] = ft_strdup(buffer[j]);
-			if (!av[i])
+			av[k] = ft_strdup(buffer[j]);
+			if (!av[k])
 				return (free_array(buffer), free_array(av), NULL);
-			i++;
+			k++;
 			j++;
 		}
 		free_array(buffer);
-		args++;
+		i++;
 	}
-	av[i] = NULL;
+	av[k] = NULL;
 	return (av);
 }
 

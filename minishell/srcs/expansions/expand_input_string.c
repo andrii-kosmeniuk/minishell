@@ -12,7 +12,7 @@
 
 #include "../../minishell.h"
 
-char	*expand_string(t_shell *shell, char *input, t_env *env)
+char	*expand_string(t_shell *shell, bool *expand, char *input, t_env *env)
 {
 	t_expand	p;
 
@@ -22,7 +22,7 @@ char	*expand_string(t_shell *shell, char *input, t_env *env)
 	p.env = env;
 	while (*input)
 	{
-		if (*input == '$')
+		if (*input == '$' && *expand)
 		{
 			if (!handle_expansions(&input, &p, shell))
 				return (free(p.output), NULL);
@@ -58,12 +58,12 @@ char	**no_expansions(char *input)
 	return (split_expanded(duplicate));
 }
 
-char	**expand_args(t_shell *shell, char *input, t_env *env)
+char	**expand_args(t_shell *shell, bool *expand, char *input, t_env *env)
 {
 	char	*expanded;
 
 	if (ft_strchr(input, '$'))
-		expanded = expand_string(shell, input, env);
+		expanded = expand_string(shell, expand, input, env);
 	else
 		expanded = ft_strdup(input);
 	if (!expanded)

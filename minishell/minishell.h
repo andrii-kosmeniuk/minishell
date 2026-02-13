@@ -26,8 +26,6 @@
 # include <stdbool.h>
 # include <fcntl.h>
 # include <errno.h>
-//# include <termios.h>
-//# include <sys/ioctl.h>
 
 # define CYAN  "\033[0;36m"
 # define RESET "\033[0m"
@@ -231,17 +229,12 @@ char	*get_value(t_env *env, char *variable_name);
 bool	is_valid(char c);
 char	*read_variable_name(char *input, char *start_of_variable);
 char	**word_split(char *expanded);
-char	**final_args(t_shell *shell, char *input, t_env *env,
-			bool should_expand);
-char	*expand_string(t_shell *shell, char *input, t_env *env);
-char	*process_tokens(t_token *tokens, t_env *env);
-char	*final_expand(char *input, t_env *env);
+char	*expand_string(t_shell *shell, bool *expand, char *input, t_env *env);
 bool	expand_all(t_shell *shell, t_cmd *cmd, t_env *env);
 char	**no_expansions(char *input);
-char	**expand_args(t_shell *shell, char *input, t_env *env);
+char	**expand_args(t_shell *shell, bool *expand, char *input, t_env *env);
 //heredoc and append redir
 bool	heredoc_append(t_shell *shell, t_redir *redir, t_env *env);
-bool	handle_append(t_redir *redir);
 char	*choose_file_name(void);
 int		open_temp_file(char **filename);
 void	write_to_file(int fd, char *content);
