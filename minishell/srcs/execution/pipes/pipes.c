@@ -45,10 +45,6 @@ static void	handle_pipeline_parent(t_pipes *state)
 static void	handle_pipeline_child(t_cmd *cmd, t_shell *shell,
 									t_pipes *state)
 {
-printf("CHILD: cmd->redirections = %p\n", cmd->redirections);  // DEBUG
-	if (cmd->redirections)
-		printf("CHILD: First redir type: %d, target: %s\n", 
-			cmd->redirections->type, cmd->redirections->target);
 	child_signals_setup();
 	if (state->i > 0)
 		reading_end(state->prev_pipe);
@@ -64,7 +60,7 @@ static int	fork_one_child(t_cmd *cmd, t_shell *shell, pid_t *pids,
 							t_pipes *state)
 {
 	pid_t	pid;
-	
+
 	if (state->has_next && !safe_pipe(state->curr_pipe))
 		return (0);
 	pid = fork();

@@ -57,8 +57,14 @@ static int	input_redirections(t_redir *redir)
 
 static bool	apply_single_redirection(t_redir *redir)
 {
+	int	result;
+
 	if (redir->type == HERE_DOC)
-		return (safe_dup2(redir->heredoc_fd, STDIN_FILENO));
+	{
+		result = safe_dup2(redir->heredoc_fd, STDIN_FILENO);
+		close(redir->heredoc_fd);
+		return (result);
+	}
 	if (redir->type == R_OUTPUT || redir->type == R_APPEND)
 		return (output_redirections(redir));
 	if (redir->type == R_INPUT)
@@ -66,29 +72,16 @@ static bool	apply_single_redirection(t_redir *redir)
 	return (false);
 }
 
-/*bool	apply_redirections(t_cmd *cmd)
-{
-	t_redir	*cur;
-
-	cmd->redirections = ;
-	while (cur)
-	{
-		printf("a\n");
-		if (!apply_single_redirection(cur))
-			return (false);
-		cur = cur->next;
-	}
-	return (true);
-}*/
 bool	apply_redirections(t_cmd *cmd)
 {
 	t_redir	*cur;
+	int		count;
 
-	printf("apply_redirections called, cmd->redirections: %p\n", cmd->redirections); // DEBUG
+	count = 0;
 	cur = cmd->redirections;
 	while (cur)
 	{
-		printf("Applying redir type: %d, target: %s\n", cur->type, cur->target); // DEBUG
+		count++;
 		if (!apply_single_redirection(cur))
 			return (false);
 		cur = cur->next;

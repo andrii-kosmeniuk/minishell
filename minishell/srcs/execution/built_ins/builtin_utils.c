@@ -60,7 +60,6 @@ int	ft_cd(t_cmd *cmd, t_shell *shell)
 		printf("%s\n", getcwd(s, 100));
 		return (0);
 	}
-//swap variables
 	path = cmd->args[1];
 	if (chdir(path) != 0)
 		perror("minishell: cd: ");

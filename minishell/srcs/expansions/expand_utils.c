@@ -70,4 +70,3 @@ bool	handle_expansions(char **input, t_expand *expand, t_shell *shell)
 	}
 	return (true);
 }
-

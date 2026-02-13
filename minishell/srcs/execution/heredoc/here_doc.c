@@ -12,7 +12,8 @@
 
 #include "../../../minishell.h"
 
-static char	*here_doc_content(t_shell *s, t_redir *redir, t_env *env, char *line)
+static char	*here_doc_content(t_shell *s, t_redir *redir, t_env *env,
+								char *line)
 {
 	char	*buffer;
 	char	*content;
@@ -32,7 +33,8 @@ static char	*here_doc_content(t_shell *s, t_redir *redir, t_env *env, char *line
 	return (content);
 }
 
-static int	heredoc_tmp(t_shell *s, t_redir *redir, t_env *env, char **file_name)
+static int	heredoc_tmp(t_shell *s, t_redir *redir, t_env *env,
+						char **file_name)
 {
 	char	*line;
 	char	*content;
@@ -80,11 +82,6 @@ static bool	here_doc(t_shell *shell, t_redir *redir, t_env *env)
 
 bool	heredoc_append(t_shell *shell, t_redir *redir, t_env *env)
 {
-	/*if (redir->type == R_APPEND)
-	{
-		if (!handle_append(redir))
-			return (false);
-	}*/
 	if (redir->type == HERE_DOC)
 	{
 		if (!here_doc(shell, redir, env))

@@ -37,16 +37,15 @@ char	*expand_string(t_shell *shell, char *input, t_env *env)
 	return (p.output);
 }
 
-static char **split_expanded(char *expanded)
+static char	**split_expanded(char *expanded)
 {
-    char **argv;
+	char	**argv;
 
-    if (!expanded)
-        return (NULL);
-
-    argv = word_split(expanded);
-    free(expanded);
-    return (argv);
+	if (!expanded)
+		return (NULL);
+	argv = word_split(expanded);
+	free(expanded);
+	return (argv);
 }
 
 char	**no_expansions(char *input)

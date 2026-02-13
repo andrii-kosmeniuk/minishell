@@ -12,8 +12,8 @@
 
 #include "../../minishell.h"
 
-static size_t	t_len(t_shell *shell, char **args, bool *should_expand, 
-					t_env *env)
+static size_t	t_len(t_shell *shell, char **args, bool *should_expand,
+						t_env *env)
 {
 	size_t	total;
 	char	**buffer;
@@ -40,8 +40,8 @@ static size_t	t_len(t_shell *shell, char **args, bool *should_expand,
 	return (total);
 }
 
-static char	**expand_final_args(t_shell *shell, char **args, 
-								bool *should_expand, t_env *env)
+static char	**expand_final_args(t_shell *shell, char **args,
+									bool *should_expand, t_env *env)
 {
 	char	**av;
 	size_t	i;

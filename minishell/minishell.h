@@ -232,7 +232,7 @@ bool	is_valid(char c);
 char	*read_variable_name(char *input, char *start_of_variable);
 char	**word_split(char *expanded);
 char	**final_args(t_shell *shell, char *input, t_env *env,
-					bool should_expand);
+			bool should_expand);
 char	*expand_string(t_shell *shell, char *input, t_env *env);
 char	*process_tokens(t_token *tokens, t_env *env);
 char	*final_expand(char *input, t_env *env);
@@ -299,8 +299,12 @@ int		ft_echo(t_cmd *cmd);
 int		ft_env(t_shell *shell);
 int		ft_exit(t_cmd *cmd);
 
-//debug
+//error handling
+void	execve_error(char *cmd);
+void	command_not_found_error(char *cmd);
+void	permission_denied_error(char *cmd);
 
+//debug
 /*void		print_env_list(t_env *head);
 const char	*type_to_string(t_type type);
 void		print_tokens(t_token *tokens);

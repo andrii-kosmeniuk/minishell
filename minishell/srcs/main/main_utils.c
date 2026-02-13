@@ -82,6 +82,7 @@ int	process_line(char *line, t_shell *shell)
 	cleanup_tokens(shell);
 	return (exit_status);
 }
+
 int	init_minishell(t_shell *shell, t_state *state, t_data *data, char **envp)
 {
 	if (!init_shell(shell, state, data))

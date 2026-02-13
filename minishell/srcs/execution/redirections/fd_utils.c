@@ -40,7 +40,10 @@ int	open_input_file(char *filename)
 
 	fd = open(filename, O_RDONLY);
 	if (fd == -1)
+	{
+		ft_putstr_fd("minishell: ", 2);
 		perror(filename);
+	}
 	return (fd);
 }
 
@@ -56,7 +59,10 @@ int	open_output_file(char *filename, bool append)
 		flags |= O_TRUNC;
 	fd = open(filename, flags, 0664);
 	if (fd == -1)
+	{
+		ft_putstr_fd("minishell: ", 2);
 		perror(filename);
+	}
 	return (fd);
 }
 

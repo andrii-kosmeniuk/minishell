@@ -12,24 +12,28 @@
 
 #include "../../../minishell.h"
 
-//improve exit codes
 void	execute_in_child(t_cmd *cmd, t_shell *shell)
 {
 	char	**env;
 
-	child_signals_setup();
-	if (!apply_redirections(cmd))
-		exit(1);
-	close_fds();
+	if (builtin_check(cmd))
+	{
+		handle_builtin(cmd, shell);
+		exit(shell->exit_status);
+	}
 	if (!cmd->path)
 	{
 		cmd->path = handle_path(cmd, shell);
 		if (!cmd->path)
-			exit (1);
+		{
+			command_not_found_error(cmd->args[0]);
+			exit(127);
+		}
 	}
 	env = list_to_envp(shell);
 	if (!env)
-		return ;
+		exit(1);
 	execve(cmd->path, cmd->args, env);
 	execve_error(cmd->path);
+	exit(126);
 }
