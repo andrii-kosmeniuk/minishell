@@ -18,6 +18,8 @@ int	execute_pipeline(t_cmd *cmd, t_shell *shell)
 	pid_t	*pids;
 	int		exit_status;
 
+	if (!cmd->args || !cmd->args[0])
+		return (0);
 	cmd_count = command_count(cmd);
 	pids = ft_calloc(cmd_count, sizeof(pid_t));
 	if (!pids)

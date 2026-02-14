@@ -21,6 +21,8 @@ static void	free_redir(t_redir *redir)
 	{
 		cur = redir->next;
 		free(redir->target);
+		if (redir->type == HERE_DOC && redir->heredoc_fd >= 0)
+			close(redir->heredoc_fd);
 		free(redir);
 		redir = cur;
 	}
@@ -37,6 +39,10 @@ void	free_command(t_cmd *cmds)
 		cur = cmds->next;
 		if (cmds->args)
 			free_array(cmds->args);
+		if (cmds->expand)
+			free(cmds->expand);
+		if (cmds->path)
+			free(cmds->path);
 		if (cmds->redirections)
 			free_redir(cmds->redirections);
 		free(cmds);
