@@ -25,7 +25,7 @@ int	main(int ac, char **av, char **envp)
 	(void)envp;
 	if (!init_minishell(&shell, &state, &data, envp))
 		return (-1);
-	shell_loop(&shell);
+	shell.exit_status = shell_loop(&shell);
 	cleanup_shell(&shell);
 	return (0);
 }

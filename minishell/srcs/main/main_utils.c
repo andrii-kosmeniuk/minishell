@@ -96,7 +96,6 @@ int	init_minishell(t_shell *shell, t_state *state, t_data *data, char **envp)
 int	shell_loop(t_shell *shell)
 {
 	char	*line;
-	int		exit_status;
 
 	while (1)
 	{
@@ -119,7 +118,7 @@ int	shell_loop(t_shell *shell)
 			free(line);
 			continue ;
 		}
-		exit_status = add_process_free(line, shell);
+		shell->exit_status = add_process_free(line, shell);
 	}
-	return (exit_status);
+	return (shell->exit_status);
 }

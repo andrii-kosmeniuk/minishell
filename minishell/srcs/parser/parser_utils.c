@@ -60,7 +60,7 @@ t_cmd	*add_args(t_cmd *cmd, t_token *token)
 	cmd_args = ft_calloc((cmd->argc + 2), sizeof(char *));
 	expansion_flag = ft_calloc((cmd->argc + 2), sizeof(bool));
 	if (!cmd_args || !expansion_flag)
-		return (free(cmd_args), free(expansion_flag), NULL);
+		return (free(cmd_args), NULL);
 	i = 0;
 	while (i < cmd->argc)
 	{
