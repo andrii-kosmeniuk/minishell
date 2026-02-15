@@ -87,7 +87,8 @@ int	init_minishell(t_shell *shell, t_state *state, t_data *data, char **envp)
 {
 	if (!init_shell(shell, state, data))
 		return (printf("Error initializing shell\n"), 0);
-	list_key_value(shell, envp, data);
+	if (!list_key_value(shell, envp, data))
+		cleanup_shell(shell);
 	update_shlvl_key(shell, data);
 	setup_interactive_signals();
 	return (1);

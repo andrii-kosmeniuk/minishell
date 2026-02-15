@@ -20,7 +20,9 @@ void	free_tokens(t_token *tokens)
 	{
 		tmp = tokens->next;
 		free(tokens->content);
+			tokens->content = NULL;
 		free(tokens);
+			tokens = NULL;
 		tokens = tmp;
 	}
 }
@@ -28,7 +30,7 @@ void	free_tokens(t_token *tokens)
 void	free_on_cmd_failure(t_shell *shell)
 {
 	free_tokens(shell->head);
-	free_env_list(shell->environment_p);
+	free_env_list(&shell->environment_p);
 }
 
 void	cleanup_shell(t_shell *shell)
@@ -38,7 +40,14 @@ void	cleanup_shell(t_shell *shell)
 		free_tokens(shell->head);
 		shell->head = NULL;
 	}
-	free_env_list(shell->environment_p);
+
+printf("Before free: %p\n", shell->environment_p);
+free_env_list(&shell->environment_p);
+printf("After free: %p\n", shell->environment_p);
+shell->environment_p = NULL;
+printf("After NULL: %p\n", shell->environment_p);
+	//free_env_list(shell->environment_p);
+	//shell->environment_p = NULL;
 	rl_clear_history();
 }
 

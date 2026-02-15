@@ -26,6 +26,7 @@ int	ft_env(t_shell *shell)
 		printf("%s\n", envp[i]);
 		++i;
 	}
+	free_array(envp);
 	return (0);
 }
 

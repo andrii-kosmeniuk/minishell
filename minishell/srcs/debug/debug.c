@@ -134,3 +134,22 @@ void debug_print_all_argv(t_cmd *cmd)
         cmd = cmd->next;
     }
 }*/
+
+void    print_env_pointers(t_env *head)
+{
+    t_env *current;
+
+	if (!head)
+		printf("all freed\n");
+    current = head;
+    while (current != NULL)
+    {
+        printf("Node address      : %p\n", (void *)current);
+        printf("Key pointer       : %p\n", (void *)current->key);
+        printf("Value pointer     : %p\n", (void *)current->value);
+        printf("Next pointer      : %p\n", (void *)current->next);
+        printf("-------------------------------\n");
+
+        current = current->next;
+    }
+}

@@ -22,17 +22,17 @@ static void	build_minimum_env(t_shell *shell, t_data *data)
 		return ;
 	node = create_node("PWD", pwd);
 	if (!node)
-		return (free(pwd));
+		return (free(pwd), free_env_list(&shell->environment_p));
 	free(pwd);
 	add_to_list(&shell->environment_p, node);
 	node = create_node("SHLVL", "1");
 	if (!node)
-		return (free_env_list(shell->environment_p));
+		return (free_env_list(&shell->environment_p));
 	data->shlvl = 1;
-	add_to_list(&shell->environment_p, shell->environment_p);
+	add_to_list(&shell->environment_p, node);
 	node = create_node("_", "/usr/bin/env");
 	if (!node)
-		return (free_env_list(shell->environment_p));
+		return (free_env_list(&shell->environment_p));
 	add_to_list(&shell->environment_p, node);
 }
 
@@ -107,11 +107,11 @@ t_env	*list_key_value(t_shell *shell, char **envp, t_data *data)
 			has_equal = assign_key_and_value(*envp, &key, &value);
 			if (!key || (!has_equal && !key) || (has_equal && !value))
 				return (free(key), free(value),
-					free_env_list(shell->environment_p), NULL);
+					free_env_list(&shell->environment_p), NULL);
 			node = create_node(key, value);
 			if (!node)
 				return (free(key), free(value),
-					free_env_list(shell->environment_p), NULL);
+					free_env_list(&shell->environment_p), NULL);
 			replace_key_if_exists(&shell->environment_p, key);
 			free_key_value(key, value);
 			add_to_list(&shell->environment_p, node);

@@ -169,7 +169,7 @@ bool	init_shell(t_shell *shell, t_state *state, t_data *data);
 //memory managment
 void	free_array(char **array);
 void	allocation_failed(char **array, int last_allocated_string);
-void	free_env_list(t_env *env);
+void	free_env_list(t_env **env);
 void	free_key_value(char *key, char *value);
 void	free_all(t_token *taokens, t_shell *shell);
 void	free_tokens(t_token *tokens);
@@ -298,6 +298,8 @@ void	command_not_found_error(char *cmd);
 void	permission_denied_error(char *cmd);
 
 //debug
+void    print_env_pointers(t_env *head);
+
 /*void		print_env_list(t_env *head);
 const char	*type_to_string(t_type type);
 void		print_tokens(t_token *tokens);
