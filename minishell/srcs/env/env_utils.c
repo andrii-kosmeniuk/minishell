@@ -20,7 +20,7 @@ int	calculate_new_shlvl(t_shell *shell)
 
 	cur_variable = shell->environment_p;
 	new_value = 0;
-	current_value = 0;
+	current_value = 1;
 	while (cur_variable)
 	{
 		if (ft_strcmp(cur_variable->key, "SHLVL") == 0)
