@@ -50,7 +50,7 @@ int	update_shlvl_key(t_shell *shell, t_data *data)
 
 	new_value = calculate_new_shlvl(shell);
 	if (new_value == 0)
-		return (1);
+		return (0);
 	data->shlvl = new_value;
 	new_value_string = ft_itoa(new_value);
 	if (!new_value_string)
@@ -61,7 +61,10 @@ int	update_shlvl_key(t_shell *shell, t_data *data)
 		if (ft_strcmp(cur_variable->key, "SHLVL") == 0)
 		{
 			free(cur_variable->value);
-			cur_variable->value = new_value_string;
+			cur_variable->value = NULL;
+			cur_variable->value = ft_strdup(new_value_string);
+			free(new_value_string);
+			new_value_string = NULL;
 			return (1);
 		}
 		cur_variable = cur_variable->next;

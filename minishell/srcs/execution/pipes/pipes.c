@@ -43,7 +43,7 @@ static void	handle_pipeline_parent(t_pipes *state)
 }
 
 static void	handle_pipeline_child(t_cmd *cmd, t_shell *shell,
-									t_pipes *state)
+									t_pipes *state, pid_t *pids)
 {
 	child_signals_setup();
 	if (state->i > 0)
@@ -51,9 +51,12 @@ static void	handle_pipeline_child(t_cmd *cmd, t_shell *shell,
 	if (state->has_next)
 		writing_end(state->curr_pipe);
 	if (!apply_redirections(cmd))
-		exit (1);
+	{
+		free(pids);
+		exit(1);
+	}
 	close_fds();
-	execute_in_child(cmd, shell);
+	execute_in_child(cmd, shell, pids);
 }
 
 static int	fork_one_child(t_cmd *cmd, t_shell *shell, pid_t *pids,
@@ -72,7 +75,7 @@ static int	fork_one_child(t_cmd *cmd, t_shell *shell, pid_t *pids,
 		return (0);
 	}
 	if (pid == 0)
-		handle_pipeline_child(cmd, shell, state);
+		handle_pipeline_child(cmd, shell, state, pids);
 	pids[state->i] = pid;
 	handle_pipeline_parent(state);
 	return (1);

@@ -42,6 +42,8 @@ static char	*join_env(char *key, char *value)
 	size_t	key_len;
 	size_t	value_len;
 
+	if (!value)
+		return (ft_strdup(key));
 	key_len = ft_strlen(key);
 	value_len = ft_strlen(value);
 	len = ft_strlen(key) + ft_strlen(value) + 2;

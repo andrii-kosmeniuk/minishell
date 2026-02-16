@@ -12,7 +12,7 @@
 
 #include "../../../minishell.h"
 
-int	execute_simple_command(t_cmd *cmd, t_shell *shell)
+int	execute_simple_command(t_cmd *cmd, t_shell *shell, pid_t *pids)
 {
 	pid_t	pid;
 	int		exit_status;
@@ -21,7 +21,7 @@ int	execute_simple_command(t_cmd *cmd, t_shell *shell)
 	if (pid == -1)
 		return (fork_error(), 1);
 	if (pid == 0)
-		execute_in_child(cmd, shell);
+		execute_in_child(cmd, shell, pids);
 	close_heredoc_fds(cmd);
 	parent_signal_setup();
 	exit_status = wait_for_child(pid);

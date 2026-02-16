@@ -26,5 +26,6 @@ int	execute_pipeline(t_cmd *cmd, t_shell *shell)
 		return (perror("malloc"), 1);
 	exit_status = execute_children_parent(cmd, shell, pids);
 	free(pids);
+	pids = NULL;
 	return (exit_status);
 }

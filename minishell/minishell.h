@@ -260,11 +260,11 @@ int		open_output_file(char *filename, bool append);
 bool	apply_redirections(t_cmd *cmd);
 void	execve_error(char *cmd_name);
 char	*handle_path(t_cmd *cmds, t_shell *shell);
-void	execute_in_child(t_cmd *cmd, t_shell *shell);
+void	execute_in_child(t_cmd *cmd, t_shell *shell, pid_t *pids);
 int		wait_for_child(pid_t pid);
 void	close_heredoc_fds(t_cmd *cmd);
 void	unlink_files(t_cmd *cmd);
-int		execute_simple_command(t_cmd *cmd, t_shell *shell);
+int		execute_simple_command(t_cmd *cmd, t_shell *shell, pid_t *pids);
 bool	safe_pipe(int pipefd[2]);
 void	reading_end(int pipefd[2]);
 void	writing_end(int pipefd[2]);
@@ -298,7 +298,7 @@ void	command_not_found_error(char *cmd);
 void	permission_denied_error(char *cmd);
 
 //debug
-void    print_env_pointers(t_env *head);
+void	print_env_pointers(t_env *head);
 
 /*void		print_env_list(t_env *head);
 const char	*type_to_string(t_type type);

@@ -133,7 +133,7 @@ void debug_print_all_argv(t_cmd *cmd)
         printf("\n");
         cmd = cmd->next;
     }
-}*/
+}
 
 void    print_env_pointers(t_env *head)
 {
@@ -152,4 +152,4 @@ void    print_env_pointers(t_env *head)
 
         current = current->next;
     }
-}
+}*/
