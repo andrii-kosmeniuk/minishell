@@ -59,7 +59,10 @@ static char	**expand_final_args(t_shell *shell, char **args,
 	while (args[i])
 	{
 		if (should_expand[i])
+		{
 			buffer = expand_args(shell, &should_expand[i], args[i], env);
+			printf("buffer after expand args: %s\n", buffer[0]);
+		}
 		else
 			buffer = no_expansions(args[i]);
 		if (!buffer)
@@ -77,6 +80,7 @@ static char	**expand_final_args(t_shell *shell, char **args,
 		i++;
 	}
 	av[k] = NULL;
+		printf("av is: %s\n", av[k]);
 	return (av);
 }
 
@@ -93,9 +97,12 @@ bool	expand_all(t_shell *shell, t_cmd *cmd, t_env *env)
 			cur = cur->next;
 			continue ;
 		}
+		printf("cur cmd is: %s\n", cur->args[0]);
+		//printf("should_expand: %d\n", (int)*cur->expand);
 		expanded = expand_final_args(shell, cur->args, cur->expand, env);
 		if (!expanded)
 			return (false);
+		//printf("expanded command is: %s\n", expanded[0]);
 		free_array(cur->args);
 		cur->args = expanded;
 		cur = cur->next;

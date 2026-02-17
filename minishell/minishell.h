@@ -104,6 +104,7 @@ typedef struct s_token
 	t_redir			*redir;
 	char			*content;
 	bool			should_expand;
+	bool			has_space_before;
 	struct s_token	*next;
 }	t_token;
 
@@ -146,6 +147,7 @@ typedef struct s_shell
 	int		signal_received;
 	int		redir_error;
 	int		exit_status;
+	bool	had_space;
 }	t_shell;
 
 typedef struct s_pipes
@@ -195,8 +197,8 @@ int		calculate_new_shlvl(t_shell *shell);
 int		update_shlvl_key(t_shell *shell, t_data *data);
 
 //lexer
-t_token	*create_token(char *content, t_state state, t_type type,
-			bool should_expand);
+t_token	*create_token(t_type type, char *content, bool should_expand, 
+			bool has_space_before);
 void	add_token(t_token **head, t_token *new_token);
 t_token	*build_token_list(const char *input, t_shell *shell);
 t_token	*build_list(t_shell *shell, t_type type, char *value,
@@ -207,7 +209,7 @@ bool	tokenize_pipe(const char *input, t_shell *shell, int *len);
 int		tokenize_word(const char *input, t_shell *shell, int *len);
 bool	tokenize_double_quotes(t_shell *shell, char *input, int *len);
 bool	tokenize_single_quotes(t_shell *shell, char *input, int *len);
-
+bool	merge_tokens(t_token *tokens, t_env *env);
 //parser
 bool	is_argument(t_token *token);
 bool	is_redirection(t_token *token);
@@ -300,12 +302,12 @@ void	permission_denied_error(char *cmd);
 //debug
 void	print_env_pointers(t_env *head);
 
-/*void		print_env_list(t_env *head);
+void		print_env_list(t_env *head);
 const char	*type_to_string(t_type type);
 void		print_tokens(t_token *tokens);
 void		print_redirs(t_redir *redir);
 void		print_argv(char **argv);
 void		print_commands(t_cmd *cmd);
-void		debug_print_all_argv(t_cmd *cmd);*/
+void		debug_print_all_argv(t_cmd *cmd);
 
 #endif

@@ -27,6 +27,5 @@ int	main(int ac, char **av, char **envp)
 		return (-1);
 	shell.exit_status = shell_loop(&shell);
 	cleanup_shell(&shell);
-	print_env_pointers(shell.environment_p);
 	return (0);
 }

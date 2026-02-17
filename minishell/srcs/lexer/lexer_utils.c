@@ -12,22 +12,22 @@
 
 #include "../../minishell.h"
 
-t_token	*create_token(char *content, t_state state, t_type type,
-						bool should_expand)
+t_token	*create_token(t_type type, char *content, bool should_expand, 
+						bool has_space_before)
 {
-	t_token	*token;
-
-	token = ft_calloc(1, sizeof(t_token));
-	if (!token)
+	t_token	*new_token;
+	
+	new_token = ft_calloc(1, sizeof(t_token));
+	if (!new_token)
 		return (NULL);
-	token->content = ft_strdup(content);
-	if (!token->content)
-		return (free(token), NULL);
-	token->state = state;
-	token->type = type;
-	token->should_expand = should_expand;
-	token->next = NULL;
-	return (token);
+	new_token->content = ft_strdup(content);
+	if (!new_token->content)
+		return (free(new_token), NULL);
+	new_token->type = type;
+	new_token->should_expand = should_expand;
+	new_token->has_space_before = has_space_before;
+	new_token->next = NULL;
+	return (new_token);
 }
 
 void	add_token(t_token **head, t_token *new_token)
@@ -55,7 +55,7 @@ t_token	*build_list(t_shell *shell, t_type type, char *value,
 {
 	t_token	*t_node;
 
-	t_node = create_token(value, shell->state, type, should_expand);
+	t_node = create_token(type, value, should_expand, shell->had_space);
 	if (!t_node)
 		return (NULL);
 	add_token(&shell->head, t_node);

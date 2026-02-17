@@ -12,42 +12,6 @@
 
 #include "../../minishell.h"
 
-int	tokenize_word(const char *input, t_shell *shell, int *len)
-{
-	const char	*start_of_word;
-	char		*token_word;
-	int			word_len;
-	bool		should_expand;
-
-	start_of_word = input;
-	while (*input >= 33 && *input != '\'' && *input != '\"' && *input != '<'
-		&& *input != '>' && *input != '|')
-		input++;
-	word_len = input - start_of_word;
-	token_word = ft_calloc(word_len + 1, sizeof(char));
-	if (!token_word)
-		return (1);
-	ft_strncpy(token_word, start_of_word, word_len);
-	should_expand = (shell->state != single_q);
-	if (!build_list(shell, WORD, token_word, should_expand))
-		return (free(token_word), 1);
-	*len = ft_strlen(token_word);
-	free(token_word);
-	return (0);
-}
-
-void	get_state(t_shell *shell, char quote)
-{
-	if (shell->state == normal && quote == '\'')
-		shell->state = single_q;
-	else if (shell->state == normal && quote == '\"')
-		shell->state = double_q;
-	else if (shell->state == single_q && quote == '\'')
-		shell->state = normal;
-	else if (shell->state == double_q && quote == '\"')
-		shell->state = normal;
-}
-
 static char	*extract_quoted_string(t_shell *shell, char *input, int *len,
 									t_state *quote_state)
 {
@@ -76,6 +40,42 @@ static char	*extract_quoted_string(t_shell *shell, char *input, int *len,
 	return (quoted_string);
 }
 
+int	tokenize_word(const char *input, t_shell *shell, int *len)
+{
+	const char	*start_of_word;
+	char		*token_word;
+	int			word_len;
+	bool		should_expand;
+
+	start_of_word = input;
+	while (*input && !my_isspace(*input) && *input && *input != '\'' && *input != '\"'
+		&& *input != '<' && *input != '>' && *input != '|')
+		input++;
+	word_len = input - start_of_word;
+	token_word = ft_calloc(word_len + 1, sizeof(char));
+	if (!token_word)
+		return (1);
+	ft_strncpy(token_word, start_of_word, word_len);
+	should_expand = (shell->state != single_q);
+	if (!build_list(shell, WORD, token_word, should_expand))
+		return (free(token_word), 1);
+	*len = ft_strlen(token_word);
+	free(token_word);
+	return (0);
+}
+
+void	get_state(t_shell *shell, char quote)
+{
+	if (shell->state == normal && quote == '\'')
+		shell->state = single_q;
+	else if (shell->state == normal && quote == '\"')
+		shell->state = double_q;
+	else if (shell->state == single_q && quote == '\'')
+		shell->state = normal;
+	else if (shell->state == double_q && quote == '\"')
+		shell->state = normal;
+}
+
 bool	tokenize_single_quotes(t_shell *shell, char *input, int *len)
 {
 	char	*quoted_input;
@@ -88,6 +88,9 @@ bool	tokenize_single_quotes(t_shell *shell, char *input, int *len)
 	t_node = build_list(shell, S_QUOTE, quoted_input, false);
 	if (!t_node)
 		return (free(quoted_input), false);
+	printf("quoted is: %s\n", quoted_input);
+	printf("node type is: %d\n", t_node->type);
+	printf("should_expand is: %d\n", t_node->should_expand);
 	shell->state = normal;
 	free(quoted_input);
 	return (true);

@@ -19,6 +19,7 @@ bool	append_var(char **buf, size_t *len, t_env *env, char *var_name)
 	value = get_value(env, var_name);
 	if (!value)
 		return (true);
+	printf("value appended is: %s\n", value);
 	if (!append_string(buf, len, value))
 	{
 		free(value);
@@ -63,6 +64,7 @@ bool	handle_expansions(char **input, t_expand *expand, t_shell *shell)
 		key = read_variable_name(*input, *input + 1);
 		if (!key)
 			return (false);
+		printf("key is: %s\n", key);
 		if (!append_var(&expand->output, &expand->len, expand->env, key))
 			return (free(key), false);
 		(*input) += 1 + ft_strlen(key);

@@ -64,10 +64,15 @@ t_token	*build_token_list(const char *input, t_shell *shell)
 
 	len = 0;
 	shell->state = normal;
+	shell->had_space = true;
 	while (*input)
 	{
+		shell->had_space = false;
 		while (*input && my_isspace(*input))
+		{
 			input++;
+			shell->had_space = true;
+		}
 		if (!*input)
 			break ;
 		if (*input == '<' || *input == '>' || *input == '|')
@@ -84,5 +89,7 @@ t_token	*build_token_list(const char *input, t_shell *shell)
 			return (free_tokens(shell->head), shell->head = NULL, NULL);
 		input += len;
 	}
+	if (!merge_tokens(shell->head, shell->environment_p))
+		return (free_tokens(shell->head), NULL);
 	return (shell->head);
 }
