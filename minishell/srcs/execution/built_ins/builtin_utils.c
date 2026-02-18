@@ -85,8 +85,39 @@ int	ft_export(t_cmd *cmd)
 	return (0);
 }
 
-int	ft_unset(t_cmd *cmd)
+int	ft_unset(t_cmd *cmd, t_env *env)
 {
-	(void)cmd;
+	t_cmd	*cur;
+	t_env	*var;
+	t_env	*prev;
+	int		i;
+
+	prev = NULL;
+	var = env;
+	cur = cmd;
+	i = 1;
+	while (cur->args[i])
+	{
+		while (var)
+		{
+			printf("args is: %s\n", cur->args[i]);
+			printf("var_key is: %s\n", var->key);
+			if (ft_strcmp(cur->args[i], var->key) == 0)
+			{
+				printf("b\n");
+				if (prev == NULL)
+					env = var->next;
+				else
+					prev->next = var->next;
+				free(var->value);
+				free(var->key);
+				free(var);
+				break ;
+			}
+			prev = var;
+			var = var->next;
+		}
+		i++;
+	}
 	return (0);
 }

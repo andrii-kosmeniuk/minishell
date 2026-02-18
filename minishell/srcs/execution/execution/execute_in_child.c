@@ -19,7 +19,7 @@ void	execute_in_child(t_cmd *cmd, t_shell *shell, pid_t *pids)
 
 	if (builtin_check(cmd))
 	{
-		handle_builtin(cmd, shell);
+		handle_builtin(cmd, shell, shell->environment_p);
 		free_command(cmd);
 		cleanup_shell(shell);
 		free(pids);

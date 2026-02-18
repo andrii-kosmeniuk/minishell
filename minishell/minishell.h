@@ -272,19 +272,19 @@ void	init_pipe_state(t_pipes *state);
 int		execute_children_parent(t_cmd *cmd, t_shell *shell, pid_t *pids);
 int		execute_pipeline(t_cmd *cmd, t_shell *shell);
 void	close_pipe(int pipefd[2]);
-bool	is_builtin(t_cmd *cmd, t_shell *shell);
-void	handle_builtin(t_cmd *cmd, t_shell *shell);
 char	*get_env_value(t_shell *shell, char *key);
-bool	builtin_check(t_cmd *cmd);
 
 //builtins
-int		ft_unset(t_cmd *cmd);
+int		ft_unset(t_cmd *cmd, t_env *env);
 int		ft_export(t_cmd *cmd);
 int		ft_pwd(void);
 int		ft_cd(t_cmd *cmd, t_shell *shell);
 int		ft_echo(t_cmd *cmd);
 int		ft_env(t_shell *shell);
 int		ft_exit(t_cmd *cmd);
+bool	is_builtin(t_cmd *cmd, t_shell *shell, t_env *env);
+void	handle_builtin(t_cmd *cmd, t_shell *shell, t_env *env);
+bool	builtin_check(t_cmd *cmd);
 
 //error handling
 void	execve_error(char *cmd);

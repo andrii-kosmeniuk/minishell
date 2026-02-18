@@ -74,7 +74,7 @@ int	process_line(char *line, t_shell *shell)
 		return (free_command(cmd), cleanup_tokens(shell), 0);
 	if (builtin_check(cmd) && (cmd->redirections || cmd->next))
 		exit_status = execute_pipeline(cmd, shell);
-	else if (is_builtin(cmd, shell))
+	else if (is_builtin(cmd, shell, shell->environment_p))
 		exit_status = shell->exit_status;
 	else
 		exit_status = execute_pipeline(cmd, shell);
