@@ -67,9 +67,9 @@ int	process_line(char *line, t_shell *shell)
 	cmd = parse(shell, tokens);
 	if (!cmd)
 		return (printf("Error parsing\n"), cleanup_tokens(shell), 0);
-	if (!expand_all(shell, cmd, shell->environment_p))
+	/*if (!expand_all(shell, cmd, shell->environment_p))
 		return (printf("Error expanding\n"), free_command(cmd),
-			cleanup_tokens(shell), 0);
+			cleanup_tokens(shell), 0);*/
 	if (!process_heredocs(shell, cmd, shell->environment_p))
 		return (free_command(cmd), cleanup_tokens(shell), 0);
 	if (builtin_check(cmd) && (cmd->redirections || cmd->next))

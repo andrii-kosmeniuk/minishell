@@ -108,23 +108,15 @@ typedef struct s_token
 	struct s_token	*next;
 }	t_token;
 
-typedef struct s_arg
-{
-	char			*value;
-	t_type			type;
-	struct s_arg	*next;
-}	t_arg;
-
 typedef struct s_cmd
 {
 	char			**args;
 	char			*path;
 	int				argc;
-	t_redir			*redirections; //linked list of redirections
+	t_redir			*redirections;
 	t_builtin		b_type;
 	bool			builtin;
-	bool			*expand;
-	struct s_cmd	*next; //next command if there is a pipe
+	struct s_cmd	*next;
 }	t_cmd;
 
 typedef struct s_expand
@@ -197,7 +189,7 @@ int		calculate_new_shlvl(t_shell *shell);
 int		update_shlvl_key(t_shell *shell, t_data *data);
 
 //lexer
-t_token	*create_token(t_type type, char *content, bool should_expand, 
+t_token	*create_token(t_type type, char *content, bool should_expand,
 			bool has_space_before);
 void	add_token(t_token **head, t_token *new_token);
 t_token	*build_token_list(const char *input, t_shell *shell);
@@ -221,7 +213,6 @@ bool	syntax_check(t_shell *shell);
 t_cmd	*add_args(t_cmd *cmd, t_token *token);
 t_cmd	*parse(t_shell *shell, t_token *token);
 bool	handle_pipe(t_cmd **current);
-char	**argument_array(t_arg *args);
 bool	append_var(char **buf, size_t *len, t_env *env, char *var_name);
 bool	append_exit_code(t_shell *shell, char **buf, size_t *len);
 bool	handle_expansions(char **input, t_expand *expand, t_shell *shell);
@@ -301,14 +292,13 @@ void	command_not_found_error(char *cmd);
 void	permission_denied_error(char *cmd);
 
 //debug
-void	print_env_pointers(t_env *head);
-
+/*void	print_env_pointers(t_env *head);
 void		print_env_list(t_env *head);
-const char	*type_to_string(t_type type);
-void		print_tokens(t_token *tokens);
-void		print_redirs(t_redir *redir);
+const char	*type_to_string(t_type type);*/
+void	print_tokens(t_token *tokens);
+/*void		print_redirs(t_redir *redir);
 void		print_argv(char **argv);
 void		print_commands(t_cmd *cmd);
-void		debug_print_all_argv(t_cmd *cmd);
+void		debug_print_all_argv(t_cmd *cmd);*/
 
 #endif

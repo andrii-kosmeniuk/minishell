@@ -37,7 +37,7 @@ char	*expand_string(t_shell *shell, bool *expand, char *input, t_env *env)
 	return (p.output);
 }
 
-static char	**split_expanded(char *expanded)
+/*static char	**split_expanded(char *expanded)
 {
 	char	**argv;
 
@@ -69,4 +69,4 @@ char	**expand_args(t_shell *shell, bool *expand, char *input, t_env *env)
 	if (!expanded)
 		return (NULL);
 	return (split_expanded(expanded));
-}
+}*/

@@ -39,6 +39,7 @@ SRC = srcs/env/get_envp.c \
 	srcs/parser/parser_clean_up.c \
 	srcs/parser/parser_utils.c \
 	srcs/parser/redir_utils.c \
+	srcs/parser/argv_utils.c \
 	srcs/execution/heredoc/here_doc.c \
 	srcs/execution/error_handling/error_handling.c \
 	srcs/execution/execution/execute_in_child.c \

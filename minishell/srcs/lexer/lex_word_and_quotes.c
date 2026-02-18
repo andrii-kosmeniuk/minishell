@@ -48,7 +48,7 @@ int	tokenize_word(const char *input, t_shell *shell, int *len)
 	bool		should_expand;
 
 	start_of_word = input;
-	while (*input && !my_isspace(*input) && *input && *input != '\'' && *input != '\"'
+	while (*input && !my_isspace(*input) && *input != '\'' && *input != '\"'
 		&& *input != '<' && *input != '>' && *input != '|')
 		input++;
 	word_len = input - start_of_word;

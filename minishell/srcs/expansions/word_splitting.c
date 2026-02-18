@@ -12,7 +12,7 @@
 
 #include "../../minishell.h"
 
-static int	count_words(char *input)
+/*static int	count_words(char *input)
 {
 	int	count;
 
@@ -46,7 +46,7 @@ char	**word_split(char *expanded)
 		if (!*expanded)
 			break ;
 		start = expanded;
-		while (*expanded /*&& my_isspace(*expanded)*/)
+		while (*expanded && my_isspace(*expanded))
 			expanded++;
 		words[i] = ft_substr(start, 0, expanded - start);
 		if (!words[i])
@@ -55,4 +55,4 @@ char	**word_split(char *expanded)
 	}
 	words[i] = NULL;
 	return (words);
-}
+}*/

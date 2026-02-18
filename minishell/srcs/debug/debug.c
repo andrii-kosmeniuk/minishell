@@ -12,7 +12,7 @@
 
 #include "../../minishell.h"
 
-const char *type_to_string(t_type type)
+/*const char *type_to_string(t_type type)
 {
     if (type == WORD) return "WORD";
     if (type == PIPE) return "PIPE";
@@ -42,8 +42,7 @@ void print_tokens(t_token *tokens)
     }
 
     printf("======= END TOKENS =======\n\n");
-}
-
+}*/
 
 /*void print_redirs(t_redir *redir)
 {

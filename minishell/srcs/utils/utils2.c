@@ -28,52 +28,6 @@ bool	is_redirection(t_token *token)
 	return (false);
 }
 
-static size_t	list_size(t_arg *arg)
-{
-	size_t	count;
-	t_arg	*tmp;
-
-	count = 0;
-	tmp = arg;
-	while (tmp)
-	{
-		if (tmp->type == WORD)
-			count++;
-		if (arg->type == R_INPUT || arg->type == R_OUTPUT
-			|| arg->type == HERE_DOC || arg->type == R_APPEND)
-			tmp = tmp->next;
-		tmp = tmp->next;
-	}
-	return (count);
-}
-
-char	**argument_array(t_arg *arg)
-{
-	char	**array;
-	int		i;
-
-	array = ft_calloc(list_size(arg) + 1, sizeof(char *));
-	if (!array)
-		return (NULL);
-	i = 0;
-	while (arg)
-	{
-		if (arg->type == R_INPUT || arg->type == R_OUTPUT
-			|| arg->type == HERE_DOC || arg->type == R_APPEND)
-		{
-			arg = arg->next;
-			if (arg)
-				arg = arg->next;
-			continue ;
-		}
-		if (arg->type == WORD)
-			array[i++] = arg->value;
-		arg = arg->next;
-	}
-	array[i] = NULL;
-	return (array);
-}
-
 char	*substring(char *start_of_word, size_t len)
 {
 	char	*substr;

@@ -39,8 +39,6 @@ void	free_command(t_cmd *cmds)
 		cur = cmds->next;
 		if (cmds->args)
 			free_array(cmds->args);
-		if (cmds->expand)
-			free(cmds->expand);
 		if (cmds->path)
 			free(cmds->path);
 		if (cmds->redirections)

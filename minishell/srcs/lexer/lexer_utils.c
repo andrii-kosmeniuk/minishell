@@ -37,11 +37,11 @@ char	*expand_variables(t_shell *shell, char *input, t_env *env)
 	return (p.output);
 }
 
-t_token	*create_token(t_type type, char *content, bool should_expand, 
+t_token	*create_token(t_type type, char *content, bool should_expand,
 						bool has_space_before)
 {
 	t_token	*new_token;
-	
+
 	new_token = ft_calloc(1, sizeof(t_token));
 	if (!new_token)
 		return (NULL);

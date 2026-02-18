@@ -24,7 +24,6 @@ char	*get_value(t_env *env, char *variable_name)
 		if (ft_strcmp(cur->key, variable_name) == 0)
 			return (ft_strdup(cur->value));
 		cur = cur->next;
-
 	}
 	return (NULL);
 }
