@@ -209,7 +209,8 @@ bool	tokenize_pipe(const char *input, t_shell *shell, int *len);
 int		tokenize_word(const char *input, t_shell *shell, int *len);
 bool	tokenize_double_quotes(t_shell *shell, char *input, int *len);
 bool	tokenize_single_quotes(t_shell *shell, char *input, int *len);
-bool	merge_tokens(t_token *tokens, t_env *env);
+bool	merge_tokens(t_shell *shell, t_token *head, t_env *env);
+char	*expand_variables(t_shell *shell, char *input, t_env *env);
 //parser
 bool	is_argument(t_token *token);
 bool	is_redirection(t_token *token);

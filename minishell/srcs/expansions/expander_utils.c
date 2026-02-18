@@ -22,7 +22,7 @@ char	*get_value(t_env *env, char *variable_name)
 	while (cur)
 	{
 		if (ft_strcmp(cur->key, variable_name) == 0)
-			return (printf("cur value is: %s\n", cur->value), ft_strdup(cur->value));
+			return (ft_strdup(cur->value));
 		cur = cur->next;
 
 	}
@@ -73,21 +73,7 @@ bool	append_string(char **buffer, size_t *len, char *str)
 		return (false);
 	*buffer = new_buf;
 	ft_memcpy(*buffer + *len, str, str_len);
-	printf("buffer string is: %s\n", *buffer);
 	*len += str_len;
 	(*buffer)[*len] = '\0';
-	printf("buffer string is: %s\n", *buffer);
 	return (true);
 }
-
-/*cur->content = '$l'"$s"
-while (cur->content[i])
-{
-	if (i == '?' && state != single_q)
-		expanded = get_value();
-	s
-	i++;
-}
-next->content = -a
-*/
-

@@ -89,7 +89,7 @@ t_token	*build_token_list(const char *input, t_shell *shell)
 			return (free_tokens(shell->head), shell->head = NULL, NULL);
 		input += len;
 	}
-	if (!merge_tokens(shell->head, shell->environment_p))
+	if (!merge_tokens(shell, shell->head, shell->environment_p))
 		return (free_tokens(shell->head), NULL);
 	return (shell->head);
 }

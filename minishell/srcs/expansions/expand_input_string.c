@@ -63,10 +63,7 @@ char	**expand_args(t_shell *shell, bool *expand, char *input, t_env *env)
 	char	*expanded;
 
 	if (ft_strchr(input, '$'))
-	{
 		expanded = expand_string(shell, expand, input, env);
-		printf("expanded_string is: %s\n", expanded);
-	}
 	else
 		expanded = ft_strdup(input);
 	if (!expanded)

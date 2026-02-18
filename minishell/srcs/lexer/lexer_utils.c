@@ -12,6 +12,31 @@
 
 #include "../../minishell.h"
 
+char	*expand_variables(t_shell *shell, char *input, t_env *env)
+{
+	t_expand	p;
+
+	p.output = NULL;
+	p.len = 0;
+	p.exit_code = 0;
+	p.env = env;
+	while (*input)
+	{
+		if (*input == '$')
+		{
+			if (!handle_expansions(&input, &p, shell))
+				return (free(p.output), NULL);
+			continue ;
+		}
+		if (!append_char(&p.output, &p.len, *input))
+			return (free(p.output), NULL);
+		input++;
+	}
+	if (!p.output)
+		return (ft_strdup(""));
+	return (p.output);
+}
+
 t_token	*create_token(t_type type, char *content, bool should_expand, 
 						bool has_space_before)
 {
