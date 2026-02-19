@@ -192,13 +192,13 @@ int		update_shlvl_key(t_shell *shell, t_data *data);
 t_token	*create_token(t_type type, char *content, bool should_expand,
 			bool has_space_before);
 void	add_token(t_token **head, t_token *new_token);
-t_token	*build_token_list(const char *input, t_shell *shell);
+t_token	*build_token_list(char *input, t_shell *shell);
 t_token	*build_list(t_shell *shell, t_type type, char *value,
 			bool should_expand);
-bool	tokenize_input_redirect(const char *input, t_shell *shell, int *len);
-bool	tokenize_output_redirect(const char *input, t_shell *shell, int *len);
-bool	tokenize_pipe(const char *input, t_shell *shell, int *len);
-int		tokenize_word(const char *input, t_shell *shell, int *len);
+bool	tokenize_input_redirect(char *input, t_shell *shell, int *len);
+bool	tokenize_output_redirect(char *input, t_shell *shell, int *len);
+bool	tokenize_pipe(char *input, t_shell *shell, int *len);
+int		tokenize_word(char *input, t_shell *shell, int *len);
 bool	tokenize_double_quotes(t_shell *shell, char *input, int *len);
 bool	tokenize_single_quotes(t_shell *shell, char *input, int *len);
 bool	merge_tokens(t_shell *shell, t_token *head, t_env *env);

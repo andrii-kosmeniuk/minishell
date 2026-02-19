@@ -12,59 +12,75 @@
 
 #include "../../minishell.h"
 
-static void	redir_pipe(t_shell *shell, const char *input, int *len)
+static bool	redir_pipe(t_shell *shell, char *input, int *len)
 {
 	char	redir;
 
 	redir = *input;
 	if (redir == '>')
 	{
-		if (!tokenize_output_redirect((char *)input, shell, len))
-		{
-			shell->redir_error = 1;
-			return ;
-		}
+		if (!tokenize_output_redirect(input, shell, len))
+			return (1);
 	}
 	else if (redir == '<')
 	{
-		if (!tokenize_input_redirect((char *)input, shell, len))
-		{
-			shell->redir_error = 1;
-			return ;
-		}
+		if (!tokenize_input_redirect(input, shell, len))
+			return (1);
 	}
 	else if (redir == '|')
 	{
-		if (!tokenize_pipe((char *)input, shell, len))
-			return ;
+		if (!tokenize_pipe(input, shell, len))
+			return (1);
 	}
+	return (0);
 }
 
-static int	quotes(t_shell *shell, const char *input, int *len)
+static int	quotes(t_shell *shell, char *input, int *len)
 {
 	char	quote;
 
 	quote = *input;
 	if (shell->state == normal && quote == '\'')
 	{
-		if (!tokenize_single_quotes(shell, (char *)input, len))
+		if (!tokenize_single_quotes(shell, input, len))
 			return (1);
 	}
 	else if (shell->state == normal && quote == '\"')
 	{
-		if (!tokenize_double_quotes(shell, (char *)input, len))
+		if (!tokenize_double_quotes(shell, input, len))
 			return (1);
 	}
 	return (0);
 }
 
-t_token	*build_token_list(const char *input, t_shell *shell)
+static int	tokenize_all(t_shell *shell, char *input, int *len)
+{
+	if (*input == '<' || *input == '>' || *input == '|')
+	{
+		if (redir_pipe(shell, input, len) == 1)
+			return (1);
+	}
+	else if (*input == '\'' || *input == '\"')
+	{
+		if (quotes(shell, input, len) == 1)
+			return (1);
+	}
+	else if (*input)
+	{
+		if (tokenize_word(input, shell, len) == 1)
+			return (1);
+	}
+	return (0);
+}
+
+t_token	*build_token_list(char *input, t_shell *shell)
 {
 	int		len;
 
 	len = 0;
 	shell->state = normal;
 	shell->had_space = true;
+	shell->redir_error = 0;
 	while (*input)
 	{
 		shell->had_space = false;
@@ -75,16 +91,7 @@ t_token	*build_token_list(const char *input, t_shell *shell)
 		}
 		if (!*input)
 			break ;
-		if (*input == '<' || *input == '>' || *input == '|')
-			redir_pipe(shell, (char *)input, &len);
-		else if (*input == '\'' || *input == '\"')
-			shell->redir_error = quotes(shell, (char *)input, &len);
-		else if (*input)
-		{
-			shell->redir_error = tokenize_word((char *)input, shell, &len);
-			if (shell->redir_error == 1)
-				printf("error here mate\n");
-		}
+		shell->redir_error = tokenize_all(shell, input, &len);
 		if (shell->redir_error == 1)
 			return (free_tokens(shell->head), shell->head = NULL, NULL);
 		input += len;

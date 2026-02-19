@@ -40,12 +40,12 @@ static char	*extract_quoted_string(t_shell *shell, char *input, int *len,
 	return (quoted_string);
 }
 
-int	tokenize_word(const char *input, t_shell *shell, int *len)
+int	tokenize_word(char *input, t_shell *shell, int *len)
 {
-	const char	*start_of_word;
-	char		*token_word;
-	int			word_len;
-	bool		should_expand;
+	char	*start_of_word;
+	char	*token_word;
+	int		word_len;
+	bool	should_expand;
 
 	start_of_word = input;
 	while (*input && !my_isspace(*input) && *input != '\'' && *input != '\"'

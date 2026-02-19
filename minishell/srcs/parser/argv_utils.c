@@ -49,13 +49,40 @@ static char	**store_words(t_token *cur)
 	return (words);
 }
 
-t_cmd	*add_args(t_cmd *cmd, t_token *token)
+static char	**merge_args(char **old_args, int old_count, char **words,
+							int word_count)
 {
-	char	**cmd_args;
-	char	**words;
-	size_t	count;
+	char	**new_args;
 	int		i;
 	int		j;
+
+	new_args = ft_calloc(old_count + word_count + 1, sizeof(char *));
+	if (!new_args)
+		return (NULL);
+	i = 0;
+	while (i < old_count)
+	{
+		new_args[i] = old_args[i];
+		i++;
+	}
+	j = 0;
+	while (j < word_count)
+	{
+		new_args[i] = ft_strdup(words[j]);
+		if (!new_args[i])
+			return (free_partial(new_args, i), NULL);
+		i++;
+		j++;
+	}
+	new_args[i] = NULL;
+	return (new_args);
+}
+
+t_cmd	*add_args(t_cmd *cmd, t_token *token)
+{
+	char	**words;
+	char	**new_args;
+	int		count;
 
 	if (!cmd || !token || !token->content)
 		return (NULL);
@@ -63,29 +90,13 @@ t_cmd	*add_args(t_cmd *cmd, t_token *token)
 	if (!words)
 		return (NULL);
 	count = count_words(words);
-	cmd_args = ft_calloc((count + cmd->argc + 1), sizeof(char *));
-	if (!cmd_args)
-		return (free_array(words), NULL);
-	i = 0;
-	while (i < cmd->argc)
-	{
-		cmd_args[i] = cmd->args[i];
-		i++;
-	}
-	j = 0;
-	while (words[j])
-	{
-		cmd_args[i] = ft_strdup(words[j]);
-		if (!cmd_args[i])
-			return (free_array(words), free_partial(cmd_args, i), NULL);
-		i++;
-		j++;
-	}
-	cmd_args[i] = NULL;
+	new_args = merge_args(cmd->args, cmd->argc, words, count);
 	free_array(words);
+	if (!new_args)
+		return (NULL);
 	if (cmd->args)
 		free(cmd->args);
-	cmd->args = cmd_args;
+	cmd->args = new_args;
 	cmd->argc += count;
 	return (cmd);
 }

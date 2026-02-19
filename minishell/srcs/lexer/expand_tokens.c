@@ -75,16 +75,19 @@ bool	merge_tokens(t_shell *shell, t_token *head, t_env *env)
 	cur = head;
 	while (cur)
 	{
-		if (!cur->next || cur->next->has_space_before)
+		if ((cur->type == WORD || cur->type == S_QUOTE || cur->type == D_QUOTE)
+			&& cur->next && (cur->next->type == WORD
+				|| cur->next->type == S_QUOTE || cur->next->type == D_QUOTE)
+			&&!cur->next->has_space_before)
+		{
+			if (!merge_two_tokens(shell, cur, env))
+				return (false);
+		}
+		else
 		{
 			if (!expand_single_token(shell, env, cur))
 				return (false);
 			cur = cur->next;
-		}
-		else
-		{
-			if (!merge_two_tokens(shell, cur, env))
-				return (false);
 		}
 	}
 	return (true);

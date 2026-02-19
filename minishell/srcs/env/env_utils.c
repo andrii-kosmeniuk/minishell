@@ -29,10 +29,7 @@ int	calculate_new_shlvl(t_shell *shell)
 			{
 				current_value += ft_atoi(cur_variable->value);
 				if (current_value <= 0 || current_value >= 1000)
-				{
-					new_value = 1;
-					return (new_value);
-				}
+					return (1);
 				new_value = current_value;
 				return (new_value);
 			}
@@ -42,11 +39,22 @@ int	calculate_new_shlvl(t_shell *shell)
 	return (0);
 }
 
+static int	update_env_value(t_env *variable, char *new_value_string)
+{
+	free(variable->value);
+	variable->value = NULL;
+	variable->value = ft_strdup(new_value_string);
+	if (!variable->value)
+		return (0);
+	return (1);
+}
+
 int	update_shlvl_key(t_shell *shell, t_data *data)
 {
 	int		new_value;
 	char	*new_value_string;
 	t_env	*cur_variable;
+	int		result;
 
 	new_value = calculate_new_shlvl(shell);
 	if (new_value == 0)
@@ -60,12 +68,8 @@ int	update_shlvl_key(t_shell *shell, t_data *data)
 	{
 		if (ft_strcmp(cur_variable->key, "SHLVL") == 0)
 		{
-			free(cur_variable->value);
-			cur_variable->value = NULL;
-			cur_variable->value = ft_strdup(new_value_string);
-			free(new_value_string);
-			new_value_string = NULL;
-			return (1);
+			result = update_env_value(cur_variable, new_value_string);
+			return (free(new_value_string), result);
 		}
 		cur_variable = cur_variable->next;
 	}

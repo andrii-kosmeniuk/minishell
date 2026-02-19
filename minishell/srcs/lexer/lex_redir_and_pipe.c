@@ -12,7 +12,7 @@
 
 #include "../../minishell.h"
 
-bool	tokenize_input_redirect(const char *input, t_shell *shell, int *len)
+bool	tokenize_input_redirect(char *input, t_shell *shell, int *len)
 {
 	if (input[1] == '<')
 	{
@@ -29,7 +29,7 @@ bool	tokenize_input_redirect(const char *input, t_shell *shell, int *len)
 	return (true);
 }
 
-bool	tokenize_output_redirect(const char *input, t_shell *shell, int *len)
+bool	tokenize_output_redirect( char *input, t_shell *shell, int *len)
 {
 	if (input[1] == '>')
 	{
@@ -46,7 +46,7 @@ bool	tokenize_output_redirect(const char *input, t_shell *shell, int *len)
 	return (true);
 }
 
-bool	tokenize_pipe(const char *input, t_shell *shell, int *len)
+bool	tokenize_pipe(char *input, t_shell *shell, int *len)
 {
 	if (input[0] == '|')
 	{
