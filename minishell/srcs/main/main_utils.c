@@ -63,19 +63,20 @@ int	process_line(char *line, t_shell *shell)
 		return (printf("\033[H\033[2J"), 1);
 	tokens = build_token_list(line, shell);
 	if (!tokens || shell->redir_error || !syntax_check(shell))
-		return (printf("syntax error1\n"), cleanup_tokens(shell), 0);
+		return (cleanup_tokens(shell), 2);
 	cmd = parse(shell, tokens);
 	if (!cmd)
 		return (printf("Error parsing\n"), cleanup_tokens(shell), 0);
+	shell->cmd_head = cmd;
 	if (!process_heredocs(shell, cmd, shell->environment_p))
-		return (free_command(cmd), cleanup_tokens(shell), 0);
+		return (free_command(&cmd), cleanup_tokens(shell), 0);
 	if (builtin_check(cmd) && (cmd->redirections || cmd->next))
 		exit_status = execute_pipeline(cmd, shell);
-	else if (is_builtin(cmd, shell, shell->environment_p))
+	else if (is_builtin(cmd, shell, shell->environment_p, NULL))
 		exit_status = shell->exit_status;
 	else
 		exit_status = execute_pipeline(cmd, shell);
-	free_command(cmd);
+	free_command(&shell->cmd_head);
 	cleanup_tokens(shell);
 	return (exit_status);
 }
@@ -107,6 +108,7 @@ int	shell_loop(t_shell *shell)
 		if (g_signal == 1)
 		{
 			g_signal = 0;
+			shell->exit_status = 130;
 			free(line);
 			continue ;
 		}

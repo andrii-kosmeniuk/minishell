@@ -67,5 +67,11 @@ bool	handle_expansions(char **input, t_expand *expand, t_shell *shell)
 		(*input) += 1 + ft_strlen(key);
 		free(key);
 	}
+	else
+	{
+		if (!append_char(&expand->output, &expand->len, '$'))
+			return (false);
+		(*input)++;
+	}
 	return (true);
 }

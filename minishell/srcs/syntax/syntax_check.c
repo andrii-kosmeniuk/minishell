@@ -16,16 +16,14 @@ static bool	validate_pipe(t_token *token)
 {
 	if (!token)
 		return (false);
-	if (token->type == PIPE)
-		return (false);
 	while (token)
 	{
 		if (token->type == PIPE)
 		{
 			if (!token->next)
-				return (false);
+				return (printf("%s", PIPE_END), false);
 			if (token->next->type == PIPE)
-				return (false);
+				return (printf("%s", PIPE_END), false);
 		}
 		token = token->next;
 	}
@@ -38,23 +36,22 @@ bool	syntax_check(t_shell *shell)
 	t_token	*next;
 
 	cur = shell->head;
+	if (cur->type == PIPE)
+		return (printf("%s", PIPE_END), false);
 	while (cur)
 	{
 		next = cur->next;
 		if (cur->type == PIPE)
-		{
-			if (validate_pipe(cur))
-				return (PIPE_END, false);
-		}
+			return (validate_pipe(cur));
 		if ((cur->type == R_OUTPUT || cur->type == R_INPUT
 				|| cur->type == HERE_DOC || cur->type == R_APPEND)
 			&& (next && next->type == PIPE))
-			return (REDIR_PIPE, false);
+			return (printf("%s", REDIR_PIPE), false);
 		if ((cur->type == R_INPUT || cur->type == R_OUTPUT
 				|| cur->type == R_APPEND || cur->type == HERE_DOC)
 			&& (next == NULL
 				|| !(is_word_quoted(cur))))
-			return (NO_TARGET, false);
+			return (printf("%s", NO_TARGET), false);
 		cur = next;
 	}
 	return (true);

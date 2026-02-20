@@ -100,11 +100,8 @@ int	ft_unset(t_cmd *cmd, t_env *env)
 	{
 		while (var)
 		{
-			printf("args is: %s\n", cur->args[i]);
-			printf("var_key is: %s\n", var->key);
 			if (ft_strcmp(cur->args[i], var->key) == 0)
 			{
-				printf("b\n");
 				if (prev == NULL)
 					env = var->next;
 				else

@@ -35,7 +35,10 @@ bool	tokenize_output_redirect( char *input, t_shell *shell, int *len)
 	{
 		*len = 2;
 		if (is_operator(input[2]) || !build_list(shell, R_APPEND, ">>", false))
+		{
+			printf("%s", NO_TARGET);
 			return (false);
+		}
 	}
 	else
 	{
@@ -53,6 +56,7 @@ bool	tokenize_pipe(char *input, t_shell *shell, int *len)
 		*len = 1;
 		if (is_operator(input[1]) || !build_list(shell, PIPE, "|", false))
 		{
+			printf("%s", REDIR_PIPE);
 			shell->redir_error = 1;
 			return (false);
 		}

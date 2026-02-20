@@ -12,36 +12,32 @@
 
 #include "../../../minishell.h"
 
-//still go over the free inside children
 static void	clean_child(t_cmd *cmd, t_shell *shell, pid_t *pids, int code)
 {
 	command_not_found_error(cmd->args[0]);
-	free_command(cmd);
 	cleanup_shell(shell);
 	free(pids);
 	exit(code);
 }
 
-static void	clean_execve_failure(t_cmd *cmd, t_shell *shell, char **array,
+static void	clean_execve_failure(t_shell *shell, char **array,
 									pid_t *pids)
 {
-	free_command(cmd);
 	cleanup_shell(shell);
 	free_array(array);
 	free(pids);
 	exit (126);
 }
 
-void	execute_in_child(t_cmd *cmd, t_shell *shell, pid_t *pids)
+void	execute_in_child(t_cmd *cmd, t_shell *shell,
+						pid_t *pids)
 {
 	char	**env;
 
 	if (builtin_check(cmd))
 	{
-		handle_builtin(cmd, shell, shell->environment_p);
-		free_command(cmd);
+		handle_builtin(cmd, shell, shell->environment_p, pids);
 		cleanup_shell(shell);
-		free(pids);
 		exit(shell->exit_status);
 	}
 	if (!cmd->path)
@@ -58,5 +54,5 @@ void	execute_in_child(t_cmd *cmd, t_shell *shell, pid_t *pids)
 		exit(1);
 	}
 	execve(cmd->path, cmd->args, env);
-	clean_execve_failure(cmd, shell, env, pids);
+	clean_execve_failure(shell, env, pids);
 }

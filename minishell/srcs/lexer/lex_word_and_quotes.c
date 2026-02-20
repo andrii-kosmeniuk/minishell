@@ -88,9 +88,6 @@ bool	tokenize_single_quotes(t_shell *shell, char *input, int *len)
 	t_node = build_list(shell, S_QUOTE, quoted_input, false);
 	if (!t_node)
 		return (free(quoted_input), false);
-	printf("quoted is: %s\n", quoted_input);
-	printf("node type is: %d\n", t_node->type);
-	printf("should_expand is: %d\n", t_node->should_expand);
 	shell->state = normal;
 	free(quoted_input);
 	return (true);

@@ -59,8 +59,8 @@ static void	handle_pipeline_child(t_cmd *cmd, t_shell *shell,
 	execute_in_child(cmd, shell, pids);
 }
 
-static int	fork_one_child(t_cmd *cmd, t_shell *shell, pid_t *pids,
-							t_pipes *state)
+static int	fork_one_child(t_cmd *cmd, t_shell *shell,
+							pid_t *pids, t_pipes *state)
 {
 	pid_t	pid;
 

@@ -31,7 +31,7 @@ bool	builtin_check(t_cmd *cmd)
 	return (false);
 }
 
-bool	is_builtin(t_cmd *cmd, t_shell *shell, t_env *env)
+bool	is_builtin(t_cmd *cmd, t_shell *shell, t_env *env, pid_t *pids)
 {
 	int			i;
 	static char	**builtins;
@@ -44,13 +44,14 @@ bool	is_builtin(t_cmd *cmd, t_shell *shell, t_env *env)
 	while (builtins[i] != NULL)
 	{
 		if (ft_strcmp(cmd->args[0], builtins[i]) == 0)
-			return (cmd->b_type = i, handle_builtin(cmd, shell, env), true);
+			return (cmd->b_type = i, handle_builtin(cmd, shell, env,
+					pids), true);
 		i++;
 	}
 	return (false);
 }
 
-void	handle_builtin(t_cmd *cmd, t_shell *shell, t_env *env)
+void	handle_builtin(t_cmd *cmd, t_shell *shell, t_env *env, pid_t *pids)
 {
 	if (cmd->b_type == ECHO)
 		shell->exit_status = ft_echo(cmd);
@@ -66,4 +67,5 @@ void	handle_builtin(t_cmd *cmd, t_shell *shell, t_env *env)
 		shell->exit_status = ft_env(shell);
 	else if (cmd->b_type == EXIT)
 		shell->exit_status = ft_exit(cmd);
+	free(pids);
 }

@@ -28,22 +28,26 @@ static void	free_redir(t_redir *redir)
 	}
 }
 
-void	free_command(t_cmd *cmds)
+void	free_command(t_cmd **cmds)
 {
 	t_cmd	*cur;
+	t_cmd	*temp;
 
-	if (!cmds)
+	if (!*cmds)
 		return ;
-	while (cmds)
+	temp = NULL;
+	cur = *cmds;
+	while (cur)
 	{
-		cur = cmds->next;
-		if (cmds->args)
-			free_array(cmds->args);
-		if (cmds->path)
-			free(cmds->path);
-		if (cmds->redirections)
-			free_redir(cmds->redirections);
-		free(cmds);
-		cmds = cur;
+		temp = cur->next;
+		if (cur->args)
+			free_array(cur->args);
+		if (cur->path)
+			free(cur->path);
+		if (cur->redirections)
+			free_redir(cur->redirections);
+		free(cur);
+		cur = temp;
 	}
+	*cmds = NULL;
 }

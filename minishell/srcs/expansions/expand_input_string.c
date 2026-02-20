@@ -36,37 +36,3 @@ char	*expand_string(t_shell *shell, bool *expand, char *input, t_env *env)
 		return (ft_strdup(""));
 	return (p.output);
 }
-
-/*static char	**split_expanded(char *expanded)
-{
-	char	**argv;
-
-	if (!expanded)
-		return (NULL);
-	argv = word_split(expanded);
-	free(expanded);
-	return (argv);
-}
-
-char	**no_expansions(char *input)
-{
-	char	*duplicate;
-
-	duplicate = ft_strdup(input);
-	if (!duplicate)
-		return (NULL);
-	return (split_expanded(duplicate));
-}
-
-char	**expand_args(t_shell *shell, bool *expand, char *input, t_env *env)
-{
-	char	*expanded;
-
-	if (ft_strchr(input, '$'))
-		expanded = expand_string(shell, expand, input, env);
-	else
-		expanded = ft_strdup(input);
-	if (!expanded)
-		return (NULL);
-	return (split_expanded(expanded));
-}*/

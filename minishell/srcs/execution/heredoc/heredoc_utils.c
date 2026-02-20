@@ -65,13 +65,13 @@ char	*expand_heredoc(t_shell *shell, t_redir *redir, t_env *env, char *line)
 	{
 		expanded_heredoc = expand_string(shell, &should_expand, line, env);
 		if (!expanded_heredoc)
-			return (ERROR_EXPANDING_HEREDOC, NULL);
+			return (printf("%s", ERROR_EXPANDING_HEREDOC), NULL);
 		return (expanded_heredoc);
 	}
 	while (*line)
 	{
 		if (!append_char(&expanded_heredoc, &len, *line))
-			return (ERROR_EXPANDING_HEREDOC, NULL);
+			return (printf("%s", ERROR_EXPANDING_HEREDOC), NULL);
 		line++;
 	}
 	return (expanded_heredoc);

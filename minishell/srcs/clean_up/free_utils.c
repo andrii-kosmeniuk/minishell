@@ -18,7 +18,11 @@ void	free_array(char **array)
 
 	i = 0;
 	while (array[i])
-		free(array[i++]);
+	{
+		free(array[i]);
+		array[i] = NULL;
+		i++;
+	}
 	if (array)
 	{
 		free(array);

@@ -40,6 +40,8 @@ void	cleanup_shell(t_shell *shell)
 		free_tokens(shell->head);
 		shell->head = NULL;
 	}
+	if (shell->cmd_head)
+		free_command(&shell->cmd_head);
 	free_env_list(&shell->environment_p);
 	shell->environment_p = NULL;
 	rl_clear_history();

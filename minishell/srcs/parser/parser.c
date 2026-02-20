@@ -56,7 +56,7 @@ t_cmd	*parse(t_shell *shell, t_token *tokens)
 	while (t_oken)
 	{
 		if (handle_token(&current, &t_oken) == false)
-			return (free_command(head), NULL);
+			return (free_command(&head), NULL);
 		t_oken = t_oken->next;
 	}
 	return (head);
