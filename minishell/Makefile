@@ -59,8 +59,6 @@ SRC = srcs/env/get_envp.c \
 	srcs/execution/heredoc/heredoc_utils.c \
 	srcs/expansions/expand_input_string.c \
 	srcs/expansions/expander_utils.c \
-	srcs/expansions/word_splitting.c \
-	srcs/expansions/main_expander.c \
 	srcs/expansions/expand_utils.c \
 	srcs/syntax/syntax_check.c \
 	srcs/main/main_utils.c \

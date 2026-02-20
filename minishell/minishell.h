@@ -31,11 +31,11 @@
 # define RESET "\033[0m"
 
 //error messages
-# define PIPE_FIRST		"bash: syntax error near unexpected token `|'\n"
-# define PIPE_END		"bash: syntax error near unexpected token `|'\n"
-# define NO_TARGET		"bash: syntax error near unexpected token `newline'\n"
-# define REDIR_PIPE		"bash: syntax error near unexpected token `|'\n"
-# define HERE_DOC_ERROR	"bash: syntax error near unexpected token `newline'\n"
+# define PIPE_FIRST	"minishell: syntax error near unexpected token `|'\n"
+# define PIPE_END	"minishell: syntax error near unexpected token `|'\n"
+# define NO_TARGET	"minishell: syntax error near unexpected token `newline'\n"
+# define REDIR_PIPE	"minishell: syntax error near unexpected token `|'\n"
+# define HERE_ERROR	"minishell: syntax error near unexpected token `newline'\n"
 # define ERROR_OPENING_FILE "heredoc: error opening heredoc file\n"
 # define ERROR_EXPANDING_HEREDOC	"could not expand heredoc\n"
 # define HEREDOC_ABORTED	130
@@ -131,11 +131,11 @@ typedef struct s_shell
 {
 	t_env	*environment_p; // pointer to copied key-value variables
 	t_token	*head; //list of tokens
+	t_cmd	*cmd_head;
 	t_state	state;
 	t_type	type;
 	char	*current_line; // gets its input from readline
 	char	*prompt; //minishell promt
-	int		interactive; // signals representend by ints
 	int		signal_received;
 	int		redir_error;
 	int		exit_status;
@@ -168,7 +168,7 @@ void	free_key_value(char *key, char *value);
 void	free_all(t_token *taokens, t_shell *shell);
 void	free_tokens(t_token *tokens);
 void	free_on_cmd_failure(t_shell *shell);
-void	free_command(t_cmd *cmds);
+void	free_command(t_cmd **cmds);
 void	cleanup_shell(t_shell *shell);
 void	cleanup_tokens(t_shell *shell);
 
@@ -282,8 +282,8 @@ int		ft_cd(t_cmd *cmd, t_shell *shell);
 int		ft_echo(t_cmd *cmd);
 int		ft_env(t_shell *shell);
 int		ft_exit(t_cmd *cmd);
-bool	is_builtin(t_cmd *cmd, t_shell *shell, t_env *env);
-void	handle_builtin(t_cmd *cmd, t_shell *shell, t_env *env);
+bool	is_builtin(t_cmd *cmd, t_shell *shell, t_env *env, pid_t *pids);
+void	handle_builtin(t_cmd *cmd, t_shell *shell, t_env *env, pid_t *pids);
 bool	builtin_check(t_cmd *cmd);
 
 //error handling
@@ -295,7 +295,7 @@ void	permission_denied_error(char *cmd);
 /*void	print_env_pointers(t_env *head);
 void		print_env_list(t_env *head);
 const char	*type_to_string(t_type type);*/
-void	print_tokens(t_token *tokens);
+//void	print_tokens(t_token *tokens);
 /*void		print_redirs(t_redir *redir);
 void		print_argv(char **argv);
 void		print_commands(t_cmd *cmd);
