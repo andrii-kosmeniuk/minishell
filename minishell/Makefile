@@ -56,6 +56,7 @@ SRC = srcs/env/get_envp.c \
 	srcs/execution/built_ins/built_ins.c \
 	srcs/execution/built_ins/builtin_utils.c \
 	srcs/execution/built_ins/builtin_utils2.c \
+	srcs/execution/built_ins/ft_exit.c \
 	srcs/execution/heredoc/heredoc_utils.c \
 	srcs/expansions/expand_input_string.c \
 	srcs/expansions/expander_utils.c \

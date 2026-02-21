@@ -107,8 +107,8 @@ int	shell_loop(t_shell *shell)
 		}
 		if (g_signal == 1)
 		{
-			g_signal = 0;
 			shell->exit_status = 130;
+			g_signal = 0;
 			free(line);
 			continue ;
 		}

@@ -1,31 +1,38 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   builtin_utils2.c                                   :+:      :+:    :+:   */
+/*   ft_atoll.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: milija-h <milija-h@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/02/12 13:41:51 by milija-h          #+#    #+#             */
-/*   Updated: 2026/02/12 13:42:08 by milija-h         ###   ########.fr       */
+/*   Created: 2026/02/21 17:17:29 by milija-h          #+#    #+#             */
+/*   Updated: 2026/02/21 17:25:29 by milija-h         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../../minishell.h"
+#include "libft.h"
 
-int	ft_env(t_shell *shell)
+long long	ft_atoll(char *str)
 {
-	int		i;
-	char	**envp;
+	size_t		i;
+	long long	result;
+	int			sign;
 
-	envp = list_to_envp(shell);
-	if (!envp)
-		return (1);
+	result = 0;
 	i = 0;
-	while (envp[i] != NULL)
+	sign = 1;
+	while (str[i] == 32 || (str[i] >= 9 && str[i] <= 13))
+		i++;
+	if (str[i] == '+' || str[i] == '-')
 	{
-		printf("%s\n", envp[i]);
-		++i;
+		if (str[i] == '-')
+			sign = -1;
+		i++;
 	}
-	free_array(envp);
-	return (0);
+	while (str[i] >= '0' && str[i] <= '9')
+	{
+		result = result * 10 + (str[i] - '0');
+		i++;
+	}
+	return (result * sign);
 }

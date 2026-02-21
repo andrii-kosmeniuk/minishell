@@ -12,16 +12,27 @@
 
 #include "../../../minishell.h"
 
-int	wait_for_child(pid_t pid)
+int	wait_for_child(pid_t pids)
 {
 	int	status;
+	int	exit_status;
+	int	sig;
 
-	waitpid(pid, &status, 0);
-	if (WIFEXITED(status))
-		return (WEXITSTATUS(status));
+	exit_status = 0;
+	waitpid(pids, &status, 0);
 	if (WIFSIGNALED(status))
-		return (128 + WTERMSIG(status));
-	return (1);
+	{
+		sig = WTERMSIG(status);
+		if (sig == SIGINT)
+			exit_status = 130;
+		else if (sig == SIGQUIT)
+			exit_status = 131;
+		else
+			exit_status = 128 + sig;
+	}
+	else if (WIFEXITED(status))
+		exit_status = WEXITSTATUS(status);
+	return (exit_status);
 }
 
 int	wait_for_all(pid_t *pids, int count)

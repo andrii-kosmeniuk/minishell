@@ -66,6 +66,6 @@ void	handle_builtin(t_cmd *cmd, t_shell *shell, t_env *env, pid_t *pids)
 	else if (cmd->b_type == ENV)
 		shell->exit_status = ft_env(shell);
 	else if (cmd->b_type == EXIT)
-		shell->exit_status = ft_exit(cmd);
+		shell->exit_status = ft_exit(cmd, shell, pids);
 	free(pids);
 }

@@ -281,7 +281,7 @@ int		ft_pwd(void);
 int		ft_cd(t_cmd *cmd, t_shell *shell);
 int		ft_echo(t_cmd *cmd);
 int		ft_env(t_shell *shell);
-int		ft_exit(t_cmd *cmd);
+int		ft_exit(t_cmd *cmd, t_shell *shell, pid_t *pids);
 bool	is_builtin(t_cmd *cmd, t_shell *shell, t_env *env, pid_t *pids);
 void	handle_builtin(t_cmd *cmd, t_shell *shell, t_env *env, pid_t *pids);
 bool	builtin_check(t_cmd *cmd);
