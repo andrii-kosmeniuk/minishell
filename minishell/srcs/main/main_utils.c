@@ -105,7 +105,7 @@ int	shell_loop(t_shell *shell)
 			printf("exit\n");
 			break ;
 		}
-		if (g_signal == 1)
+		if (g_signal == 130)
 		{
 			shell->exit_status = 130;
 			g_signal = 0;

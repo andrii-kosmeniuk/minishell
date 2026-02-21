@@ -20,18 +20,17 @@ void	restore_interactive_signals(void)
 void	sigint_handler(int sig)
 {
 	(void)sig;
-	g_signal = 1;
+	g_signal = 130;
+	rl_on_new_line();
+	rl_replace_line("", 0);
 	write(1, "\n", 1);
 }
 
 int	handle_signal_event(void)
 {
-	if (g_signal == 1)
+	if (g_signal == 130)
 	{
-		g_signal = 0;
-		rl_replace_line("", 0);
-		rl_on_new_line();
-		rl_redisplay();
+		rl_done = 1;
 	}
 	return (0);
 }
