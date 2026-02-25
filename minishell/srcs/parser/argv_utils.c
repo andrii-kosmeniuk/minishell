@@ -22,31 +22,26 @@ static size_t	count_words(char **array)
 	return (count);
 }
 
-static char	**single_array(char *content)
+static	char **single_array(char *content)
 {
 	char	**words;
 
-	words = ft_calloc(2, sizeof(char *));
-	if (!words)
+    words = ft_calloc(2, sizeof(char *));
+    if (!words)
 		return (NULL);
-	words[0] = content;
-	words[1] = NULL;
-	return (words);
+    words[0] = ft_strdup(content);
+    if (!words[0])
+        return (free(words), NULL);
+    words[1] = NULL;
+    return (words);
 }
 
-static char	**store_words(t_token *cur)
+static	char **store_words(t_token *cur)
 {
-	char	**words;
-
-	if (cur->type == WORD)
+	if (cur->type == WORD && !cur->was_merged)
 		return (ft_split(cur->content, ' '));
 	else
-	{
-		words = single_array(ft_strdup(cur->content));
-		if (!words)
-			return (NULL);
-	}
-	return (words);
+		return (single_array(cur->content));
 }
 
 static char	**merge_args(char **old_args, int old_count, char **words,

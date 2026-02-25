@@ -12,60 +12,77 @@
 
 #include "../../../minishell.h"
 
-static int	ft_isnumeric(char *str)
+#include "../../../minishell.h"
+
+static int	exit_is_numeric(char *s)
 {
 	int	i;
 
 	i = 0;
-	if (str[i] == '-' || str[i] == '+')
+	if (s[i] == '-' || s[i] == '+')
 		i++;
-	if (!str[i])
+	if (!s[i])
 		return (0);
-	while (str[i])
+	while (s[i])
 	{
-		if (!ft_isdigit(str[i]))
+		if (!ft_isdigit(s[i]))
 			return (0);
 		i++;
 	}
 	return (1);
 }
 
-static void	exit_non_numeric(t_cmd *cmd, t_shell *shell, pid_t *pid)
+static long long	exit_parse_code(char *s)
 {
-	ft_putstr_fd("minishell: exit ", STDERR_FILENO);
-	ft_putstr_fd(cmd->args[1], STDERR_FILENO);
-	ft_putendl_fd(": numeric argument required", STDERR_FILENO);
-	shell->exit_status = 2;
-	cleanup_shell(shell);
-	if (pid)
-		free(pid);
-	exit (2);
+	long long	n;
+	int			sign;
+	int			i;
+
+	n = 0;
+	sign = 1;
+	i = 0;
+	if (s[i] == '-')
+	{
+		sign = -1;
+		i++;
+	}
+	else if (s[i] == '+')
+		i++;
+	while (s[i] && ft_isdigit(s[i]))
+	{
+		n = n * 10 + (s[i] - '0');
+		i++;
+	}
+	return (sign * n);
 }
 
-int	ft_exit(t_cmd *cmd, t_shell *shell, pid_t *pid)
+int	ft_exit(t_cmd *cmd, t_shell *shell, pid_t *pids)
 {
-	long long	exit_code;
+	long long	code;
 
-	ft_putendl_fd("exit", STDERR_FILENO);
-	if (cmd->argc == 1)
+	ft_putstr_fd("exit\n", 2);
+	if (!cmd->args[1])
+		code = shell->exit_status;
+	else if (cmd->args[2])
 	{
-		shell->exit_status = 0;
-		cleanup_shell(shell);
-		exit(0);
-	}
-	if (!ft_isnumeric(cmd->args[1]))
-		exit_non_numeric(cmd, shell, pid);
-	if (cmd->argc > 2)
-	{
-		ft_putendl_fd("minishell: exit: too many arguments", STDERR_FILENO);
-		shell->exit_status = 1;
+		ft_putstr_fd("minishell: exit: too many arguments\n", 2);
 		return (1);
 	}
-	exit_code = ft_atoll(cmd->args[1]);
-	exit_code = ((exit_code % 256) + 256) % 256;
-	shell->exit_status = (int)exit_code;
+	else if (!exit_is_numeric(cmd->args[1]))
+	{
+		ft_putstr_fd("minishell: exit ", STDERR_FILENO);
+		ft_putstr_fd(cmd->args[1], STDERR_FILENO);
+		ft_putendl_fd(": numeric argument required", STDERR_FILENO);
+		shell->exit_status = 2;
+		cleanup_shell(shell);
+		if (pids)
+			free(pids);
+		exit (2);
+	}
+	else
+		code = exit_parse_code(cmd->args[1]);
 	cleanup_shell(shell);
-	if (pid)
-		free(pid);
-	exit((int)exit_code);
+	if (pids)
+		free(pids);
+	exit((unsigned char)code);
 }

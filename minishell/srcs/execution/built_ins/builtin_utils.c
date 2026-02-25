@@ -12,6 +12,22 @@
 
 #include "../../../minishell.h"
 
+static bool	is_echo_n_option(char *s)
+{
+	int	i;
+
+	if (!s || s[0] != '-' || s[1] == '\0')
+		return (false);
+	i = 1;
+	while (s[i])
+	{
+		if (s[i] != 'n')
+			return (false);
+		i++;
+	}
+	return (true);
+}
+
 int	ft_echo(t_cmd *cmd)
 {
 	int	i;
@@ -19,10 +35,10 @@ int	ft_echo(t_cmd *cmd)
 
 	i = 1;
 	new_line = 1;
-	while (cmd->args[i] && ft_strcmp(cmd->args[i], "-n") == 0)
+	while (cmd->args[i] && is_echo_n_option(cmd->args[i]))
 	{
 		new_line = 0;
-		++i;
+		i++;
 	}
 	while (cmd->args[i])
 	{
@@ -36,36 +52,6 @@ int	ft_echo(t_cmd *cmd)
 	return (0);
 }
 
-int	ft_cd(t_cmd *cmd, t_shell *shell)
-{
-	char	*path;
-	char	old_pwd[1024];
-	char	s[100];
-
-	printf("%s\n", getcwd(s, 100));
-	if (cmd->args[1] == NULL)
-	{
-		path = get_env_value(shell, "HOME");
-		if (chdir(path) != 0)
-			perror("cd home:");
-		printf("%s\n", getcwd(s, 100));
-		return (0);
-	}
-	else if (ft_strcmp(cmd->args[1], "-"))
-	{
-		getcwd(old_pwd, 200);
-		path = get_env_value(shell, "OLDPWD");
-		if (chdir(path) != 0)
-			perror("cd home:");
-		printf("%s\n", getcwd(s, 100));
-		return (0);
-	}
-	path = cmd->args[1];
-	if (chdir(path) != 0)
-		perror("minishell: cd: ");
-	return (1);
-}
-
 int	ft_pwd(void)
 {
 	char	pwd[1024];
@@ -75,46 +61,29 @@ int	ft_pwd(void)
 		printf("%s\n", pwd);
 		return (0);
 	}
-	perror("getcwd: ");
+	ft_putstr_fd("minishell: pwd: error retrieving current directory\n", 2);
 	return (1);
 }
 
-int	ft_export(t_cmd *cmd)
+int	ft_unset(t_cmd *cmd, t_shell *shell)
 {
-	(void)cmd;
-	return (0);
-}
+	int	i;
+	int	status;
 
-int	ft_unset(t_cmd *cmd, t_env *env)
-{
-	t_cmd	*cur;
-	t_env	*var;
-	t_env	*prev;
-	int		i;
-
-	prev = NULL;
-	var = env;
-	cur = cmd;
 	i = 1;
-	while (cur->args[i])
+	status = 0;
+	while (cmd->args[i])
 	{
-		while (var)
+		if (!env_is_valid_identifier(cmd->args[i]))
 		{
-			if (ft_strcmp(cur->args[i], var->key) == 0)
-			{
-				if (prev == NULL)
-					env = var->next;
-				else
-					prev->next = var->next;
-				free(var->value);
-				free(var->key);
-				free(var);
-				break ;
-			}
-			prev = var;
-			var = var->next;
+			ft_putstr_fd("minishell: unset: '", 2);
+			ft_putstr_fd(cmd->args[i], 2);
+			ft_putstr_fd("': not a valid identifier\n", 2);
+			status = 1;
 		}
+		else
+			env_unset(&shell->environment_p, cmd->args[i]);
 		i++;
 	}
-	return (0);
+	return (status);
 }

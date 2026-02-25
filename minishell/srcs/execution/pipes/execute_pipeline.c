@@ -40,7 +40,7 @@ int	execute_pipeline(t_cmd *cmd, t_shell *shell)
 	pid_t	*pids;
 	int		exit_status;
 
-	if (!cmd->args || !cmd->args[0])
+	if (!cmd->args)
 	{
 		if (cmd->redirections)
 		{

@@ -15,12 +15,11 @@
 bool	builtin_check(t_cmd *cmd)
 {
 	int			i;
-	static char	**builtins;
+	static char	*builtins[] = {"", "echo", "cd", "pwd", "export",
+		"unset", "env", "exit", NULL};
 
 	if (!cmd || !cmd->args || !cmd->args[0])
 		return (false);
-	builtins = (char *[]){"", "echo", "cd", "pwd", "export",
-		"unset", "env", "exit", NULL};
 	i = 0;
 	while (builtins[i] != NULL)
 	{
@@ -34,12 +33,11 @@ bool	builtin_check(t_cmd *cmd)
 bool	is_builtin(t_cmd *cmd, t_shell *shell, t_env *env, pid_t *pids)
 {
 	int			i;
-	static char	**builtins;
+	static char	*builtins[] = {"", "echo", "cd", "pwd", "export",
+		"unset", "env", "exit", NULL};
 
 	if (!cmd || !cmd->args || !cmd->args[0])
 		return (false);
-	builtins = (char *[]){"", "echo", "cd", "pwd", "export",
-		"unset", "env", "exit", NULL};
 	i = 0;
 	while (builtins[i] != NULL)
 	{
@@ -53,6 +51,7 @@ bool	is_builtin(t_cmd *cmd, t_shell *shell, t_env *env, pid_t *pids)
 
 void	handle_builtin(t_cmd *cmd, t_shell *shell, t_env *env, pid_t *pids)
 {
+	(void)env;
 	if (cmd->b_type == ECHO)
 		shell->exit_status = ft_echo(cmd);
 	else if (cmd->b_type == CD)
@@ -60,9 +59,9 @@ void	handle_builtin(t_cmd *cmd, t_shell *shell, t_env *env, pid_t *pids)
 	else if (cmd->b_type == PWD)
 		shell->exit_status = ft_pwd();
 	else if (cmd->b_type == EXPORT)
-		shell->exit_status = ft_export(cmd);
+		shell->exit_status = ft_export(cmd, shell);
 	else if (cmd->b_type == UNSET)
-		shell->exit_status = ft_unset(cmd, env);
+		shell->exit_status = ft_unset(cmd, shell);
 	else if (cmd->b_type == ENV)
 		shell->exit_status = ft_env(shell);
 	else if (cmd->b_type == EXIT)

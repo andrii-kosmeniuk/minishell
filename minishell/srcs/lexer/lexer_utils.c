@@ -51,6 +51,7 @@ t_token	*create_token(t_type type, char *content, bool should_expand,
 	new_token->type = type;
 	new_token->should_expand = should_expand;
 	new_token->has_space_before = has_space_before;
+	new_token->was_merged = false;
 	new_token->next = NULL;
 	return (new_token);
 }

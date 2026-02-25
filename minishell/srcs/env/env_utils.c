@@ -12,6 +12,8 @@
 
 #include "../../minishell.h"
 
+#include "../../minishell.h"
+
 int	calculate_new_shlvl(t_shell *shell)
 {
 	t_env	*cur_variable;
@@ -75,4 +77,37 @@ int	update_shlvl_key(t_shell *shell, t_data *data)
 	}
 	free(new_value_string);
 	return (0);
+}
+
+int	env_print_exported(t_shell *shell)
+{
+	t_env	*cur;
+
+	cur = shell->environment_p;
+	while (cur)
+	{
+		if (cur->exported)
+		{
+			ft_putstr_fd(cur->key, 1);
+			write(1, "=", 1);
+			if (cur->value)
+				ft_putstr_fd(cur->value, 1);
+			write(1, "\n", 1);
+		}
+		cur = cur->next;
+	}
+	return (0);
+}
+
+void	print_escaped_value(char *value)
+{
+	write(1, "\"", 1);
+	while (*value)
+	{
+		if (*value == '\\' || *value == '"')
+			write(1, "\\", 1);
+		write(1, value, 1);
+		value++;
+	}
+	write(1, "\"", 1);
 }

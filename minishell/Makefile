@@ -19,6 +19,8 @@ LDLIBS  = -lreadline -lncurses
 NAME = minishell
 
 SRC = srcs/env/get_envp.c \
+	srcs/env/env_api.c \
+	srcs/env/env_print.c \
 	srcs/utils/utils.c \
 	srcs/utils/utils2.c \
 	srcs/utils/utils3.c \
@@ -54,9 +56,11 @@ SRC = srcs/env/get_envp.c \
 	srcs/execution/redirections/redirection_utils.c \
 	srcs/execution/utils/signal_handling.c \
 	srcs/execution/built_ins/built_ins.c \
+	srcs/execution/built_ins/ft_cd.c \
+	srcs/execution/built_ins/ft_export.c \
+	srcs/execution/built_ins/ft_exit.c \
 	srcs/execution/built_ins/builtin_utils.c \
 	srcs/execution/built_ins/builtin_utils2.c \
-	srcs/execution/built_ins/ft_exit.c \
 	srcs/execution/heredoc/heredoc_utils.c \
 	srcs/expansions/expand_input_string.c \
 	srcs/expansions/expander_utils.c \

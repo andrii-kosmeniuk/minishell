@@ -52,6 +52,7 @@ static void	handle_pipeline_child(t_cmd *cmd, t_shell *shell,
 		writing_end(state->curr_pipe);
 	if (!apply_redirections(cmd))
 	{
+		cleanup_shell(shell);
 		free(pids);
 		exit(1);
 	}

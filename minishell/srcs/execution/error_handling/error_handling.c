@@ -16,7 +16,7 @@ void	permission_denied_error(char *cmd)
 {
 	ft_putstr_fd("minishell: ", 2);
 	ft_putstr_fd(cmd, 2);
-	ft_putstr_fd(": Permission denied\n", 2);
+	ft_putstr_fd(": Is a directory\n", 2);
 }
 
 void	command_not_found_error(char *cmd)
@@ -24,22 +24,6 @@ void	command_not_found_error(char *cmd)
 	ft_putstr_fd("minishell: ", 2);
 	ft_putstr_fd(cmd, 2);
 	ft_putstr_fd(": command not found\n", 2);
-}
-
-void	execve_error(char *cmd)
-{
-	if (errno == EACCES)
-		permission_denied_error(cmd);
-	else if (errno == ENOENT)
-		command_not_found_error(cmd);
-	else
-	{
-		ft_putstr_fd("minishell: ", 2);
-		ft_putstr_fd(cmd, 2);
-		ft_putstr_fd(": ", 2);
-		ft_putstr_fd(strerror(errno), 2);
-		ft_putstr_fd("\n", 2);
-	}
 }
 
 void	fork_error(void)

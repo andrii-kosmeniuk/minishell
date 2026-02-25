@@ -58,6 +58,7 @@ t_env	*create_node(char *name, char *value)
 	}
 	else
 		new_node->value = NULL;
+	new_node->exported = false;
 	new_node->next = NULL;
 	return (new_node);
 }

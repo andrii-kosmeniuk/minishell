@@ -20,9 +20,10 @@ static void	clean_child(t_cmd *cmd, t_shell *shell, pid_t *pids, int code)
 	exit(code);
 }
 
-static void	clean_execve_failure(t_shell *shell, char **array,
+static void	clean_execve_failure(t_cmd *cmd, t_shell *shell, char **array,
 									pid_t *pids)
 {
+	permission_denied_error(cmd->args[0]);
 	cleanup_shell(shell);
 	free_array(array);
 	free(pids);
@@ -54,5 +55,5 @@ void	execute_in_child(t_cmd *cmd, t_shell *shell,
 		exit(1);
 	}
 	execve(cmd->path, cmd->args, env);
-	clean_execve_failure(shell, env, pids);
+	clean_execve_failure(cmd, shell, env, pids);
 }

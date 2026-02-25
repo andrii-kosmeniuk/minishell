@@ -63,6 +63,7 @@ static bool	merge_two_tokens(t_shell *shell, t_token *cur, t_env *env)
 	free(cur->content);
 	cur->content = merged;
 	cur->should_expand = false;
+	cur->was_merged = true;
 	cur->type = WORD;
 	remove_next(cur);
 	return (true);

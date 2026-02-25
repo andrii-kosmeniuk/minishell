@@ -46,6 +46,7 @@ typedef struct s_env
 {
 	char			*key;
 	char			*value;
+	bool			exported;
 	struct s_env	*next;
 }	t_env;
 
@@ -105,6 +106,7 @@ typedef struct s_token
 	char			*content;
 	bool			should_expand;
 	bool			has_space_before;
+	bool			was_merged;
 	struct s_token	*next;
 }	t_token;
 
@@ -184,9 +186,15 @@ void	get_state(t_shell *shell, char quote);
 
 //environment
 t_env	*list_key_value(t_shell *shell, char **envp, t_data *data);
-char	**copy_of_envp(t_shell *shell, char **envp);
 int		calculate_new_shlvl(t_shell *shell);
 int		update_shlvl_key(t_shell *shell, t_data *data);
+int		export_print_sorted(t_shell *shell);
+int	env_unset(t_env **head, char *key);
+int	env_set(t_env **head, char *key, char *value, bool exported);
+bool	env_is_valid_identifier(char *s);
+t_env	*env_find(t_env *head, char *key);
+void	print_escaped_value(char *value);
+int		env_print_exported(t_shell *shell);
 
 //lexer
 t_token	*create_token(t_type type, char *content, bool should_expand,
@@ -222,11 +230,7 @@ bool	append_char(char **buffer, size_t *len, char c);
 char	*get_value(t_env *env, char *variable_name);
 bool	is_valid(char c);
 char	*read_variable_name(char *input, char *start_of_variable);
-char	**word_split(char *expanded);
 char	*expand_string(t_shell *shell, bool *expand, char *input, t_env *env);
-bool	expand_all(t_shell *shell, t_cmd *cmd, t_env *env);
-char	**no_expansions(char *input);
-char	**expand_args(t_shell *shell, bool *expand, char *input, t_env *env);
 //heredoc and append redir
 bool	heredoc_append(t_shell *shell, t_redir *redir, t_env *env);
 char	*choose_file_name(void);
@@ -252,7 +256,6 @@ void	close_fds(void);
 int		open_input_file(char *filename);
 int		open_output_file(char *filename, bool append);
 bool	apply_redirections(t_cmd *cmd);
-void	execve_error(char *cmd_name);
 char	*handle_path(t_cmd *cmds, t_shell *shell);
 void	execute_in_child(t_cmd *cmd, t_shell *shell, pid_t *pids);
 int		wait_for_child(pid_t pid);
@@ -275,8 +278,8 @@ void	close_pipe(int pipefd[2]);
 char	*get_env_value(t_shell *shell, char *key);
 
 //builtins
-int		ft_unset(t_cmd *cmd, t_env *env);
-int		ft_export(t_cmd *cmd);
+int		ft_unset(t_cmd *cmd, t_shell *shell);
+int		ft_export(t_cmd *cmd, t_shell *shell);
 int		ft_pwd(void);
 int		ft_cd(t_cmd *cmd, t_shell *shell);
 int		ft_echo(t_cmd *cmd);
@@ -287,7 +290,6 @@ void	handle_builtin(t_cmd *cmd, t_shell *shell, t_env *env, pid_t *pids);
 bool	builtin_check(t_cmd *cmd);
 
 //error handling
-void	execve_error(char *cmd);
 void	command_not_found_error(char *cmd);
 void	permission_denied_error(char *cmd);
 
