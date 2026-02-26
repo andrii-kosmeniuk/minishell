@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   built_ins.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: milija-h <milija-h@student.42vienna.com>   +#+  +:+       +#+        */
+/*   By: akosmeni <akosmeni@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/12 13:12:18 by milija-h          #+#    #+#             */
-/*   Updated: 2026/02/12 13:38:38 by milija-h         ###   ########.fr       */
+/*   Updated: 2026/02/26 13:36:45 by akosmeni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,9 @@ bool	builtin_check(t_cmd *cmd)
 
 	if (!cmd || !cmd->args || !cmd->args[0])
 		return (false);
-	i = 0;
+	if (cmd->args[0][0] == '\0')
+		return (cmd->b_type = NONE, true);
+	i = 1;
 	while (builtins[i] != NULL)
 	{
 		if (ft_strcmp(cmd->args[0], builtins[i]) == 0)
@@ -38,7 +40,10 @@ bool	is_builtin(t_cmd *cmd, t_shell *shell, t_env *env, pid_t *pids)
 
 	if (!cmd || !cmd->args || !cmd->args[0])
 		return (false);
-	i = 0;
+	if (cmd->args[0][0] == '\0')
+		return (cmd->b_type = NONE, handle_builtin(cmd, shell, env,
+			 pids), true);
+	i = 1;
 	while (builtins[i] != NULL)
 	{
 		if (ft_strcmp(cmd->args[0], builtins[i]) == 0)
@@ -52,7 +57,12 @@ bool	is_builtin(t_cmd *cmd, t_shell *shell, t_env *env, pid_t *pids)
 void	handle_builtin(t_cmd *cmd, t_shell *shell, t_env *env, pid_t *pids)
 {
 	(void)env;
-	if (cmd->b_type == ECHO)
+	if (cmd->b_type == NONE)
+	{
+		ft_putstr_fd("Command '' not found\n", 2);
+		shell->exit_status = 127;
+	}
+	else if (cmd->b_type == ECHO)
 		shell->exit_status = ft_echo(cmd);
 	else if (cmd->b_type == CD)
 		shell->exit_status = ft_cd(cmd, shell);
@@ -63,7 +73,7 @@ void	handle_builtin(t_cmd *cmd, t_shell *shell, t_env *env, pid_t *pids)
 	else if (cmd->b_type == UNSET)
 		shell->exit_status = ft_unset(cmd, shell);
 	else if (cmd->b_type == ENV)
-		shell->exit_status = ft_env(shell);
+		shell->exit_status = ft_env(cmd, shell);
 	else if (cmd->b_type == EXIT)
 		shell->exit_status = ft_exit(cmd, shell, pids);
 	free(pids);

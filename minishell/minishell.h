@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: milija-h <milija-h@student.42.fr>          +#+  +:+       +#+        */
+/*   By: akosmeni <akosmeni@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 15:14:05 by milija-h          #+#    #+#             */
-/*   Updated: 2026/01/17 18:25:00 by milija-h         ###   ########.fr       */
+/*   Updated: 2026/02/26 13:35:04 by akosmeni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -283,7 +283,7 @@ int		ft_export(t_cmd *cmd, t_shell *shell);
 int		ft_pwd(void);
 int		ft_cd(t_cmd *cmd, t_shell *shell);
 int		ft_echo(t_cmd *cmd);
-int		ft_env(t_shell *shell);
+int		ft_env(t_cmd *cmd, t_shell *shell);
 int		ft_exit(t_cmd *cmd, t_shell *shell, pid_t *pids);
 bool	is_builtin(t_cmd *cmd, t_shell *shell, t_env *env, pid_t *pids);
 void	handle_builtin(t_cmd *cmd, t_shell *shell, t_env *env, pid_t *pids);

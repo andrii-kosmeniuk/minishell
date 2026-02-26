@@ -3,18 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   env_api.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: milija-h <milija-h@student.42vienna.com>   +#+  +:+       +#+        */
+/*   By: akosmeni <akosmeni@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/25 14:28:11 by milija-h          #+#    #+#             */
-/*   Updated: 2026/02/25 14:28:41 by milija-h         ###   ########.fr       */
+/*   Updated: 2026/02/26 13:35:19 by akosmeni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-int	env_unset(t_env **head, char *key);
-int	env_set(t_env **head, char *key, char *value, bool exported);
-bool	env_is_valid_identifier(char *s);
 t_env	*env_find(t_env *head, char *key)
 {
 	while (head)
