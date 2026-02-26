@@ -67,7 +67,7 @@ int	process_line(char *line, t_shell *shell)
 		return (printf("Error parsing\n"), cleanup_tokens(shell), 0);
 	shell->cmd_head = cmd;
 	if (!process_heredocs(shell, cmd, shell->environment_p))
-		return (cleanup_tokens(shell), 0);
+		return (cleanup_tokens(shell), shell->exit_status);
 	if (builtin_check(cmd) && (cmd->redirections || cmd->next))
 		exit_status = execute_pipeline(cmd, shell);
 	else if (is_builtin(cmd, shell, shell->environment_p, NULL))

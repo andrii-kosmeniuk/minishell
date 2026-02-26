@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   here_doc.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: milija-h <milija-h@student.42.fr>          +#+  +:+       +#+        */
+/*   By: akosmeni <akosmeni@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/25 14:36:00 by milija-h          #+#    #+#             */
-/*   Updated: 2026/02/05 15:54:02 by milija-h         ###   ########.fr       */
+/*   Updated: 2026/02/26 21:21:35 by akosmeni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ static int	heredoc_tmp(t_shell *s, t_redir *redir, t_env *env,
 	{
 		line = readline("heredoc> ");
 		if (g_signal == 2)
-			return (close(fd), free(line), g_signal = 0,
+			return (s->exit_status = 130, close(fd), free(line), g_signal = 0,
 				unlink(*file_name), free(*file_name), -1);
 		if (!line)
 			return (close(fd), 0);
