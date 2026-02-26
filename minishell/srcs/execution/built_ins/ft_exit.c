@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_exit.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: milija-h <milija-h@student.42vienna.com>   +#+  +:+       +#+        */
+/*   By: akosmeni <akosmeni@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/21 15:26:52 by milija-h          #+#    #+#             */
-/*   Updated: 2026/02/21 16:08:10 by milija-h         ###   ########.fr       */
+/*   Updated: 2026/02/26 18:25:26 by akosmeni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,7 @@ int	ft_exit(t_cmd *cmd, t_shell *shell, pid_t *pids)
 		cleanup_shell(shell);
 		if (pids)
 			free(pids);
+		close_std_fds();
 		exit (2);
 	}
 	else
@@ -84,5 +85,6 @@ int	ft_exit(t_cmd *cmd, t_shell *shell, pid_t *pids)
 	cleanup_shell(shell);
 	if (pids)
 		free(pids);
+	close_std_fds();
 	exit((unsigned char)code);
 }

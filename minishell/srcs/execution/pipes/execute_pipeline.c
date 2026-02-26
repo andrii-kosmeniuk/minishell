@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_pipeline.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: milija-h <milija-h@student.42vienna.com>   +#+  +:+       +#+        */
+/*   By: akosmeni <akosmeni@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/10 19:53:23 by milija-h          #+#    #+#             */
-/*   Updated: 2026/02/10 19:53:38 by milija-h         ###   ########.fr       */
+/*   Updated: 2026/02/26 17:55:43 by akosmeni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

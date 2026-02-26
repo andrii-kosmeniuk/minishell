@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signal_handling.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: milija-h <milija-h@student.42vienna.com>   +#+  +:+       +#+        */
+/*   By: akosmeni <akosmeni@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/09 19:07:31 by milija-h          #+#    #+#             */
-/*   Updated: 2026/02/09 19:10:47 by milija-h         ###   ########.fr       */
+/*   Updated: 2026/02/26 18:20:31 by akosmeni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,4 +38,16 @@ void	init_pipe_state(t_pipes *state)
 	state->curr_pipe[1] = -1;
 	state->i = 0;
 	state->has_next = 0;
+}
+
+void	close_std_fds()
+{
+	int	i;
+
+	i = 0;
+	while (i < 3)
+	{
+		close(i);
+		i++;
+	}
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_in_child.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: milija-h <milija-h@student.42vienna.com>   +#+  +:+       +#+        */
+/*   By: akosmeni <akosmeni@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/09 13:27:14 by milija-h          #+#    #+#             */
-/*   Updated: 2026/02/09 13:27:25 by milija-h         ###   ########.fr       */
+/*   Updated: 2026/02/26 18:09:24 by akosmeni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ void	execute_in_child(t_cmd *cmd, t_shell *shell,
 	{
 		handle_builtin(cmd, shell, shell->environment_p, pids);
 		cleanup_shell(shell);
+		close_std_fds();
 		exit(shell->exit_status);
 	}
 	if (!cmd->path)

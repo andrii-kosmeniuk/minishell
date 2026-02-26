@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipes.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: milija-h <milija-h@student.42vienna.com>   +#+  +:+       +#+        */
+/*   By: akosmeni <akosmeni@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/09 13:21:34 by milija-h          #+#    #+#             */
-/*   Updated: 2026/02/09 13:21:46 by milija-h         ###   ########.fr       */
+/*   Updated: 2026/02/26 18:17:17 by akosmeni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,7 @@ static void	handle_pipeline_child(t_cmd *cmd, t_shell *shell,
 		writing_end(state->curr_pipe);
 	if (!apply_redirections(cmd))
 	{
+		close_std_fds();
 		cleanup_shell(shell);
 		free(pids);
 		exit(1);
