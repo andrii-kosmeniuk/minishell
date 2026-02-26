@@ -73,32 +73,43 @@ bool	merge_tokens(t_shell *shell, t_token *head, t_env *env)
 {
 	t_token	*cur;
 	t_token	*prev;
-    
-    cur = head;
-    prev = NULL;
-    while (cur)
-    {
-        if (prev && prev->type == HERE_DOC)
-        {
-            if (cur->type == S_QUOTE || cur->type == D_QUOTE)
-                cur->type = WORD;
-            prev = cur;
-            cur = cur->next;
-            continue;
-        }
-        if (!cur->next || cur->next->has_space_before)
-        {
-            if (!expand_single_token(shell, env, cur))
-                return (false);
-            prev = cur;
-            cur = cur->next;
-        }
-        else
-        {
-            if (!merge_two_tokens(shell, cur, env))
-                return (false);
-            prev = cur;
-        }
-    }
-    return (true);
+
+	cur = head;
+	prev = NULL;
+	while (cur)
+	{
+		if (prev && prev->type == HERE_DOC)
+		{
+			if (cur->type == S_QUOTE || cur->type == D_QUOTE)
+				cur->type = WORD;
+			prev = cur;
+			cur = cur->next;
+			continue ;
+		}
+		if (cur->type == R_INPUT || cur->type == R_OUTPUT
+			|| cur->type == R_APPEND || cur->type == HERE_DOC
+			|| cur->type == PIPE)
+		{
+			prev = cur;
+			cur = cur->next;
+			continue ;
+		}
+		if (!cur->next || cur->next->has_space_before
+			|| cur->next->type == R_INPUT || cur->next->type == R_OUTPUT
+			|| cur->next->type == R_APPEND || cur->next->type == HERE_DOC
+			|| cur->next->type == PIPE)
+		{
+			if (!expand_single_token(shell, env, cur))
+				return (false);
+			prev = cur;
+			cur = cur->next;
+		}
+		else
+		{
+			if (!merge_two_tokens(shell, cur, env))
+				return (false);
+			prev = cur;
+		}
+	}
+	return (true);
 }

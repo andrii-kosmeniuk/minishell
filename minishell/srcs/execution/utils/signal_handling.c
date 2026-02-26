@@ -40,7 +40,7 @@ void	init_pipe_state(t_pipes *state)
 	state->has_next = 0;
 }
 
-void	close_std_fds()
+void	close_std_fds(void)
 {
 	int	i;
 

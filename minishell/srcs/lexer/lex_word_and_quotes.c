@@ -29,7 +29,7 @@ static char	*extract_quoted_string(t_shell *shell, char *input, int *len,
 	if (*input == '\0' && shell->state != normal)
 	{
 		shell->state = normal;
-		ft_putstr_fd(QUOTES , 2);
+		ft_putstr_fd(QUOTES, 2);
 		*len = input - start_of_string + 1;
 		return (NULL);
 	}

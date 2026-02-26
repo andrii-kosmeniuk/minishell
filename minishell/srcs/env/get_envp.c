@@ -124,4 +124,3 @@ t_env	*list_key_value(t_shell *shell, char **envp, t_data *data)
 	}
 	return (shell->environment_p);
 }
-

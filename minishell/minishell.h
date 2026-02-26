@@ -189,8 +189,8 @@ t_env	*list_key_value(t_shell *shell, char **envp, t_data *data);
 int		calculate_new_shlvl(t_shell *shell);
 int		update_shlvl_key(t_shell *shell, t_data *data);
 int		export_print_sorted(t_shell *shell);
-int	env_unset(t_env **head, char *key);
-int	env_set(t_env **head, char *key, char *value, bool exported);
+int		env_unset(t_env **head, char *key);
+int		env_set(t_env **head, char *key, char *value, bool exported);
 bool	env_is_valid_identifier(char *s);
 t_env	*env_find(t_env *head, char *key);
 void	print_escaped_value(char *value);
@@ -276,7 +276,7 @@ int		execute_children_parent(t_cmd *cmd, t_shell *shell, pid_t *pids);
 int		execute_pipeline(t_cmd *cmd, t_shell *shell);
 void	close_pipe(int pipefd[2]);
 char	*get_env_value(t_shell *shell, char *key);
-void	close_std_fds();
+void	close_std_fds(void);
 
 //builtins
 int		ft_unset(t_cmd *cmd, t_shell *shell);

@@ -42,7 +42,7 @@ bool	is_builtin(t_cmd *cmd, t_shell *shell, t_env *env, pid_t *pids)
 		return (false);
 	if (cmd->args[0][0] == '\0')
 		return (cmd->b_type = NONE, handle_builtin(cmd, shell, env,
-			 pids), true);
+				pids), true);
 	i = 1;
 	while (builtins[i] != NULL)
 	{
