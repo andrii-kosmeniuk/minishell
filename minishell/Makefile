@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: milija-h <milija-h@student.42.fr>          +#+  +:+       +#+         #
+#    By: akosmeni <akosmeni@student.42vienna.com    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/11/19 19:13:22 by milija-h          #+#    #+#              #
-#    Updated: 2026/01/16 21:31:29 by milija-h         ###   ########.fr        #
+#    Updated: 2026/02/26 20:36:12 by akosmeni         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -48,6 +48,7 @@ SRC = srcs/env/get_envp.c \
 	srcs/execution/execution/execution.c \
 	srcs/execution/heredoc/close_fds.c \
 	srcs/execution/execution/execution_utils.c \
+	srcs/execution/execution/execution_utils2.c \
 	srcs/execution/exit_code/calc_exit_code.c \
 	srcs/execution/pipes/pipes.c \
 	srcs/execution/pipes/pipes_utils.c \

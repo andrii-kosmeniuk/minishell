@@ -6,7 +6,7 @@
 /*   By: akosmeni <akosmeni@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 15:14:05 by milija-h          #+#    #+#             */
-/*   Updated: 2026/02/26 18:09:01 by akosmeni         ###   ########.fr       */
+/*   Updated: 2026/02/26 20:35:38 by akosmeni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -277,6 +277,7 @@ int		execute_pipeline(t_cmd *cmd, t_shell *shell);
 void	close_pipe(int pipefd[2]);
 char	*get_env_value(t_shell *shell, char *key);
 void	close_std_fds();
+char	*access_command(t_cmd *cmd);
 
 //builtins
 int		ft_unset(t_cmd *cmd, t_shell *shell);

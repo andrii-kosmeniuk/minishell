@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution_utils.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: milija-h <milija-h@student.42vienna.com>   +#+  +:+       +#+        */
+/*   By: akosmeni <akosmeni@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/09 15:32:55 by milija-h          #+#    #+#             */
-/*   Updated: 2026/02/09 15:33:08 by milija-h         ###   ########.fr       */
+/*   Updated: 2026/02/26 20:35:08 by akosmeni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,23 +60,51 @@ static char	*find_cmd_path(t_cmd *cmds, char *path_value)
 	return (NULL);
 }
 
+static bool	path_lookup_allowed(char *path_value)
+{
+	int	i;
+
+	if (!path_value || path_value[0] == '\0')
+		return (false);
+	if (path_value[0] == ':')
+		return (false);
+	i = 0;
+	while (path_value[i])
+	{
+		if (path_value[i] == ':' && path_value[i + 1] == ':')
+			return (false);
+		i++;
+	}
+	if (i > 0 && path_value[i - 1] == ':')
+		return (false);
+	return (true);
+}
+
 char	*handle_path(t_cmd *cmds, t_shell *shell)
 {
 	char	*path_value;
 	char	*res;
+	char	*local_path;
 
-	if (!cmds->args || !cmds->args[0])
+	if (!cmds || !cmds->args || !cmds->args[0])
 		return (NULL);
-	if (cmds->args[0][0] == '/' ||
-		(cmds->args[0][0] == '.' && cmds->args[0][1] == '/'))
-	{
-		if (access(cmds->args[0], X_OK) == 0)
-			return (ft_strdup(cmds->args[0]));
-		return (NULL);
-	}
+	if (ft_strchr(cmds->args[0], '/'))
+		return (access_command(cmds));
 	path_value = get_env_value(shell, "PATH");
-	if (!path_value)
-		return (NULL);
-	res = find_cmd_path(cmds, path_value);
-	return (res);
+	if (path_lookup_allowed(path_value))
+	{
+		res = find_cmd_path(cmds, path_value);
+		if (res)
+			return (res);
+	}
+	if (!path_lookup_allowed(path_value))
+	{
+		local_path = ft_strjoin("./", cmds->args[0]);
+		if (!local_path)
+			return (NULL);
+		if (access(local_path, X_OK) == 0)
+			return (local_path);
+		free(local_path);
+	}
+	return (NULL);
 }
