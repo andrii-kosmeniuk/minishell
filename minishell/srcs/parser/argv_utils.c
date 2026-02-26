@@ -22,7 +22,7 @@ static size_t	count_words(char **array)
 	return (count);
 }
 
-static	char **single_array(char *content)
+static char	**single_array(char *content)
 {
 	char	**words;
 
@@ -36,7 +36,7 @@ static	char **single_array(char *content)
 	return (words);
 }
 
-static	char **store_words(t_token *cur)
+static char	**store_words(t_token *cur)
 {
 	if (cur->type == WORD && !cur->was_merged)
 		return (ft_split(cur->content, ' '));

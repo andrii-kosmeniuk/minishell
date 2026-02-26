@@ -19,7 +19,7 @@ int	ft_env(t_cmd *cmd, t_shell *shell)
 
 	if (cmd->args[1])
 	{
-		ft_putstr_fd("env: '"  , 2);
+		ft_putstr_fd("env: '", 2);
 		ft_putstr_fd(cmd->args[1], 2);
 		ft_putstr_fd("' : No such file or directory\n", 2);
 		return (127);
