@@ -43,14 +43,15 @@ static int	heredoc_tmp(t_shell *s, t_redir *redir, t_env *env,
 	fd = open_temp_file(file_name);
 	if (fd < 0)
 		return (-1);
+	line = NULL;
 	while (1)
 	{
 		line = readline("heredoc> ");
 		if (g_signal == 2)
-			return (free(line), g_signal = 0, printf("\n"), close(fd),
+			return (close(fd), free(line), g_signal = 0,
 				unlink(*file_name), free(*file_name), -1);
 		if (!line)
-			return (close(fd), free(*file_name), -1);
+			return (close(fd), 0);
 		if (ft_strcmp(redir->target, line) == 0)
 			return (free(line), close(fd), 0);
 		content = here_doc_content(s, redir, env, line);

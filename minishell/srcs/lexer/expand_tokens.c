@@ -72,24 +72,33 @@ static bool	merge_two_tokens(t_shell *shell, t_token *cur, t_env *env)
 bool	merge_tokens(t_shell *shell, t_token *head, t_env *env)
 {
 	t_token	*cur;
-
-	cur = head;
-	while (cur)
-	{
-		if ((cur->type == WORD || cur->type == S_QUOTE || cur->type == D_QUOTE)
-			&& cur->next && (cur->next->type == WORD
-				|| cur->next->type == S_QUOTE || cur->next->type == D_QUOTE)
-			&&!cur->next->has_space_before)
-		{
-			if (!merge_two_tokens(shell, cur, env))
-				return (false);
-		}
-		else
-		{
-			if (!expand_single_token(shell, env, cur))
-				return (false);
-			cur = cur->next;
-		}
-	}
-	return (true);
+	t_token	*prev;
+    
+    cur = head;
+    prev = NULL;
+    while (cur)
+    {
+        if (prev && prev->type == HERE_DOC)
+        {
+            if (cur->type == S_QUOTE || cur->type == D_QUOTE)
+                cur->type = WORD;
+            prev = cur;
+            cur = cur->next;
+            continue;
+        }
+        if (!cur->next || cur->next->has_space_before)
+        {
+            if (!expand_single_token(shell, env, cur))
+                return (false);
+            prev = cur;
+            cur = cur->next;
+        }
+        else
+        {
+            if (!merge_two_tokens(shell, cur, env))
+                return (false);
+            prev = cur;
+        }
+    }
+    return (true);
 }
