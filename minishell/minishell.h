@@ -36,6 +36,7 @@
 # define NO_TARGET	"minishell: syntax error near unexpected token `newline'\n"
 # define REDIR_PIPE	"minishell: syntax error near unexpected token `|'\n"
 # define HERE_ERROR	"minishell: syntax error near unexpected token `newline'\n"
+# define QUOTES		"minishell: syntax error, unclosed quotes\n"
 # define ERROR_OPENING_FILE "heredoc: error opening heredoc file\n"
 # define ERROR_EXPANDING_HEREDOC	"could not expand heredoc\n"
 # define HEREDOC_ABORTED	130
@@ -296,9 +297,9 @@ void	permission_denied_error(char *cmd);
 //debug
 /*void	print_env_pointers(t_env *head);
 void		print_env_list(t_env *head);
-const char	*type_to_string(t_type type);*/
+const char	*type_to_string(t_type type);
 //void	print_tokens(t_token *tokens);
-/*void		print_redirs(t_redir *redir);
+void		print_redirs(t_redir *redir);
 void		print_argv(char **argv);
 void		print_commands(t_cmd *cmd);
 void		debug_print_all_argv(t_cmd *cmd);*/
