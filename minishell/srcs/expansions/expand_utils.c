@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: milija-h <milija-h@student.42vienna.com>   +#+  +:+       +#+        */
+/*   By: akosmeni <akosmeni@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/13 14:25:51 by milija-h          #+#    #+#             */
-/*   Updated: 2026/02/13 14:27:38 by milija-h         ###   ########.fr       */
+/*   Updated: 2026/02/26 22:22:16 by akosmeni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,11 +46,22 @@ bool	append_exit_code(t_shell *shell, char **buf, size_t *len)
 	return (true);
 }
 
-bool	handle_expansions(char **input, t_expand *expand, t_shell *shell)
+static bool	handle_variable_expansion(char **input, t_expand *expand)
 {
 	char	*key;
 
-	key = NULL;
+	key = read_variable_name(*input, *input + 1);
+	if (!key)
+		return (false);
+	if (!append_var(&expand->output, &expand->len, expand->env, key))
+		return (free(key), false);
+	(*input) += 1 + ft_strlen(key);
+	free(key);
+	return (true);
+}
+
+bool	handle_expansions(char **input, t_expand *expand, t_shell *shell)
+{
 	if (*(*input + 1) == '?')
 	{
 		if (!append_exit_code(shell, &expand->output, &expand->len))
@@ -59,13 +70,8 @@ bool	handle_expansions(char **input, t_expand *expand, t_shell *shell)
 	}
 	else if (is_valid(*(*input + 1)))
 	{
-		key = read_variable_name(*input, *input + 1);
-		if (!key)
+		if (!handle_variable_expansion(input, expand))
 			return (false);
-		if (!append_var(&expand->output, &expand->len, expand->env, key))
-			return (free(key), false);
-		(*input) += 1 + ft_strlen(key);
-		free(key);
 	}
 	else
 	{

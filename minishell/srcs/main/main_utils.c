@@ -6,7 +6,7 @@
 /*   By: akosmeni <akosmeni@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/05 20:16:23 by milija-h          #+#    #+#             */
-/*   Updated: 2026/02/26 17:53:38 by akosmeni         ###   ########.fr       */
+/*   Updated: 2026/02/26 22:59:26 by akosmeni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,23 +93,17 @@ int	init_minishell(t_shell *shell, t_state *state, t_data *data, char **envp)
 int	shell_loop(t_shell *shell)
 {
 	char	*line;
+	int		status;
 
 	while (1)
 	{
 		g_signal = 0;
 		line = readline(CYAN"👹-minis(hell)>" RESET);
-		if (!line)
-		{
-			printf("exit\n");
+		status = handle_loop_readline(shell, line);
+		if (status == -1)
 			break ;
-		}
-		if (g_signal == 130)
-		{
-			shell->exit_status = 130;
-			g_signal = 0;
-			free(line);
+		if (status == 0)
 			continue ;
-		}
 		if (!is_valid_line(line))
 		{
 			free(line);

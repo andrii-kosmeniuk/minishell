@@ -6,7 +6,7 @@
 #    By: akosmeni <akosmeni@student.42vienna.com    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/11/19 19:13:22 by milija-h          #+#    #+#              #
-#    Updated: 2026/02/26 20:36:12 by akosmeni         ###   ########.fr        #
+#    Updated: 2026/02/26 22:59:26 by akosmeni         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,6 +19,7 @@ LDLIBS  = -lreadline -lncurses
 NAME = minishell
 
 SRC = srcs/env/get_envp.c \
+	srcs/env/get_envp_utils.c \
 	srcs/env/env_api.c \
 	srcs/env/env_print.c \
 	srcs/utils/utils.c \
@@ -68,6 +69,7 @@ SRC = srcs/env/get_envp.c \
 	srcs/expansions/expand_utils.c \
 	srcs/syntax/syntax_check.c \
 	srcs/main/main_utils.c \
+	srcs/main/shell_loop_utils.c \
 	main.c
 
 OBJ = $(SRC:.c=.o)

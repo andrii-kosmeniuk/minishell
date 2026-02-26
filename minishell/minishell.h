@@ -6,7 +6,7 @@
 /*   By: akosmeni <akosmeni@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 15:14:05 by milija-h          #+#    #+#             */
-/*   Updated: 2026/02/26 20:35:38 by akosmeni         ###   ########.fr       */
+/*   Updated: 2026/02/26 22:59:26 by akosmeni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -158,6 +158,7 @@ int		shell_loop(t_shell*shell);
 int		process_line(char *line, t_shell *shell);
 int		init_minishell(t_shell *shell, t_state *state,
 			t_data *data, char **envp);
+int		handle_loop_readline(t_shell *shell, char *line);
 
 //initialization
 bool	init_shell(t_shell *shell, t_state *state, t_data *data);
@@ -186,6 +187,7 @@ void	get_state(t_shell *shell, char quote);
 
 //environment
 t_env	*list_key_value(t_shell *shell, char **envp, t_data *data);
+t_env	*build_from_envp(t_shell *shell, char **envp);
 int		calculate_new_shlvl(t_shell *shell);
 int		update_shlvl_key(t_shell *shell, t_data *data);
 int		export_print_sorted(t_shell *shell);
@@ -277,6 +279,8 @@ int		execute_pipeline(t_cmd *cmd, t_shell *shell);
 void	close_pipe(int pipefd[2]);
 char	*get_env_value(t_shell *shell, char *key);
 void	close_std_fds(void);
+char	*access_command(t_cmd *cmd);
+t_env	*list_key_value(t_shell *shell, char **envp, t_data *data);
 
 //builtins
 int		ft_unset(t_cmd *cmd, t_shell *shell);

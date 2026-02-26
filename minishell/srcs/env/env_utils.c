@@ -6,11 +6,9 @@
 /*   By: akosmeni <akosmeni@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/22 22:14:16 by milija-h          #+#    #+#             */
-/*   Updated: 2026/02/26 18:34:18 by akosmeni         ###   ########.fr       */
+/*   Updated: 2026/02/26 22:40:18 by akosmeni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
-#include "../../minishell.h"
 
 #include "../../minishell.h"
 

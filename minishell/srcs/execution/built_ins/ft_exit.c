@@ -6,11 +6,9 @@
 /*   By: akosmeni <akosmeni@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/21 15:26:52 by milija-h          #+#    #+#             */
-/*   Updated: 2026/02/26 18:25:26 by akosmeni         ###   ########.fr       */
+/*   Updated: 2026/02/26 22:17:23 by akosmeni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
-#include "../../../minishell.h"
 
 #include "../../../minishell.h"
 
@@ -56,10 +54,29 @@ static long long	exit_parse_code(char *s)
 	return (sign * n);
 }
 
+static void	exit_with_cleanup(t_shell *shell, pid_t *pids, long long code)
+{
+	cleanup_shell(shell);
+	if (pids)
+		free(pids);
+	close_std_fds();
+	exit((unsigned char)code);
+}
+
+static void	exit_numeric_error(t_cmd *cmd, t_shell *shell, pid_t *pids)
+{
+	ft_putstr_fd("minishell: exit ", STDERR_FILENO);
+	ft_putstr_fd(cmd->args[1], STDERR_FILENO);
+	ft_putendl_fd(": numeric argument required", STDERR_FILENO);
+	shell->exit_status = 2;
+	exit_with_cleanup(shell, pids, 2);
+}
+
 int	ft_exit(t_cmd *cmd, t_shell *shell, pid_t *pids)
 {
 	long long	code;
 
+	code = 0;
 	ft_putstr_fd("exit\n", 2);
 	if (!cmd->args[1])
 		code = shell->exit_status;
@@ -69,22 +86,9 @@ int	ft_exit(t_cmd *cmd, t_shell *shell, pid_t *pids)
 		return (1);
 	}
 	else if (!exit_is_numeric(cmd->args[1]))
-	{
-		ft_putstr_fd("minishell: exit ", STDERR_FILENO);
-		ft_putstr_fd(cmd->args[1], STDERR_FILENO);
-		ft_putendl_fd(": numeric argument required", STDERR_FILENO);
-		shell->exit_status = 2;
-		cleanup_shell(shell);
-		if (pids)
-			free(pids);
-		close_std_fds();
-		exit (2);
-	}
+		exit_numeric_error(cmd, shell, pids);
 	else
 		code = exit_parse_code(cmd->args[1]);
-	cleanup_shell(shell);
-	if (pids)
-		free(pids);
-	close_std_fds();
-	exit((unsigned char)code);
+	exit_with_cleanup(shell, pids, code);
+	return (0);
 }

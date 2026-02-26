@@ -6,30 +6,11 @@
 /*   By: akosmeni <akosmeni@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/09 15:32:55 by milija-h          #+#    #+#             */
-/*   Updated: 2026/02/26 21:11:14 by akosmeni         ###   ########.fr       */
+/*   Updated: 2026/02/26 22:25:47 by akosmeni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../minishell.h"
-
-int	check_file_access(char *path, int mode)
-{
-	return (access(path, mode) == 0);
-}
-
-char	*get_env_value(t_shell *shell, char *key)
-{
-	t_env	*current;
-
-	current = shell->environment_p;
-	while (current)
-	{
-		if (ft_strcmp(current->key, key) == 0)
-			return (current->value);
-		current = current->next;
-	}
-	return (NULL);
-}
 
 static char	*find_cmd_path(t_cmd *cmds, char *path_value)
 {
@@ -67,11 +48,23 @@ static bool	path_lookup_allowed(char *path_value)
 	return (true);
 }
 
+static char	*resolve_local_path(t_cmd *cmds)
+{
+	char	*local_path;
+
+	local_path = ft_strjoin("./", cmds->args[0]);
+	if (!local_path)
+		return (NULL);
+	if (access(local_path, X_OK) == 0)
+		return (local_path);
+	free(local_path);
+	return (NULL);
+}
+
 char	*handle_path(t_cmd *cmds, t_shell *shell)
 {
 	char	*path_value;
 	char	*res;
-	char	*local_path;
 
 	if (!cmds || !cmds->args || !cmds->args[0])
 		return (NULL);
@@ -86,13 +79,6 @@ char	*handle_path(t_cmd *cmds, t_shell *shell)
 	}
 	if (!path_lookup_allowed(path_value)
 		|| ft_strcmp(cmds->args[0], "minishell") == 0)
-	{
-		local_path = ft_strjoin("./", cmds->args[0]);
-		if (!local_path)
-			return (NULL);
-		if (access(local_path, X_OK) == 0)
-			return (local_path);
-		free(local_path);
-	}
+		return (resolve_local_path(cmds));
 	return (NULL);
 }
