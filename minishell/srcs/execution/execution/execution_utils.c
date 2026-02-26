@@ -6,7 +6,7 @@
 /*   By: akosmeni <akosmeni@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/09 15:32:55 by milija-h          #+#    #+#             */
-/*   Updated: 2026/02/26 20:35:08 by akosmeni         ###   ########.fr       */
+/*   Updated: 2026/02/26 21:11:14 by akosmeni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,20 +62,7 @@ static char	*find_cmd_path(t_cmd *cmds, char *path_value)
 
 static bool	path_lookup_allowed(char *path_value)
 {
-	int	i;
-
 	if (!path_value || path_value[0] == '\0')
-		return (false);
-	if (path_value[0] == ':')
-		return (false);
-	i = 0;
-	while (path_value[i])
-	{
-		if (path_value[i] == ':' && path_value[i + 1] == ':')
-			return (false);
-		i++;
-	}
-	if (i > 0 && path_value[i - 1] == ':')
 		return (false);
 	return (true);
 }
@@ -97,7 +84,8 @@ char	*handle_path(t_cmd *cmds, t_shell *shell)
 		if (res)
 			return (res);
 	}
-	if (!path_lookup_allowed(path_value))
+	if (!path_lookup_allowed(path_value)
+		|| ft_strcmp(cmds->args[0], "minishell") == 0)
 	{
 		local_path = ft_strjoin("./", cmds->args[0]);
 		if (!local_path)
