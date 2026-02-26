@@ -62,7 +62,7 @@ void	handle_builtin(t_cmd *cmd, t_shell *shell, t_env *env, pid_t *pids)
 		ft_putstr_fd("Command '' not found\n", 2);
 		shell->exit_status = 127;
 	}
-	else if (cmd->b_type == ECHO)
+	if (cmd->b_type == ECHO)
 		shell->exit_status = ft_echo(cmd);
 	else if (cmd->b_type == CD)
 		shell->exit_status = ft_cd(cmd, shell);
