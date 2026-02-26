@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils4.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: milija-h <milija-h@student.42vienna.com>   +#+  +:+       +#+        */
+/*   By: akosmeni <akosmeni@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/09 13:35:44 by milija-h          #+#    #+#             */
-/*   Updated: 2026/02/09 14:21:49 by milija-h         ###   ########.fr       */
+/*   Updated: 2026/02/26 18:53:39 by akosmeni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,8 @@ static size_t	list_size(t_env *env)
 	count = 0;
 	while (cur)
 	{
-		count++;
+		if (cur->exported && cur->value != NULL)
+			count++;
 		cur = cur->next;
 	}
 	return (count);
@@ -57,7 +58,6 @@ static char	*join_env(char *key, char *value)
 	return (str);
 }
 
-//use inside of child processes before execve
 char	**list_to_envp(t_shell *shell)
 {
 	t_env	*cur;
@@ -73,10 +73,13 @@ char	**list_to_envp(t_shell *shell)
 	i = 0;
 	while (cur)
 	{
-		env_array[i] = join_env(cur->key, cur->value);
-		if (!env_array[i])
-			return (free_necessary(env_array, i), NULL);
-		i++;
+		if (cur->exported && cur->value != NULL)
+		{
+			env_array[i] = join_env(cur->key, cur->value);
+			if (!env_array[i])
+				return (free_necessary(env_array, i), NULL);
+			i++;
+		}
 		cur = cur->next;
 	}
 	return (env_array);

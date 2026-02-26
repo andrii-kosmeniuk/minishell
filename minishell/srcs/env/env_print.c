@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_print.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: milija-h <milija-h@student.42vienna.com>   +#+  +:+       +#+        */
+/*   By: akosmeni <akosmeni@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/25 14:29:06 by milija-h          #+#    #+#             */
-/*   Updated: 2026/02/25 14:29:11 by milija-h         ###   ########.fr       */
+/*   Updated: 2026/02/26 18:46:25 by akosmeni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ static void	print_export_entry(t_env *node)
 {
 	ft_putstr_fd("declare -x ", 1);
 	ft_putstr_fd(node->key, 1);
-	if (node->value != NULL)
+	if (node->value)
 	{
 		write(1, "=", 1);
 		print_escaped_value(node->value);

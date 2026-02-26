@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_envp.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: milija-h <milija-h@student.42.fr>          +#+  +:+       +#+        */
+/*   By: akosmeni <akosmeni@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 20:20:22 by milija-h          #+#    #+#             */
-/*   Updated: 2025/12/01 14:01:59 by milija-h         ###   ########.fr       */
+/*   Updated: 2026/02/26 18:54:03 by akosmeni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,16 +23,19 @@ static void	build_minimum_env(t_shell *shell, t_data *data)
 	node = create_node("PWD", pwd);
 	if (!node)
 		return (free(pwd), free_env_list(&shell->environment_p));
+	node->exported = true;
 	free(pwd);
 	add_to_list(&shell->environment_p, node);
 	node = create_node("SHLVL", "1");
 	if (!node)
 		return (free_env_list(&shell->environment_p));
+	node->exported = true;
 	data->shlvl = 1;
 	add_to_list(&shell->environment_p, node);
 	node = create_node("_", "/usr/bin/env");
 	if (!node)
 		return (free_env_list(&shell->environment_p));
+	node->exported = true;
 	add_to_list(&shell->environment_p, node);
 }
 
@@ -112,6 +115,7 @@ t_env	*list_key_value(t_shell *shell, char **envp, t_data *data)
 			if (!node)
 				return (free(key), free(value),
 					free_env_list(&shell->environment_p), NULL);
+			node->exported = true;
 			replace_key_if_exists(&shell->environment_p, key);
 			free_key_value(key, value);
 			add_to_list(&shell->environment_p, node);
@@ -121,22 +125,3 @@ t_env	*list_key_value(t_shell *shell, char **envp, t_data *data)
 	return (shell->environment_p);
 }
 
-/*int	main(void)
-{
-	t_env	*head = NULL;
-	t_shell	shell;
-	char	*fake_envp[] = {
-        "USER=mauro",
-        "HOME=/home/mauro_42",
-        "PATH=/usr/bin:/bin",
-        "EMPTY_VALUE=",
-        "NOEQUALSIGN",
-		"HOME=/home/mauro_forty_two",
-        NULL};
-	t_env	*result = create_list_key_value(&shell, &head, fake_envp);
-	if (!result)
-		return (printf("function error\n"), 1);
-	print_env_list(head);
-	free_env_list(head);
-	return (0);
-}*/
