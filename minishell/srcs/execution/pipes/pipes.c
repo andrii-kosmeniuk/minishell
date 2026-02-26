@@ -32,8 +32,9 @@ static void	handle_pipeline_parent(t_pipes *state)
 		close_pipe(state->prev_pipe);
 	if (state->has_next)
 	{
+		close(state->curr_pipe[1]);
 		state->prev_pipe[0] = state->curr_pipe[0];
-		state->prev_pipe[1] = state->curr_pipe[1];
+		state->prev_pipe[1] = -1;
 	}
 	else
 	{

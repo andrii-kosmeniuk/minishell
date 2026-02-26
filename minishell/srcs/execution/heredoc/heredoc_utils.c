@@ -40,7 +40,7 @@ int	open_temp_file(char **file_name)
 	{
 		free(*file_name);
 		*file_name = NULL;
-		return (ERROR_OPENING_FILE, -1);
+		return (-1);
 	}
 	return (fd);
 }

@@ -15,10 +15,8 @@
 char	*get_value(t_env *env, char *variable_name)
 {
 	t_env	*cur;
-	char	*value;
 
 	cur = env;
-	value = NULL;
 	while (cur)
 	{
 		if (ft_strcmp(cur->key, variable_name) == 0)

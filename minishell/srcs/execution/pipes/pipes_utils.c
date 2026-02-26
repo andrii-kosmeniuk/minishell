@@ -51,13 +51,15 @@ void	reading_end(int pipefd[2])
 	if (!safe_dup2(pipefd[0], STDIN_FILENO))
 		return ;
 	close(pipefd[0]);
-	close(pipefd[1]);
+	if (pipefd[1] != -1)
+		close(pipefd[1]);
 }
 
 void	writing_end(int pipefd[2])
 {
 	if (!safe_dup2(pipefd[1], STDOUT_FILENO))
 		return ;
-	close(pipefd[0]);
+	if (pipefd[0] != -1)
+		close(pipefd[0]);
 	close(pipefd[1]);
 }
