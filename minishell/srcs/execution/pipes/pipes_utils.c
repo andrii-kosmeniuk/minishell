@@ -56,23 +56,8 @@ void	reading_end(int pipefd[2])
 
 void	writing_end(int pipefd[2])
 {
-	int	i;
-
-	i = 0;
 	if (!safe_dup2(pipefd[1], STDOUT_FILENO))
-	{
-		i = 0;
-		while (i < 1024)
-		{
-			close(i);
-			i++;
-		}
 		return ;
-	}
-	i = 0;
-	while (i < 1024)
-	{
-		close(i);
-		i++;
-	}
+	close(pipefd[0]);
+	close(pipefd[1]);
 }
