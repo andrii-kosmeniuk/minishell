@@ -6,7 +6,7 @@
 /*   By: akosmeni <akosmeni@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 15:14:05 by milija-h          #+#    #+#             */
-/*   Updated: 2026/02/26 22:59:26 by akosmeni         ###   ########.fr       */
+/*   Updated: 2026/02/26 23:13:39 by akosmeni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -212,6 +212,9 @@ int		tokenize_word(char *input, t_shell *shell, int *len);
 bool	tokenize_double_quotes(t_shell *shell, char *input, int *len);
 bool	tokenize_single_quotes(t_shell *shell, char *input, int *len);
 bool	merge_tokens(t_shell *shell, t_token *head, t_env *env);
+bool	handle_token_merge(t_shell *shell, t_env *env,
+	t_token **cur, t_token **prev);
+bool	advance_merge_cursor(t_token **cur, t_token **prev);
 char	*expand_variables(t_shell *shell, char *input, t_env *env);
 //parser
 bool	is_argument(t_token *token);
