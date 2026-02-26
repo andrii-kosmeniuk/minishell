@@ -39,7 +39,6 @@
 # define QUOTES		"minishell: syntax error, unclosed quotes\n"
 # define ERROR_OPENING_FILE "heredoc: error opening heredoc file\n"
 # define ERROR_EXPANDING_HEREDOC	"could not expand heredoc\n"
-# define HEREDOC_ABORTED	130
 
 extern volatile sig_atomic_t	g_signal;
 

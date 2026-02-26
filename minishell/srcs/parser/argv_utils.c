@@ -26,14 +26,14 @@ static	char **single_array(char *content)
 {
 	char	**words;
 
-    words = ft_calloc(2, sizeof(char *));
-    if (!words)
+	words = ft_calloc(2, sizeof(char *));
+	if (!words)
 		return (NULL);
-    words[0] = ft_strdup(content);
-    if (!words[0])
-        return (free(words), NULL);
-    words[1] = NULL;
-    return (words);
+	words[0] = ft_strdup(content);
+	if (!words[0])
+		return (free(words), NULL);
+	words[1] = NULL;
+	return (words);
 }
 
 static	char **store_words(t_token *cur)
@@ -44,7 +44,7 @@ static	char **store_words(t_token *cur)
 		return (single_array(cur->content));
 }
 
-static char	**merge_args(char **old_args, int old_count, char **words,
+static	char	**merge_args(char **old_args, int old_count, char **words,
 							int word_count)
 {
 	char	**new_args;
