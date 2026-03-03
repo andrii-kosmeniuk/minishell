@@ -17,6 +17,7 @@ static void	clean_child(t_cmd *cmd, t_shell *shell, pid_t *pids, int code)
 	command_not_found_error(cmd->args[0]);
 	cleanup_shell(shell);
 	free(pids);
+	close_std_fds();
 	exit(code);
 }
 
