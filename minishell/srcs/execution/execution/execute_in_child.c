@@ -27,6 +27,7 @@ static void	clean_execve_failure(t_cmd *cmd, t_shell *shell, char **array,
 	permission_denied_error(cmd->args[0]);
 	cleanup_shell(shell);
 	free_array(array);
+	close_std_fds();
 	free(pids);
 	exit (126);
 }

@@ -73,7 +73,7 @@ int	ft_cd(t_cmd *cmd, t_shell *shell)
 	char	old_pwd[1024];
 	char	*path;
 
-	if (cmd->args[2])
+	if (cmd->argc > 2)
 	{
 		ft_putstr_fd("minishell: cd: too many arguments\n", 2);
 		return (1);
