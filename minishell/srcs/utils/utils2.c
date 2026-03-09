@@ -45,7 +45,7 @@ char	*substring(char *start_of_word, size_t len)
 void	clean_heredoc(int fd, t_cmd *cmd, char *line, char *file_name)
 {
 	close(fd);
-	free_command(cmd);
+	free_command(&cmd);
 	free(line);
 	g_signal = 0;
 	unlink(file_name);
