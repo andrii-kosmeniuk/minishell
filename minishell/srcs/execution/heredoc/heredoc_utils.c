@@ -48,7 +48,6 @@ int	open_temp_file(char **file_name)
 void	write_to_file(int fd, char *content)
 {
 	write(fd, content, ft_strlen(content));
-	write(fd, "\n", 1);
 	free(content);
 }
 
@@ -61,6 +60,7 @@ char	*expand_heredoc(t_shell *shell, t_redir *redir, t_env *env, char *line)
 	len = 0;
 	expanded_heredoc = NULL;
 	should_expand = redir->expand_heredoc;
+	printf("expand_heredoc_flag: %d\n", should_expand);
 	if (redir->expand_heredoc == true)
 	{
 		expanded_heredoc = expand_string(shell, &should_expand, line, env);

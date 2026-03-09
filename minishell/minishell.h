@@ -184,6 +184,7 @@ int		alpha_numeric_underscore(int c);
 bool	my_isspace(char input);
 bool	is_word_quoted(t_token *token);
 void	get_state(t_shell *shell, char quote);
+void	clean_heredoc(int fd, t_cmd *cmd, char *line, char *file_name);
 
 //environment
 t_env	*list_key_value(t_shell *shell, char **envp, t_data *data);
@@ -303,10 +304,10 @@ void	permission_denied_error(char *cmd);
 
 //debug
 /*void	print_env_pointers(t_env *head);
-void		print_env_list(t_env *head);
-const char	*type_to_string(t_type type);
-//void	print_tokens(t_token *tokens);
-void		print_redirs(t_redir *redir);
+void		print_env_list(t_env *head);*/
+/*const char	*type_to_string(t_type type);
+void	print_tokens(t_token *tokens);*/
+/*void		print_redirs(t_redir *redir);
 void		print_argv(char **argv);
 void		print_commands(t_cmd *cmd);
 void		debug_print_all_argv(t_cmd *cmd);*/

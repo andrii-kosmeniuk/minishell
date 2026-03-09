@@ -26,7 +26,10 @@ int	wait_for_child(pid_t pids)
 		if (sig == SIGINT)
 			exit_status = 130;
 		else if (sig == SIGQUIT)
+		{
 			exit_status = 131;
+			printf("Quit (core dumped)\n");
+		}
 		else
 			exit_status = 128 + sig;
 	}

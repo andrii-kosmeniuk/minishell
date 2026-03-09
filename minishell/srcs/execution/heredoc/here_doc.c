@@ -48,8 +48,8 @@ static int	heredoc_tmp(t_shell *s, t_redir *redir, t_env *env,
 	{
 		line = readline("heredoc> ");
 		if (g_signal == 2)
-			return (s->exit_status = 130, close(fd), free(line), g_signal = 0,
-				unlink(*file_name), free(*file_name), -1);
+			return (s->exit_status = 130,
+				clean_heredoc(fd, s->cmd_head, line, *file_name), -1);
 		if (!line)
 			return (close(fd), 0);
 		if (ft_strcmp(redir->target, line) == 0)

@@ -1,5 +1,5 @@
 /* ************************************************************************** */
-/*                                                                            */
+/*                                                                           */
 /*                                                        :::      ::::::::   */
 /*   debug.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
@@ -20,6 +20,8 @@
     if (type == R_OUTPUT) return "R_OUTPUT (>)";
     if (type == R_APPEND) return "R_APPEND (>>)";
     if (type == HERE_DOC) return "HERE_DOC (<<)";
+    if (type == D_QUOTE) return "D_QUOTE";
+    if (type == S_QUOTE) return "S_QUOTE";
     return "UNKNOWN";
 }
 
@@ -64,7 +66,6 @@ void print_tokens(t_token *tokens)
         i++;
     }
 }
-
 
 void print_argv(char **argv)
 {

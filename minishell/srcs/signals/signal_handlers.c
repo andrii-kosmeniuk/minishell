@@ -16,7 +16,6 @@ void	heredoc_sigint_handler(int sig)
 {
 	(void)sig;
 	g_signal = 2;
-	write(STDOUT_FILENO, "\n", 1);
 	rl_done = 1;
 }
 
