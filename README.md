@@ -30,14 +30,15 @@ The shell supports interactive use with a prompt, command history, pipes, redire
 
 ### Requirements
 
-- GCC compiler
+- CC compiler
 - GNU Make
 - Readline library (`libreadline-dev` on Debian/Ubuntu)
 
 ### Compilation
 
 ```bash
-git clone <your-repo-url> minishell
+@github.com:andrii-kosmeniuk/minishell.git minishell
+cd minishell
 cd minishell
 make
 ```
@@ -94,7 +95,7 @@ minishell$ echo $?
 
 ### How AI Was Used
 
-AI tools (primarily Claude) were used during this project for **research and conceptual understanding**, not for code generation. Specifically:
+AI tools were used during this project for **research and conceptual understanding**, not for code generation. Specifically:
 
 - **Understanding function behavior**: AI was used to explain the behavior and edge cases of system calls such as `execve`, `dup2`, `fork`, `waitpid`, and `sigaction` — particularly when the man pages were unclear or ambiguous.
 - **Bash behavior clarification**: When the expected behavior of the shell was unclear (e.g., how Bash handles unclosed quotes, nested expansions, or heredoc without history update), AI was queried to clarify and cross-reference with the Bash manual.

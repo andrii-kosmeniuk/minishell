@@ -27,8 +27,8 @@
 # include <fcntl.h>
 # include <errno.h>
 
-# define CYAN  "\033[0;36m"
-# define RESET "\033[0m"
+#define CYAN  "\001\e[36m\002"
+#define RESET "\001\e[0m\002"
 
 //error messages
 # define PIPE_FIRST	"minishell: syntax error near unexpected token `|'\n"
