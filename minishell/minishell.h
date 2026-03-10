@@ -215,7 +215,7 @@ bool	tokenize_single_quotes(t_shell *shell, char *input, int *len);
 bool	merge_tokens(t_shell *shell, t_token *head, t_env *env);
 bool	handle_token_merge(t_shell *shell, t_env *env,
 			t_token **cur, t_token **prev);
-bool	advance_merge_cursor(t_token **cur, t_token **prev);
+bool	advance_merger(t_token **cur, t_token **prev);
 char	*expand_variables(t_shell *shell, char *input, t_env *env);
 //parser
 bool	is_argument(t_token *token);

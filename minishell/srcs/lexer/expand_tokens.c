@@ -21,7 +21,7 @@ bool	merge_tokens(t_shell *shell, t_token *head, t_env *env)
 	prev = NULL;
 	while (cur)
 	{
-		if (advance_merge_cursor(&cur, &prev))
+		if (advance_merger(&cur, &prev))
 			continue ;
 		if (!handle_token_merge(shell, env, &cur, &prev))
 			return (false);

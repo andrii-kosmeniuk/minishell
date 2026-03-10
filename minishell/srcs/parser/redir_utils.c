@@ -24,7 +24,6 @@ static t_redir	*create_here_doc(t_token *tokens, char *delimeter)
 		redir->expand_heredoc = false;
 	else
 		redir->expand_heredoc = true;
-	printf("expand_flag is: %d\n", redir->expand_heredoc);
 	eof = ft_strdup(delimeter);
 	if (!eof)
 		return (free(redir), redir = NULL, NULL);

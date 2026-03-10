@@ -85,16 +85,8 @@ bool	handle_token_merge(t_shell *shell, t_env *env,
 	return (true);
 }
 
-bool	advance_merge_cursor(t_token **cur, t_token **prev)
+bool	advance_merger(t_token **cur, t_token **prev)
 {
-	/*if (*prev && (*prev)->type == HERE_DOC)
-	{
-		if ((*cur)->type == S_QUOTE || (*cur)->type == D_QUOTE)
-			(*cur)->type = WORD;
-		*prev = *cur;
-		*cur = (*cur)->next;
-		return (true);
-	}*/
 	if ((*cur)->type == R_INPUT || (*cur)->type == R_OUTPUT
 		|| (*cur)->type == R_APPEND || (*cur)->type == HERE_DOC
 		|| (*cur)->type == PIPE)
