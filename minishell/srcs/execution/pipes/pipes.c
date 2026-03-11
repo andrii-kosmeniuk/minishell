@@ -51,7 +51,7 @@ static void	handle_pipeline_child(t_cmd *cmd, t_shell *shell,
 		reading_end(state->prev_pipe);
 	if (state->has_next)
 		writing_end(state->curr_pipe);
-	if (!apply_redirections(cmd))
+	if (!apply_redirections(shell, cmd))
 	{
 		close_std_fds();
 		cleanup_shell(shell);

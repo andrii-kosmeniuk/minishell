@@ -34,20 +34,21 @@ void	close_fds(void)
 	}
 }
 
-int	open_input_file(char *filename)
+int	open_input_file(t_shell *shell, char *filename)
 {
 	int	fd;
 
 	fd = open(filename, O_RDONLY);
 	if (fd == -1)
 	{
+		shell->exit_status = 1;
 		ft_putstr_fd("minishell: ", 2);
 		perror(filename);
 	}
 	return (fd);
 }
 
-int	open_output_file(char *filename, bool append)
+int	open_output_file(t_shell *shell, char *filename, bool append)
 {
 	int	flags;
 	int	fd;
@@ -60,6 +61,7 @@ int	open_output_file(char *filename, bool append)
 	fd = open(filename, flags, 0664);
 	if (fd == -1)
 	{
+		shell->exit_status = 1;
 		ft_putstr_fd("minishell: ", 2);
 		perror(filename);
 	}

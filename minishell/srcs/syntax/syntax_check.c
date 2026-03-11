@@ -45,7 +45,8 @@ bool	syntax_check(t_shell *shell)
 			return (validate_pipe(cur));
 		if ((cur->type == R_OUTPUT || cur->type == R_INPUT
 				|| cur->type == HERE_DOC || cur->type == R_APPEND)
-			&& (next && next->type == PIPE))
+			&& (next && (next->type != WORD && next->type != D_QUOTE
+					&& next->type != S_QUOTE)))
 			return (printf("%s", REDIR_PIPE), false);
 		if ((cur->type == R_INPUT || cur->type == R_OUTPUT
 				|| cur->type == R_APPEND || cur->type == HERE_DOC)

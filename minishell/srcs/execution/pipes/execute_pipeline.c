@@ -12,14 +12,14 @@
 
 #include "../../../minishell.h"
 
-int	execute_redirections_only(t_cmd *cmd)
+int	execute_redirections_only(t_shell *shell, t_cmd *cmd)
 {
 	int	saved_stdin;
 	int	saved_stdout;
 
 	saved_stdin = dup(STDIN_FILENO);
 	saved_stdout = dup(STDOUT_FILENO);
-	if (!apply_redirections(cmd))
+	if (!apply_redirections(shell, cmd))
 	{
 		safe_dup2(saved_stdin, STDIN_FILENO);
 		safe_dup2(saved_stdout, STDOUT_FILENO);
@@ -44,7 +44,8 @@ int	execute_pipeline(t_cmd *cmd, t_shell *shell)
 	{
 		if (cmd->redirections)
 		{
-			execute_redirections_only(cmd);
+			if (execute_redirections_only(shell, cmd) == 1)
+				return (1);
 		}
 		return (0);
 	}

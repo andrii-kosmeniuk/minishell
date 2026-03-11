@@ -259,9 +259,9 @@ int		check_file_access(char *path, int mode);
 char	**list_to_envp(t_shell *shell);
 bool	safe_dup2(int old_fd, int new_fd);
 void	close_fds(void);
-int		open_input_file(char *filename);
-int		open_output_file(char *filename, bool append);
-bool	apply_redirections(t_cmd *cmd);
+int		open_input_file(t_shell *shell, char *filename);
+int		open_output_file(t_shell *shell, char *filename, bool append);
+bool	apply_redirections(t_shell *shell, t_cmd *cmd);
 char	*handle_path(t_cmd *cmds, t_shell *shell);
 void	execute_in_child(t_cmd *cmd, t_shell *shell, pid_t *pids);
 int		wait_for_child(pid_t pid);
@@ -302,8 +302,10 @@ bool	builtin_check(t_cmd *cmd);
 void	command_not_found_error(char *cmd);
 void	permission_denied_error(char *cmd);
 
-//debug
-/*void	print_env_pointers(t_env *head);
+#endif
+
+/*debug
+void	print_env_pointers(t_env *head);
 void		print_env_list(t_env *head);*/
 /*const char	*type_to_string(t_type type);
 void	print_tokens(t_token *tokens);*/
@@ -311,5 +313,3 @@ void	print_tokens(t_token *tokens);*/
 void		print_argv(char **argv);
 void		print_commands(t_cmd *cmd);
 void		debug_print_all_argv(t_cmd *cmd);*/
-
-#endif

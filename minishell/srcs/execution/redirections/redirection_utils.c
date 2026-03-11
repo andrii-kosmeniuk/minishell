@@ -12,25 +12,25 @@
 
 #include "../../../minishell.h"
 
-static int	output_redirections(t_redir *redir)
+static int	output_redirections(t_shell *shell, t_redir *redir)
 {
 	int	fd;
 	int	result;
 
 	if (redir->type == R_OUTPUT)
 	{
-		fd = open_output_file(redir->target, false);
+		fd = open_output_file(shell, redir->target, false);
 		if (fd < 0)
-			return (0);
+			return (-1);
 		result = safe_dup2(fd, STDOUT_FILENO);
 		close(fd);
 		return (result);
 	}
 	else if (redir->type == R_APPEND)
 	{
-		fd = open_output_file(redir->target, true);
+		fd = open_output_file(shell, redir->target, true);
 		if (fd < 0)
-			return (0);
+			return (-1);
 		result = safe_dup2(fd, STDOUT_FILENO);
 		close(fd);
 		return (result);
@@ -38,16 +38,16 @@ static int	output_redirections(t_redir *redir)
 	return (0);
 }
 
-static int	input_redirections(t_redir *redir)
+static int	input_redirections(t_shell *shell, t_redir *redir)
 {
 	int	fd;
 	int	result;
 
 	if (redir->type == R_INPUT)
 	{
-		fd = open_input_file(redir->target);
-		if (fd < 0)
-			return (0);
+		fd = open_input_file(shell, redir->target);
+		if (fd == -1)
+			return (-1);
 		result = safe_dup2(fd, STDIN_FILENO);
 		close(fd);
 		return (result);
@@ -55,7 +55,7 @@ static int	input_redirections(t_redir *redir)
 	return (0);
 }
 
-static bool	apply_single_redirection(t_redir *redir)
+static int	apply_single_redirection(t_shell *shell, t_redir *redir)
 {
 	int	result;
 
@@ -66,13 +66,13 @@ static bool	apply_single_redirection(t_redir *redir)
 		return (result);
 	}
 	if (redir->type == R_OUTPUT || redir->type == R_APPEND)
-		return (output_redirections(redir));
+		return (output_redirections(shell, redir));
 	if (redir->type == R_INPUT)
-		return (input_redirections(redir));
-	return (false);
+		return (input_redirections(shell, redir));
+	return (0);
 }
 
-bool	apply_redirections(t_cmd *cmd)
+bool	apply_redirections(t_shell *shell, t_cmd *cmd)
 {
 	t_redir	*cur;
 	int		count;
@@ -82,7 +82,7 @@ bool	apply_redirections(t_cmd *cmd)
 	while (cur)
 	{
 		count++;
-		if (!apply_single_redirection(cur))
+		if (apply_single_redirection(shell, cur) == -1)
 			return (false);
 		cur = cur->next;
 	}

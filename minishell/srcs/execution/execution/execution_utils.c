@@ -12,29 +12,52 @@
 
 #include "../../../minishell.h"
 
+static char	*search_in_path_dir(char *dir, char *cmd, char **temp)
+{
+	char	*path_with_slash;
+	char	*full_path;
+
+	if (dir[0] == '\0')
+	{
+		if (access(cmd, X_OK) == 0)
+		{
+			full_path = ft_strdup(cmd);
+			if (!full_path)
+				return (free_array(temp), NULL);
+			return (free_array(temp), full_path);
+		}
+		return (NULL);
+	}
+	path_with_slash = ft_strjoin(dir, "/");
+	if (!path_with_slash)
+		return (free_array(temp), NULL);
+	full_path = ft_strjoin(path_with_slash, cmd);
+	free(path_with_slash);
+	if (!full_path)
+		return (free_array(temp), NULL);
+	if (access(full_path, X_OK) == 0)
+		return (free_array(temp), full_path);
+	free(full_path);
+	return (NULL);
+}
+
 static char	*find_cmd_path(t_cmd *cmds, char *path_value)
 {
 	char	**temp;
 	char	*res;
-	char	*t;
 	int		i;
 
-	i = 0;
 	if (!path_value)
 		return (NULL);
 	temp = ft_split(path_value, ':');
 	if (!temp)
 		return (NULL);
+	i = 0;
 	while (temp[i])
 	{
-		t = ft_strjoin(temp[i], "/");
-		res = ft_strjoin(t, cmds->args[0]);
-		free(t);
-		if (!res)
-			return (free_array(temp), NULL);
-		if (access(res, X_OK) == 0)
-			return (free_array(temp), res);
-		free(res);
+		res = search_in_path_dir(temp[i], cmds->args[0], temp);
+		if (res)
+			return (res);
 		i++;
 	}
 	free_array(temp);
