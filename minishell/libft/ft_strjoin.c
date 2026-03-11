@@ -12,7 +12,7 @@
 
 #include "libft.h"
 
-static char	*ft_edge_cases_join(char const *s1, char const *s2)
+/*static char	*ft_edge_cases_join(char const *s1, char const *s2)
 {
 	if (s1 == NULL)
 		return (ft_strdup(s2));
@@ -27,15 +27,14 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	size_t	i;
 	size_t	j;
 
-	i = 0;
 	if (!s1 && !s2)
 		return (NULL);
 	s3 = ft_edge_cases_join(s1, s2);
-	if (s3 != NULL)
-		return (s3);
+	return (s3);
 	s3 = (char *)malloc(ft_strlen(s1) + ft_strlen(s2) + 1);
 	if (s3 == NULL)
 		return (NULL);
+	i = 0;
 	while (s1[i])
 	{
 		s3[i] = s1[i];
@@ -46,6 +45,38 @@ char	*ft_strjoin(char const *s1, char const *s2)
 		s3[i++] = s2[j++];
 	s3[i] = '\0';
 	return (s3);
+}*/
+
+static char	*check(char const *s1, char const *s2)
+{
+	if (!s1)
+		return (ft_strdup(s2));
+	if (!s2)
+		return (ft_strdup(s1));
+	return (NULL);
+}
+
+char	*ft_strjoin(char const *s1, char const *s2)
+{
+	char		*check_str;
+	char		*res;
+	size_t		len1;
+	size_t		len2;
+
+	if (!s1 && !s2)
+		return (NULL);
+	check_str = check(s1, s2);
+	if (check_str)
+		return (check_str);
+	len1 = ft_strlen(s1);
+	len2 = ft_strlen(s2);
+	res = malloc((sizeof(char) * (len1 + len2)) + 1);
+	if (!res)
+		return (NULL);
+	ft_memcpy(res, s1, len1);
+	ft_memcpy(res + len1, s2, len2);
+	res[len1 + len2] = '\0';
+	return (res);
 }
 /*#include <stdio.h>
 int	main(void)

@@ -58,7 +58,6 @@ int	process_line(char *line, t_shell *shell)
 	t_cmd	*cmd;
 	int		exit_status;
 
-	exit_status = 0;
 	tokens = build_token_list(line, shell);
 	if (!tokens || shell->redir_error || !syntax_check(shell))
 		return (cleanup_tokens(shell), 2);

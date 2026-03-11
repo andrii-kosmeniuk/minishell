@@ -14,7 +14,7 @@ MAKEFLAGS += --no-print-directory
 
 CC = cc
 CFLAGS = -Wall -Wextra -Werror -g
-LDLIBS  = -lreadline -lncurses
+LDLIBS  = -lreadline
 
 NAME = minishell
 

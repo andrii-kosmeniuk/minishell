@@ -16,7 +16,8 @@ static void	free_redir(t_redir *redir)
 {
 	t_redir	*cur;
 
-	cur = redir;
+	if (!redir)
+		return ;
 	while (redir)
 	{
 		cur = redir->next;

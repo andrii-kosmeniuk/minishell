@@ -19,7 +19,6 @@ int	calculate_new_shlvl(t_shell *shell)
 	int		new_value;
 
 	cur_variable = shell->environment_p;
-	new_value = 0;
 	current_value = 1;
 	while (cur_variable)
 	{

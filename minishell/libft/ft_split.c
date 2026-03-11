@@ -59,9 +59,12 @@ void	free_partial(char **array, size_t count)
 	i = 0;
 	if (!array)
 		return ;
+	if (!array[0] || count == 0)
+		return (free(array));
 	while (i < count)
 	{
-		free(array[i]);
+		if (array[i])
+			free(array[i]);
 		i++;
 	}
 	free (array);

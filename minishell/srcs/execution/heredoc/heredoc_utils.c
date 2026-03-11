@@ -60,7 +60,6 @@ char	*expand_heredoc(t_shell *shell, t_redir *redir, t_env *env, char *line)
 	len = 0;
 	expanded_heredoc = NULL;
 	should_expand = redir->expand_heredoc;
-	printf("expand_heredoc_flag: %d\n", should_expand);
 	if (redir->expand_heredoc == true)
 	{
 		expanded_heredoc = expand_string(shell, &should_expand, line, env);

@@ -15,12 +15,22 @@
 char	*get_value(t_env *env, char *variable_name)
 {
 	t_env	*cur;
+	char	*value;
 
+	if (!env)
+		return (NULL);
 	cur = env;
 	while (cur)
 	{
 		if (ft_strcmp(cur->key, variable_name) == 0)
-			return (ft_strdup(cur->value));
+		{
+			if (!cur->value)
+				return (NULL);
+			value = ft_strdup(cur->value);
+			if (!value)
+				return (NULL);
+			return (value);
+		}
 		cur = cur->next;
 	}
 	return (NULL);

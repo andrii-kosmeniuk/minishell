@@ -21,7 +21,6 @@ size_t	array_len(char **str)
 	if (!*str)
 		return (0);
 	i = 1;
-	j = 0;
 	len = 0;
 	while (str[i])
 	{

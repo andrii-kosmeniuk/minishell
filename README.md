@@ -37,7 +37,7 @@ The shell supports interactive use with a prompt, command history, pipes, redire
 ### Compilation
 
 ```bash
-@github.com:andrii-kosmeniuk/minishell.git minishell
+git clone https://github.com/andrii-kosmeniuk/minishell.git
 cd minishell
 cd minishell
 make
